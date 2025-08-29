@@ -14,10 +14,6 @@ Player::Player()
 	//ユニティちゃんのモデルを読み込む
 	modelRender.Init("Assets/modelData/unityChan.tkm", animationClips,enAnimationClip_Num, enModelUpAxisY);
 	//modelRender.Update();
-	
-	/*g_soundEngine->ResistWaveFileBank(0, "Assets/Sound/Jump.wav");
-	m_sound = NewGO<SoundSource>(0);
-	m_sound->Init(0);*/
 
 	//キャラコンを初期化
 	characterController.Init(10.0f, 10.0f, position);
