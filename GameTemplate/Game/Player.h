@@ -1,5 +1,4 @@
 #pragma once
-#include"sound/SoundSource.h"
 class Player : public IGameObject
 {
 public:
@@ -13,22 +12,12 @@ public:
 	void Move();
     //回転処理
     void Rotation();
-    // ステート管理
-    void ManageState();
-    //アニメーションの再生
-    void Animation();
 
     //メンバ変数
 	ModelRender modelRender;//モデルレンダ―
 	Vector3 position;       //座標
     //アニメーション
-    enum EnAnimationClip { 
-        enAnimationClip_Idle,
-        enAnimationClip_Walk,
-        enAnimationClip_Jump,
-        enAnimationClip_Num,
-    };
-    AnimationClip animationClips[enAnimationClip_Num]; //アニメーションクリップ
+    
     CharacterController characterController; //キャラクターコントローラー
     Vector3 moveSpeed; //移動速度
     Quaternion rotation;//クォータニオン
@@ -36,6 +25,5 @@ public:
     int itemCount = 0;//集めたコインの数をカウント
     int jump=0;
     int jumpState = 0;
-    SoundSource* m_sound;
 };
 

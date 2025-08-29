@@ -8,5 +8,6 @@ public:
 	void Render(RenderContext& rc);
 
 	ModelRender modelRender;
-
+	PhysicsStaticObject physicsStaticObject;
+	Quaternion m_rot;
 };
