@@ -1,5 +1,5 @@
 #pragma once
-class BackGround:public IGameObject
+class BackGround :public IGameObject
 {
 public:
 	BackGround();
@@ -7,8 +7,6 @@ public:
 
 	void Render(RenderContext& rc);
 
-	ModelRender modelRender;;
-	PhysicsStaticObject physicsStaticObject;
-	Quaternion m_rot;
-};
+	ModelRender modelRender;
 
+};
