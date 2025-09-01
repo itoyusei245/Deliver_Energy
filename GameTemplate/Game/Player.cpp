@@ -8,7 +8,7 @@ Player::Player()
 
 	//キャラコンを初期化
 	characterController.Init(10.0f, 10.0f, position);
-	position = { -20.0f, -600.0f, 0.0f };//初期位置
+	position = { 10.0f, 10.0f, 0.0f };//初期位置
 
 }
 
