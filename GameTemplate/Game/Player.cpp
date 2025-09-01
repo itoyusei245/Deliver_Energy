@@ -1,14 +1,18 @@
 #include "stdafx.h"
 #include "Player.h"
 
+
+
 Player::Player()
 {
 	//ユニティちゃんのモデルを読み込む
 	modelRender.Init("Assets/animData/Player.tkm");
 
 	//キャラコンを初期化
-	characterController.Init(10.0f, 10.0f, position);
+	characterController.Init(25.0f, 50.0f, position);
 	position = { 10.0f, 10.0f, 0.0f };//初期位置
+	rotation.SetRotationDeg(Vector3::AxisX, 0.0f);
+	targetRotation = rotation;
 
 }
 
@@ -22,13 +26,14 @@ void Player::Update()
 	//移動処理。
 	Move();
 
+	
+	
+
 	//回転処理。
 	Rotation();
 
 	//絵描きさんの更新処理。
 	modelRender.Update();
-
-	//m_sound->SetVolume(3.5f);
 
 }
 
@@ -80,7 +85,6 @@ void Player::Move()
 	{
 		//重力を発生させる。
 		moveSpeed.y -= 7.0f;
-		//m_sound->Stop();
 	}
 
 	if (characterController.IsOnGround() == true) {
@@ -97,17 +101,26 @@ void Player::Move()
 
 void Player::Rotation()
 {
-	//xかzの移動速度があったら(スティックの入力があったら)。
-	if (fabsf(moveSpeed.x) >= 0.001f || fabsf(moveSpeed.z) >= 0.001f)
-	{
-		//キャラクターの方向を変える。
-		rotation.SetRotationYFromDirectionXZ(moveSpeed);
-
-		//絵描きさんに回転を教える。
-		modelRender.SetRotation(rotation);
-
+	// Bボタンで倒す／起き上がるを切り替え
+	if (g_pad[0]->IsTrigger(enButtonB)) {
+		if (!isFallen) {
+			// 倒れる姿勢を目標に
+			targetRotation.SetRotationDeg(Vector3::AxisX, 90.0f);
+			isFallen = true;
+		}
+		else {
+			// 立ち姿勢を目標に
+			targetRotation.SetRotationDeg(Vector3::AxisX, 0.0f);
+			isFallen = false;
+		}
 	}
 
+	// 常にアニメーションで targetRotation に近づける
+	rotation.Slerp(0.9f, targetRotation, rotation);
+// ↑ 第1引数0.9fは補間の速さ(1.0に近づくほど遅くなる)
+
+	// モデルに反映
+	modelRender.SetRotation(rotation);
 }
 
 void Player::Render(RenderContext& rc)

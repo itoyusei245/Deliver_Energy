@@ -28,6 +28,7 @@ bool Game::Start()
 	//Init=初期化
 	NewGO<BackGround>(0, "background");
 	//m_block = NewGO<Block>(0,"block");//ブロックのインスタンスをm_blockに格納、これでNewGOしたオブジェクトの情報を取得できるようになる。
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();//ワイヤーフレームを描画する
 	return true;
 }
 
