@@ -80,12 +80,6 @@ void Player::Move()
 		//重力を発生させる。
 		moveSpeed.y -= 7.0f;
 	}
-
-	if (characterController.IsOnGround() == true) {
-		playerState = 0;
-
-		jump = 0;
-	}
 	//キャラクターコントローラーを使って座標を移動させる。
 	position = characterController.Execute(moveSpeed, 1.0f / 60.0f);
 
@@ -98,20 +92,14 @@ void Player::Rotation()
 	// Bボタンで倒す／起き上がるを切り替え
 	if (g_pad[0]->IsTrigger(enButtonB)) {
 		if (!isFallen) {
-			// 倒れる姿勢を目標に
+			// 倒れる
 			targetRotation.SetRotationDeg(Vector3::AxisX, 90.0f);
 			isFallen = true;
-
-			//モデルが端で倒れないように中心へ移動
-			position.y += 25.0f;//半径ぶん持ち上げる（モデルによって調整）
 		}
 		else {
-			// 立ち姿勢を目標に
+			// 起き上がる
 			targetRotation.SetRotationDeg(Vector3::AxisX, 0.0f);
 			isFallen = false;
-
-			//元の位置に戻す。
-			position.y -= 25.0f;//半径ぶん下げる（モデルによって調整）
 		}
 	}
 
@@ -142,10 +130,27 @@ void Player::Rotation()
 			// ================================
 			targetRotation.SetRotationYFromDirectionXZ(inputDir);
 		}
+
 	}
 
 	// 補間して回転
 	rotation.Slerp(0.2f, rotation, targetRotation);
+
+	// ====== ここで描画用の位置補正をする ======
+	Vector3 renderPos = position;
+
+	if (!isFallen) {
+		// 直立モード → pivot が中心なので、半径ぶん浮かせて底を接地
+		renderPos.y += 40.0f;
+	}
+	else {
+		// 倒れモード → pivot が中心なので、高さ半分ぶん浮かせて側面を接地
+		renderPos.y += 25.0f;
+	}
+
+	// モデルに反映
+	modelRender.SetPosition(renderPos);
+	modelRender.SetRotation(rotation);
 
 	// モデルに反映
 	modelRender.SetRotation(rotation);
