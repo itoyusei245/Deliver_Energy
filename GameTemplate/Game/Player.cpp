@@ -13,7 +13,6 @@ Player::Player()
 	position = { 10.0f, 10.0f, 0.0f };//初期位置
 	rotation.SetRotationDeg(Vector3::AxisX, 0.0f);
 	targetRotation = rotation;
-
 }
 
 Player::~Player()
@@ -26,15 +25,11 @@ void Player::Update()
 	//移動処理。
 	Move();
 
-	
-	
-
 	//回転処理。
 	Rotation();
 
 	//絵描きさんの更新処理。
 	modelRender.Update();
-
 }
 
 void Player::Move()
@@ -77,7 +72,6 @@ void Player::Move()
 			//ジャンプさせる。
 			moveSpeed.y = 300.0f;
 			jump += 1;
-
 		}
 	}
 	//地面に付いていなかったら。
@@ -107,11 +101,17 @@ void Player::Rotation()
 			// 倒れる姿勢を目標に
 			targetRotation.SetRotationDeg(Vector3::AxisX, 90.0f);
 			isFallen = true;
+
+			//モデルが端で倒れないように中心へ移動
+			position.y += 25.0f;//半径ぶん持ち上げる（モデルによって調整）
 		}
 		else {
 			// 立ち姿勢を目標に
 			targetRotation.SetRotationDeg(Vector3::AxisX, 0.0f);
 			isFallen = false;
+
+			//元の位置に戻す。
+			position.y -= 25.0f;//半径ぶん下げる（モデルによって調整）
 		}
 	}
 
