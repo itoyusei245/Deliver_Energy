@@ -115,9 +115,37 @@ void Player::Rotation()
 		}
 	}
 
-	// 常にアニメーションで targetRotation に近づける
-	rotation.Slerp(0.9f, targetRotation, rotation);
-// ↑ 第1引数0.9fは補間の速さ(1.0に近づくほど遅くなる)
+	// スティック入力方向を算出
+	Vector3 stickL;
+	stickL.x = g_pad[0]->GetLStickXF();
+	stickL.z = g_pad[0]->GetLStickYF();
+	Vector3 inputDir = { stickL.x, 0.0f, stickL.z };
+
+	if (inputDir.LengthSq() > 0.01f) {
+		inputDir.Normalize();
+
+		if (isFallen) {
+			// ================================
+			// 倒れているとき：横倒し + 入力方向を前にする
+			// ================================
+			Quaternion dirRot;
+			dirRot.SetRotationYFromDirectionXZ(inputDir);
+
+			Quaternion fallenBase;
+			fallenBase.SetRotationDeg(Vector3::AxisX, 90.0f);
+
+			targetRotation.Multiply(fallenBase, dirRot);
+		}
+		else {
+			// ================================
+			// 直立時：入力方向を前にする
+			// ================================
+			targetRotation.SetRotationYFromDirectionXZ(inputDir);
+		}
+	}
+
+	// 補間して回転
+	rotation.Slerp(0.2f, rotation, targetRotation);
 
 	// モデルに反映
 	modelRender.SetRotation(rotation);
