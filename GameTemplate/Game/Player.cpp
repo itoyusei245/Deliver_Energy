@@ -89,72 +89,87 @@ void Player::Move()
 
 void Player::Rotation()
 {
-	// Bボタンで倒す／起き上がるを切り替え
-	if (g_pad[0]->IsTrigger(enButtonB)) {
-		if (!isFallen) {
-			// 倒れる
-			targetRotation.SetRotationDeg(Vector3::AxisX, 90.0f);
-			isFallen = true;
-		}
-		else {
-			// 起き上がる
-			targetRotation.SetRotationDeg(Vector3::AxisX, 0.0f);
-			isFallen = false;
-		}
-	}
+    // Bボタンで倒す／起き上がるを切り替え
+    if (g_pad[0]->IsTrigger(enButtonB)) {
+        if (!isFallen) {
+            // 倒れる
+            targetRotation.SetRotationDeg(Vector3::AxisX, 90.0f);
+            isFallen = true;
+            rollAngle = 0.0f; // 累積回転リセット
+        }
+        else {
+            // 起き上がる
+            targetRotation.SetRotationDeg(Vector3::AxisX, 0.0f);
+            isFallen = false;
+            rollAngle = 0.0f;
+        }
+    }
 
-	// スティック入力方向を算出
-	Vector3 stickL;
-	stickL.x = g_pad[0]->GetLStickXF();
-	stickL.z = g_pad[0]->GetLStickYF();
-	Vector3 inputDir = { stickL.x, 0.0f, stickL.z };
+    // スティック入力方向を算出
+    Vector3 stickL;
+    stickL.x = g_pad[0]->GetLStickXF();
+    stickL.z = g_pad[0]->GetLStickYF();
+    Vector3 inputDir = { stickL.x, 0.0f, stickL.z };
 
-	if (inputDir.LengthSq() > 0.01f) {
-		inputDir.Normalize();
+    if (inputDir.LengthSq() > 0.01f) {
+        inputDir.Normalize();
 
-		if (isFallen) {
-			// ================================
-			// 倒れているとき：横倒し + 入力方向を前にする
-			// ================================
-			Quaternion dirRot;
-			dirRot.SetRotationYFromDirectionXZ(inputDir);
+        if (isFallen) {
+            // ================================
+            // 倒れているとき：入力方向ベクトルを軸にゴロゴロ回転
+            // ================================
+            Quaternion dirRot;
+            dirRot.SetRotationYFromDirectionXZ(inputDir);
 
-			Quaternion fallenBase;
-			fallenBase.SetRotationDeg(Vector3::AxisX, 90.0f);
+            Quaternion fallenBase;
+            fallenBase.SetRotationDeg(Vector3::AxisX, 90.0f);
 
-			targetRotation.Multiply(fallenBase, dirRot);
-		}
-		else {
-			// ================================
-			// 直立時：入力方向を前にする
-			// ================================
-			targetRotation.SetRotationYFromDirectionXZ(inputDir);
-		}
+            // このフレームの移動距離
+            float distance = moveSpeed.Length() * (1.0f / 60.0f);
 
-	}
+            // 累積回転角度を更新（誇張するために倍率をかける）
+            rollAngle += (distance / 25.0f) * 2.5f;
 
-	// 補間して回転
-	rotation.Slerp(0.2f, rotation, targetRotation);
+            // 入力方向をそのまま回転軸に利用
+            Vector3 rollAxis = inputDir;
+            rollAxis.Normalize();
 
-	// ====== ここで描画用の位置補正をする ======
-	Vector3 renderPos = position;
+            Quaternion rollRot;
+            rollRot.SetRotation(rollAxis, rollAngle);
 
-	if (!isFallen) {
-		// 直立モード → pivot が中心なので、半径ぶん浮かせて底を接地
-		renderPos.y += 40.0f;
-	}
-	else {
-		// 倒れモード → pivot が中心なので、高さ半分ぶん浮かせて側面を接地
-		renderPos.y += 25.0f;
-	}
+            Quaternion tmp;
+            tmp.Multiply(fallenBase, dirRot);
+            targetRotation.Multiply(tmp, rollRot);
+        }
+        else {
+            // ================================
+            // 直立時：入力方向を前にする
+            // ================================
+            targetRotation.SetRotationYFromDirectionXZ(inputDir);
+        }
+    }
 
-	// モデルに反映
-	modelRender.SetPosition(renderPos);
-	modelRender.SetRotation(rotation);
+    // 回転補間
+    rotation.Slerp(0.2f, rotation, targetRotation);
 
-	// モデルに反映
-	modelRender.SetRotation(rotation);
+    // ====== 描画用の位置補正 ======
+    Vector3 renderPos = position;
+
+    if (!isFallen) {
+        // 直立モード → pivot が中心なので、半径ぶん浮かせて底を接地
+        renderPos.y += 40.0f;
+    }
+    else {
+        // 倒れモード → pivot が中心なので、高さ半分ぶん浮かせて側面を接地
+        renderPos.y += 25.0f;
+    }
+
+    // モデルに反映
+    modelRender.SetPosition(renderPos);
+    modelRender.SetRotation(rotation);
 }
+
+
 
 void Player::Render(RenderContext& rc)
 {
