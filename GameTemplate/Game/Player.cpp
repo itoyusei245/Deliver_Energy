@@ -50,6 +50,7 @@ void Player::Move()
     right *= stickL.x * 180.0f;
     forward *= stickL.y * 180.0f;
 
+
     Vector3 inputMove = right + forward;
 
     if (isFallen) {
@@ -68,7 +69,7 @@ void Player::Move()
         }
         else {
             // 入力がなければ徐々に減速
-            rollVelocity *= 0.8f;
+            rollVelocity *= 0.5f;
         }
 
         moveSpeed += rollVelocity;
@@ -90,7 +91,7 @@ void Player::Move()
                 moveSpeed.y = 300.0f + boost;
             }
             else {
-                moveSpeed.y = 500.0f;
+                moveSpeed.y = 400.0f;
             }
         }
     }
@@ -152,7 +153,7 @@ void Player::Rotation()
             float distance = moveSpeed.Length() * (1.0f / 60.0f);
 
             // 累積回転角度を更新（誇張するために倍率をかける）
-            rollAngle += (distance / 25.0f) * 2.5f;
+            rollAngle += (distance / 25.0f) * 1.0f;
 
             // 入力方向をそのまま回転軸に利用
             Vector3 rollAxis = inputDir;
