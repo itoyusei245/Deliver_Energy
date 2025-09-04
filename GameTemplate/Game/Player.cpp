@@ -34,58 +34,75 @@ void Player::Update()
 
 void Player::Move()
 {
-	//xzの移動速度を0.0fにする。
-	moveSpeed.x =0.0f;
-	moveSpeed.z = 0.0f;
+    // 入力からXZ移動を作る
+    moveSpeed.x = 0.0f;
+    moveSpeed.z = 0.0f;
 
-	//左スティックの入力量を取得。
-	Vector3 stickL;
-	stickL.x = g_pad[0]->GetLStickXF();
-	stickL.y = g_pad[0]->GetLStickYF();
+    Vector3 stickL;
+    stickL.x = g_pad[0]->GetLStickXF();
+    stickL.y = g_pad[0]->GetLStickYF();
 
-	//カメラの前方向と右方向のベクトルを持ってくる。
-	Vector3 forward = g_camera3D->GetForward();
-	Vector3 right = g_camera3D->GetRight();
-	//y方向には移動させない。
-	forward.y = 0.0f;
-	right.y = 0.0f;
+    Vector3 forward = g_camera3D->GetForward();
+    Vector3 right = g_camera3D->GetRight();
+    forward.y = 0.0f;
+    right.y = 0.0f;
 
-	//左スティックの入力量と120.0fを乗算。
-	right *= stickL.x * 125.0f;
-	forward *= stickL.y * 125.0f;
+    right *= stickL.x * 180.0f;
+    forward *= stickL.y * 180.0f;
 
-	//移動速度にスティックの入力量を加算する。
-	moveSpeed += right + forward;
-	if (jumpState == 0)
-	{
+    Vector3 inputMove = right + forward;
 
-	}
-	//地面に付いていたら。
-	if (characterController.IsOnGround())
-	{
-		//重力を無くす。
-		moveSpeed.y = 0.0f;
+    if (isFallen) {
+        // ================================
+        // 倒れているとき → 転がり加速をつける
+        // ================================
+        if (inputMove.LengthSq() > 0.01f) {
+            inputMove.Normalize();
+            // 現在の速度に少しずつ加速
+            rollVelocity += inputMove * 10.0f;   // 10.0f が加速の強さ
+            // 最大スピード制限
+            if (rollVelocity.Length() > 600.0f) {
+                rollVelocity.Normalize();
+                rollVelocity *= 600.0f;
+            }
+        }
+        else {
+            // 入力がなければ徐々に減速
+            rollVelocity *= 0.8f;
+        }
 
-		//Aボタンが押されたら。
-		if (g_pad[0]->IsTrigger(enButtonA))
-		{
-			//ジャンプさせる。
-			moveSpeed.y = 300.0f;
-			jump += 1;
-		}
-	}
-	//地面に付いていなかったら。
-	else
-	{
-		//重力を発生させる。
-		moveSpeed.y -= 7.0f;
-	}
-	//キャラクターコントローラーを使って座標を移動させる。
-	position = characterController.Execute(moveSpeed, 1.0f / 60.0f);
+        moveSpeed += rollVelocity;
+    }
+    else {
+        // 直立時 → 入力した分だけ移動
+        moveSpeed += inputMove;
+        // 倒立時は転がり速度をリセット
+        rollVelocity = { 0,0,0 };
+    }
 
-	//絵描きさんに座標を教える。
-	modelRender.SetPosition(position);
+    // ====== ジャンプ処理 ======
+    if (characterController.IsOnGround()) {
+        moveSpeed.y = 0.0f;
+        if (g_pad[0]->IsTrigger(enButtonA)) {
+            if (isFallen) {
+                // 転がり速度があるとジャンプ強化
+                float boost = rollVelocity.Length() * 0.4f;
+                moveSpeed.y = 300.0f + boost;
+            }
+            else {
+                moveSpeed.y = 500.0f;
+            }
+        }
+    }
+    else {
+        moveSpeed.y -= 8.5f; // 重力
+    }
+
+    // 実際に移動
+    position = characterController.Execute(moveSpeed, 1.0f / 60.0f);
+    modelRender.SetPosition(position);
 }
+
 
 void Player::Rotation()
 {
@@ -95,13 +112,13 @@ void Player::Rotation()
             // 倒れる
             targetRotation.SetRotationDeg(Vector3::AxisX, 90.0f);
             isFallen = true;
-            rollAngle = 0.0f; // 累積回転リセット
+            rollAngle = 0.0f;// 累積回転リセット
         }
         else {
             // 起き上がる
             targetRotation.SetRotationDeg(Vector3::AxisX, 0.0f);
             isFallen = false;
-            rollAngle = 0.0f;
+			rollAngle = 0.0f;// 累積回転リセット
         }
     }
 
@@ -111,18 +128,25 @@ void Player::Rotation()
     stickL.z = g_pad[0]->GetLStickYF();
     Vector3 inputDir = { stickL.x, 0.0f, stickL.z };
 
-    if (inputDir.LengthSq() > 0.01f) {
-        inputDir.Normalize();
+	if (inputDir.LengthSq() > 0.01f) {// 入力があるときのみ回転処理
+		inputDir.Normalize();// 正規化
 
         if (isFallen) {
             // ================================
             // 倒れているとき：入力方向ベクトルを軸にゴロゴロ回転
             // ================================
-            Quaternion dirRot;
-            dirRot.SetRotationYFromDirectionXZ(inputDir);
+			
+			// 入力方向を向く回転
+			Quaternion dirRot;
 
-            Quaternion fallenBase;
-            fallenBase.SetRotationDeg(Vector3::AxisX, 90.0f);
+			// Y軸回転のみで向きを合わせる
+			dirRot.SetRotationYFromDirectionXZ(inputDir);
+
+			// 倒れたときの基本回転
+			Quaternion fallenBase;
+			
+			// X軸90度倒れ
+			fallenBase.SetRotationDeg(Vector3::AxisX, 90.0f);
 
             // このフレームの移動距離
             float distance = moveSpeed.Length() * (1.0f / 60.0f);
@@ -134,9 +158,13 @@ void Player::Rotation()
             Vector3 rollAxis = inputDir;
             rollAxis.Normalize();
 
-            Quaternion rollRot;
+			// 転がり回転
+			Quaternion rollRot;
+
+			// 軸と角度で回転をセット
             rollRot.SetRotation(rollAxis, rollAngle);
 
+			// 最終的な目標回転を計算
             Quaternion tmp;
             tmp.Multiply(fallenBase, dirRot);
             targetRotation.Multiply(tmp, rollRot);
