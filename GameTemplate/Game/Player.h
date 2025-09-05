@@ -21,9 +21,9 @@ public:
     CharacterController characterController; //キャラクターコントローラー
     Quaternion targetRotation;   // 目標の回転
     Quaternion rotation;//クォータニオン
-    int playerState = 0;//プレイヤーのステート(状態)を表す変数
+    //int playerState = 0;//プレイヤーのステート(状態)を表す変数
     int jump = 0;
-    int jumpState = 0;
+    //int jumpState = 0;
     bool isFallen = false;  // 倒れているかどうか
     float rollAngle = 0.0f;  // ゴロゴロ用の回転角
 };
