@@ -1,6 +1,7 @@
 #pragma once
 #include "Level3DRender/LevelRender.h"
 class Player;
+class Enemy;
 class GameCamera;
 class BackGround;
 //Gameシーンを管理するクラス
@@ -15,11 +16,12 @@ public:
 	void Render(RenderContext& rc);
 
 private:
-	ModelRender m_modelRender;
-	Vector3		m_pos = Vector3::Zero;
-	Player* m_player = nullptr;
-	GameCamera* m_gameCamera;
-	BackGround* m_backGround;
-	Vector3 position;
+	ModelRender	 m_modelRender;
+	Vector3		 m_pos = Vector3::Zero;
+	Player*		 m_player = nullptr;
+	Enemy*		 m_enemy = nullptr;
+	GameCamera*	 m_gameCamera;
+	BackGround*	 m_backGround;
+	Vector3		 position;
 	SpriteRender spriteRender;
 };

@@ -13,9 +13,10 @@ public:
 
 	void Rotation();
 
-	ModelRender modelRender;
-	Vector3 position;
-	Vector3 moveSpeed;
-	Quaternion rotation;
+	ModelRender			modelRender;
+	Vector3				position;
+	Vector3				moveSpeed;
+	CharacterController characterController;
+	Quaternion			rotation;
 };
 
