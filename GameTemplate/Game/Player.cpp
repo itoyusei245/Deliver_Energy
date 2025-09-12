@@ -2,10 +2,9 @@
 #include "Player.h"
 
 
-
 Player::Player()
 {
-	//ユニティちゃんのモデルを読み込む
+	//缶のモデルを読み込む
 	modelRender.Init("Assets/animData/Player.tkm");
 
 	//キャラコンを初期化
