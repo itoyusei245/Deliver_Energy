@@ -4,24 +4,66 @@ class Player;
 class Enemy;
 class GameCamera;
 class BackGround;
-//Gameシーンを管理するクラス
+
+/**
+ * @brief ゲームシーン管理クラス
+ * @details ゲームシーン内の各オブジェクト（プレイヤー、敵、カメラ、背景など）を管理します。
+ */
 class Game : public IGameObject
 {
 public:
-	Game();
-	~Game();
-	//更新処理
-	bool Start();
-	void Update();
-	void Render(RenderContext& rc);
+    /**
+     * @brief コンストラクタ
+     * @details ゲームシーンの初期化を行います。
+     */
+    Game();
+
+    /**
+     * @brief デストラクタ
+     * @details ゲームシーンの終了処理を行います。
+     */
+    ~Game();
+
+    /**
+     * @brief ゲーム開始時の初期化処理
+     * @return 初期化が成功した場合はtrue
+     */
+    bool Start();
+
+    /**
+     * @brief 毎フレームの更新処理
+     */
+    void Update();
+
+    /**
+     * @brief 描画処理
+     * @param rc 描画コンテキスト
+     * @details ゲームシーンの描画を行います。
+     */
+    void Render(RenderContext& rc);
 
 private:
-	ModelRender	 m_modelRender;
-	Vector3		 m_pos = Vector3::Zero;
-	Player*		 m_player = nullptr;
-	Enemy*		 m_enemy = nullptr;
-	GameCamera*	 m_gameCamera;
-	BackGround*	 m_backGround;
-	Vector3		 position;
-	SpriteRender spriteRender;
+    /** @brief ゲームシーンのモデルレンダラー */
+    ModelRender m_modelRender;
+
+    /** @brief ゲームシーンの座標 */
+    Vector3 m_pos = Vector3::Zero;
+
+    /** @brief プレイヤーオブジェクト */
+    Player* m_player = nullptr;
+
+    /** @brief 敵オブジェクト */
+    Enemy* m_enemy = nullptr;
+
+    /** @brief ゲームカメラオブジェクト */
+    GameCamera* m_gameCamera;
+
+    /** @brief 背景オブジェクト */
+    BackGround* m_backGround;
+
+    /** @brief 汎用座標変数 */
+    Vector3 position;
+
+    /** @brief スプライトレンダラー */
+    SpriteRender spriteRender;
 };
