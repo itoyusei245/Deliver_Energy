@@ -1,17 +1,38 @@
 #pragma once
 
-//ゲームクリア
-class GameClear :public IGameObject
+/**
+ * @brief ゲームクリア画面クラス
+ * @details ゲームクリア時のスプライト表示・遷移処理を管理します。
+ */
+class GameClear : public IGameObject
 {
 public:
-	GameClear();
-	~GameClear();
-	//更新処理
-	void Update();
-	//描画処理
-	void Render(RenderContext& rc);
+    /**
+     * @brief コンストラクタ
+     * @details ゲームクリア画面の初期化を行います。
+     */
+    GameClear();
 
-	//メンバ変数
-	SpriteRender spriteRender; //スプライトレンダ―
+    /**
+     * @brief デストラクタ
+     * @details ゲームクリア画面の終了処理を行います。
+     */
+    ~GameClear();
+
+    /**
+     * @brief 更新処理
+     * @details 入力判定や画面遷移などの毎フレーム処理を行います。
+     */
+    void Update();
+
+    /**
+     * @brief 描画処理
+     * @param rc 描画コンテキスト
+     * @details ゲームクリア画面のスプライト描画を行います。
+     */
+    void Render(RenderContext& rc);
+
+    /** @brief ゲームクリア画面用スプライトレンダラー */
+    SpriteRender spriteRender;
 };
 
