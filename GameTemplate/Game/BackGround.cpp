@@ -8,7 +8,8 @@
 BackGround::BackGround()
 {
 	/** ”wŒiƒ‚ƒfƒ‹‚ğ‰Šú‰»*/
-    modelRender.Init("Assets/modelData/Stage/BackGround.tkm");
+    modelRender.Init("Assets/modelData/Stage/map.tkm");
+    //modelRender.Init("Assets/modelData/Stage/BackGround.tkm");
     /** ƒ‚ƒfƒ‹‚ÌˆÊ’u‚ğİ’è*/
     modelRender.SetPosition(0.0f, 0.0f, 0.0f);
     /** Y²‰ñ“]‚ğ90“x‚Éİ’è*/

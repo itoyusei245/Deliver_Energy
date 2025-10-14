@@ -34,9 +34,9 @@ public:
     void Update();
 
     /** @brief 追従対象のプレイヤー */
-    Player* player;
+    Player* player= nullptr;
 
     /** @brief 注視点から視点に向かうベクトル */
-    Vector3 m_toCameraPos;
+    Vector3 m_toCameraPos = Vector3::One;
 };
 
