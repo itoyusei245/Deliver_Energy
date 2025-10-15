@@ -1,4 +1,5 @@
 #pragma once
+#include"camera/SpringCamera.h"
 
 class Player;
 
@@ -38,5 +39,7 @@ public:
 
     /** @brief 注視点から視点に向かうベクトル */
     Vector3 m_toCameraPos = Vector3::One;
+private:
+	SpringCamera m_springCamera; /**< スプリングカメラオブジェクト */
 };
 

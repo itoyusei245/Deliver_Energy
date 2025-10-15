@@ -30,11 +30,24 @@ bool GameCamera::Start()
     /** プレイヤーのインスタンスを探す*/
     player = FindGO<Player>("player");
 
-    /** カメラのニアクリップとファークリップを設定*/
-    g_camera3D->SetNear(1.0f);
-    g_camera3D->SetFar(10000.0f);
+    /**SpringCameraの初期化*/
+    m_springCamera.Init(
+		*g_camera3D,
+		600.0f,	// カメラの距離
+        true,
+		30.0f	// カメラの高さ
+    );
+	m_springCamera.SetNear(1.0f);
+	m_springCamera.SetFar(10000.0f);
 
-   
+    /**初期注意点・視点*/
+	Vector3 target = player->position;
+	target.y += 60.0f;
+	m_springCamera.SetTarget(target);
+	m_springCamera.SetPosition(target + m_toCameraPos);
+    /** カメラのニアクリップとファークリップを設定*/
+    /*g_camera3D->SetNear(1.0f);
+    g_camera3D->SetFar(10000.0f);*/
     return true;
 }
 
@@ -82,10 +95,16 @@ void GameCamera::Update()
     }
     /** 視点を計算*/
     Vector3 pos = target + m_toCameraPos;
-    /** メインカメラに注視点と視点を設定*/
-    g_camera3D->SetTarget(target);
-    g_camera3D->SetPosition(pos);
+    ///** メインカメラに注視点と視点を設定*/
+    //g_camera3D->SetTarget(target);
+    //g_camera3D->SetPosition(pos);
 
-    /** カメラの更新*/
-    g_camera3D->Update();
+    ///** カメラの更新*/
+    //g_camera3D->Update();
+	/** スプリングカメラに注視点と視点を設定*/
+	m_springCamera.SetTarget(target);
+	m_springCamera.SetPosition(target+m_toCameraPos);
+
+	/** スプリングカメラの更新*/
+	m_springCamera.Update();
 }
