@@ -8,22 +8,22 @@
 BackGround::BackGround()
 {
 	/** 背景モデルを初期化*/
-    modelRender.Init("Assets/modelData/Stage/map.tkm");
+    m_map.Init("Assets/modelData/Stage/map.tkm");
     //modelRender.Init("Assets/modelData/Stage/BackGround.tkm");
     /** モデルの位置を設定*/
-    modelRender.SetPosition(0.0f, 0.0f, 0.0f);
+    m_map.SetPosition(0.0f, 0.0f, 0.0f);
+    /** モデルの回転を設定*/
+    m_map.SetRotation(m_rot);
+    /** モデルのスケールを設定*/
+    m_map.SetScale(Vector3(1.3f, 1.3f, 1.3f));
+    /** モデルの更新*/
+    m_map.Update();
     /** Y軸回転を90度に設定*/
     m_rot.SetRotationDegY(90);
-    /** モデルの回転を設定*/
-    modelRender.SetRotation(m_rot);
-    /** モデルのスケールを設定*/
-    modelRender.SetScale(Vector3(1.3f, 1.3f, 1.3f));
-    /** モデルの更新*/
-    modelRender.Update();
     /** 物理静的オブジェクトをモデルから生成*/
-    physicsStaticObject.CreateFromModel(modelRender.GetModel(), modelRender.GetModel().GetWorldMatrix());
+    physicsStaticObject.CreateFromModel(m_map.GetModel(), m_map.GetModel().GetWorldMatrix());
     /** デバッグ用ワイヤーフレーム表示を有効化*/
-    PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+    /**PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();*/
 }
 
 /**
@@ -41,5 +41,5 @@ BackGround::~BackGround()
  */
 void BackGround::Render(RenderContext& rc)
 {
-    modelRender.Draw(rc);
+    m_map.Draw(rc);
 }
