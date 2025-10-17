@@ -7,7 +7,6 @@
  */
 Enemy::Enemy() {
     modelRender.Init("Assets/animData/bossEnemy_TypeA.tkm");
-    //modelRender.Init("Assets/animData/coin.tkm");
     modelRender.SetScale(Vector3(1.2f, 1.2f, 1.2f));
     modelRender.Update();
 

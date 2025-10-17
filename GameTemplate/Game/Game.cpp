@@ -4,6 +4,7 @@
 #include"Player.h"
 #include"Enemy.h"
 #include"GameCamera.h"
+#include"EnemyManager.h"
 
 /**
  * @brief Gameクラスのコンストラクタ
@@ -13,8 +14,6 @@ Game::Game()
 {
 	/** プレイヤーのオブジェクトを作成: */
 	m_player = NewGO<Player>(0, "player");
-	/** 敵のオブジェクトを作成*/
-	m_enemy = NewGO<Enemy>(0, "enemy");
 	/** ゲームカメラのオブジェクトを作成*/
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
 	/** 背景のオブジェクトを作成*/
@@ -31,10 +30,10 @@ Game::~Game()
 	DeleteGO(m_backGround);
 	/** ゲームカメラを削除*/
 	DeleteGO(m_gameCamera);
-	/** 敵を削除*/
-	DeleteGO(m_enemy);
 	/** プレイヤーを削除*/
 	DeleteGO(m_player);
+	/** 敵管理クラスのインスタンスを削除*/
+	EnemyManager::DeleteInstance();
 }
 
 /**
@@ -43,6 +42,9 @@ Game::~Game()
  */
 bool Game::Start()
 {
+	EnemyManager::GetInstance()->Setup();
+	/** 敵管理クラスのインスタンスを生成*/
+	EnemyManager::CreateInstance();
 	/** 背景の初期化*/
 	NewGO<BackGround>(0, "background");
 	/** ワイヤーフレームを描画する（コメントアウト中）*/
@@ -55,7 +57,8 @@ bool Game::Start()
  */
 void Game::Update()
 {
-	
+	/**↓IGameOdjectを継承しないやりかた↓*/
+	EnemyManager::GetInstance()->Update();
 }
 
 void Game::Render(RenderContext& rc)

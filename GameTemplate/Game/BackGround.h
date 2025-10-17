@@ -27,7 +27,7 @@ public:
     void Render(RenderContext& rc);
 
     /** @brief 背景モデルのレンダラー */
-    ModelRender modelRender;
+    ModelRender m_map;
 
     /** @brief 背景の物理静的オブジェクト */
     PhysicsStaticObject physicsStaticObject;
