@@ -44,6 +44,7 @@ public:
     void Render(RenderContext& rc);
 
 private:
+
     /** @brief ゲームシーンのモデルレンダラー */
     ModelRender m_modelRender;
 
