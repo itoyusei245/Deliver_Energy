@@ -18,6 +18,7 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -32,6 +33,7 @@
     <ClInclude Include="GameClear.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

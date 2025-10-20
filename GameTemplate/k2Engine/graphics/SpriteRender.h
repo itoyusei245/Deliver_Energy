@@ -111,6 +111,29 @@ namespace nsK2Engine {
 		/// <param name="rc">レンダーコンテキスト。</param>
 		void Draw(RenderContext& rc);
 
+		void CircleInit(float& p, float& size, const char* filePath, const float w, const float h, AlphaBlendMode alphaBlendMode);/**w・・・広さ(Wide)、h・・・高さ(High)*/
+		struct CircleData
+		{
+			float circlePoint;/**ゲージの割合*/
+			float spriteSize;/**画像のサイズ*/
+			float circleSize;/**円のサイズ*/
+			
+			void InitData(float circleP, float spriteS, float circleS)
+			{
+				circlePoint = circleP;
+				spriteSize = spriteS;
+				circleSize = circleS;
+			}
+
+			void AddGaugePoint(float P) {/**ゲージを足す*/
+				circlePoint += P;
+			}
+		};
+
+	private:
+		CircleData *m_circleData=nullptr;
+		
+
 	private:
 		/// <summary>
 		/// 2D描画パスから呼ばれる処理。
@@ -121,6 +144,7 @@ namespace nsK2Engine {
 			m_sprite.Draw(rc);
 		}
 	private:
+
 		Sprite			m_sprite;								//スプライト。
 		Vector3			m_position = Vector3::Zero;				//座標。
 		Quaternion		m_rotation = Quaternion::Identity;		//回転。
