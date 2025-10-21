@@ -5,6 +5,7 @@
 #include"Enemy.h"
 #include"GameCamera.h"
 #include"EnemyManager.h"
+#include"StageManager.h"
 
 /**
  * @brief Gameクラスのコンストラクタ
@@ -34,6 +35,8 @@ Game::~Game()
 	DeleteGO(m_player);
 	/** 敵管理クラスのインスタンスを削除*/
 	EnemyManager::DeleteInstance();
+	/**ステージクラスのインスタンスを削除*/
+	StageManager::DeleteInstance();
 }
 
 /**
@@ -42,7 +45,12 @@ Game::~Game()
  */
 bool Game::Start()
 {
+	/** ステージ管理クラスのインスタンスを初期化*/
+	StageManager::GetInstance()->Setup();
+	/** 敵管理クラスのインスタンスを初期化*/
 	EnemyManager::GetInstance()->Setup();
+	/**ステージ管理クラスのインスタンスを生成*/
+	StageManager::CreateInstance();
 	/** 敵管理クラスのインスタンスを生成*/
 	EnemyManager::CreateInstance();
 	/** 背景の初期化*/
@@ -57,6 +65,8 @@ bool Game::Start()
  */
 void Game::Update()
 {
+	/**↓IGameOdjectを継承するやりかた↓*/
+	StageManager::GetInstance()->Update();
 	/**↓IGameOdjectを継承しないやりかた↓*/
 	EnemyManager::GetInstance()->Update();
 }

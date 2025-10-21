@@ -5,6 +5,7 @@ class Enemy;
 class GameCamera;
 class BackGround;
 class EnemyManager;
+class StageManager;
 
 /**
  * @brief ゲームシーン管理クラス
