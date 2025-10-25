@@ -45,18 +45,16 @@ Game::~Game()
  */
 bool Game::Start()
 {
-	/** ステージ管理クラスのインスタンスを初期化*/
-	StageManager::GetInstance()->Setup();
-	/** 敵管理クラスのインスタンスを初期化*/
-	EnemyManager::GetInstance()->Setup();
 	/**ステージ管理クラスのインスタンスを生成*/
 	StageManager::CreateInstance();
+	/** ステージ管理クラスのインスタンスを初期化*/
+	StageManager::GetInstance()->Setup();
 	/** 敵管理クラスのインスタンスを生成*/
 	EnemyManager::CreateInstance();
+	/** 敵管理クラスのインスタンスを初期化*/
+	EnemyManager::GetInstance()->Setup();
 	/** 背景の初期化*/
 	NewGO<BackGround>(0, "background");
-	/** ワイヤーフレームを描画する（コメントアウト中）*/
-	/** PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();*/
 	return true;
 }
 

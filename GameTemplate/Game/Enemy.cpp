@@ -6,20 +6,7 @@
  * @details モデル・キャラクターコントローラー・巡回ルートの初期化を行います。
  */
 Enemy::Enemy() {
-    modelRender.Init("Assets/animData/bossEnemy_TypeA.tkm");
-    modelRender.SetScale(Vector3(1.2f, 1.2f, 1.2f));
-    modelRender.Update();
-
-    currentPos = { 100.0f, 0.0f, 0.0f };
-
-    /** キャラコンを初期化（半径・高さ・初期位置）*/
-    characterController.Init(25.0f, 50.0f, currentPos);
-
-    /** 巡回ルートを設定*/
-    waypoints.push_back(Vector3(100.0f, 0.0f, 0.0f));
-    waypoints.push_back(Vector3(100.0f, 0.0f, 50.0f));
-    waypoints.push_back(Vector3(50.0f, 0.0f, 50.0f));
-    waypoints.push_back(Vector3(50.0f, 0.0f, 0.0f));
+    
 }
 
 /**
@@ -27,6 +14,23 @@ Enemy::Enemy() {
  */
 Enemy::~Enemy() {}
 
+bool Enemy::Start()
+{
+    modelRender.Init("Assets/animData/main_bossEnemy.tkm");
+    modelRender.SetScale(Vector3(80.0f, 80.0f, 80.0));
+    modelRender.Update();
+
+
+    /** キャラコンを初期化（半径・高さ・初期位置）*/
+    characterController.Init(25.0f, 50.0f, currentPos);
+
+    /** 巡回ルートを設定*/
+    waypoints.push_back(Vector3(3500.0f, -100.0f, -4200.0f));
+    waypoints.push_back(Vector3(3500.0f, -100.0f, -4100.0f));
+    waypoints.push_back(Vector3(3400.0f, -100.0f, -4100.0f));
+    waypoints.push_back(Vector3(3400.0f, -100.0f, -4200.0f));
+    return true;
+}
 /**
  * @brief 毎フレームの更新処理
  * @details 移動・回転・モデルの更新を行います。

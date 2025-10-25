@@ -28,10 +28,9 @@ public:
 
     /** @brief 背景モデルのレンダラー */
     ModelRender m_map;
+    ModelRender m_hitBox;
 
     /** @brief 背景の物理静的オブジェクト */
     PhysicsStaticObject physicsStaticObject;
 
-    /** @brief 背景モデルの回転情報 */
-    Quaternion m_rot;
 };
