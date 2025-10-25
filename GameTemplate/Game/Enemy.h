@@ -19,6 +19,7 @@ public:
      */
     ~Enemy();
 
+    bool Start();
     /**
      * @brief 更新処理
      * @details 毎フレーム呼ばれる敵の更新処理です。
@@ -43,6 +44,10 @@ public:
      * @details 敵の回転を制御します。
      */
     void Rotation();
+
+    void SetPosition(Vector3& pos) {
+        currentPos = pos;
+    }
 
     /** @brief モデルレンダラー */
     ModelRender modelRender;

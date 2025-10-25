@@ -1,21 +1,27 @@
 #pragma once
+class Enemy;
 class EnemyManager
 {
 private:
 	EnemyManager();
 	~EnemyManager();
 
+private:
+	static EnemyManager* m_instance;
+
+private:
+	/**可変長配列(Vector)を使ってEnemyを保存する*/
+	std::vector<Enemy*> m_enemyList;
+
 public:
 	void Update();
 	void Setup();
-
-private:
-	
-	static EnemyManager* m_instance;
+	void CreateEnemy(Vector3& pos);
+	void RemoveEnemy();
 
 public:
 	/**EnemyManagerクラスのインスタンスを作成(NewGO)*/
-	static EnemyManager* CreateInstance()
+	static void CreateInstance()
 	{
 		if (m_instance == nullptr)
 		{
@@ -34,9 +40,10 @@ public:
 	/**EnemyManagerクラスのインスタンスを取得(FindGO)*/
 	static EnemyManager*GetInstance()
 	{
+
 		return m_instance;
 	}
-
+	
 	
 };
 
