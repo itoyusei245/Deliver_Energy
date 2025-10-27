@@ -1,11 +1,13 @@
 #include "stdafx.h"
 #include "Game.h"
-#include"BackGround.h"
-#include"Player.h"
-#include"Enemy.h"
-#include"GameCamera.h"
-#include"EnemyManager.h"
-#include"StageManager.h"
+#include "BackGround.h"
+#include "Player.h"
+#include "Enemy.h"
+#include "GameCamera.h"
+#include "EnemyManager.h"
+#include "StageManager.h"
+#include "TriggerBox.h"
+#include "Item.h"
 
 /**
  * @brief Gameクラスのコンストラクタ
