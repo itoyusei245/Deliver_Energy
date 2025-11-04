@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 class Enemy;
 class EnemyManager
 {
@@ -10,7 +10,7 @@ private:
 	static EnemyManager* m_instance;
 
 private:
-	/**‰Â•Ï’·”z—ñ(Vector)‚ğg‚Á‚ÄEnemy‚ğ•Û‘¶‚·‚é*/
+	/**å¯å¤‰é•·é…åˆ—(Vector)ã‚’ä½¿ã£ã¦Enemyã‚’ä¿å­˜ã™ã‚‹*/
 	std::vector<Enemy*> m_enemyList;
 
 public:
@@ -20,7 +20,7 @@ public:
 	void RemoveEnemy();
 
 public:
-	/**EnemyManagerƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğì¬(NewGO)*/
+	/**EnemyManagerã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆ(NewGO)*/
 	static void CreateInstance()
 	{
 		if (m_instance == nullptr)
@@ -28,7 +28,7 @@ public:
 			m_instance = new EnemyManager();
 		}
 	}
-	/**EnemyManagerƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğíœ(DeleteGO)*/
+	/**EnemyManagerã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å‰Šé™¤(DeleteGO)*/
 	static void DeleteInstance()
 	{
 		if (m_instance!=nullptr)
@@ -37,7 +37,7 @@ public:
 			m_instance = nullptr;
 		}
 	}
-	/**EnemyManagerƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾(FindGO)*/
+	/**EnemyManagerã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—(FindGO)*/
 	static EnemyManager*GetInstance()
 	{
 

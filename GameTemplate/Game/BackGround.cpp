@@ -1,29 +1,29 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "BackGround.h"
 
 /**
- * @brief BackGroundƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @details ”wŒiƒ‚ƒfƒ‹‚Ì‰Šú‰»AˆÊ’uE‰ñ“]EƒXƒP[ƒ‹İ’èA•¨—ƒIƒuƒWƒFƒNƒg¶¬AƒfƒoƒbƒOƒƒCƒ„[ƒtƒŒ[ƒ€•\¦‚ğs‚¢‚Ü‚·B
+ * @brief BackGroundã‚¯ãƒ©ã‚¹ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+ * @details èƒŒæ™¯ãƒ¢ãƒ‡ãƒ«ã®åˆæœŸåŒ–ã€ä½ç½®ãƒ»å›è»¢ãƒ»ã‚¹ã‚±ãƒ¼ãƒ«è¨­å®šã€ç‰©ç†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆã€ãƒ‡ãƒãƒƒã‚°ãƒ¯ã‚¤ãƒ¤ãƒ¼ãƒ•ãƒ¬ãƒ¼ãƒ è¡¨ç¤ºã‚’è¡Œã„ã¾ã™ã€‚
  */
 BackGround::BackGround()
 {
-    /** ƒ‚ƒfƒ‹‚ÌˆÊ’u‚ğİ’è*/
+    /** ãƒ¢ãƒ‡ãƒ«ã®ä½ç½®ã‚’è¨­å®š*/
     m_map.SetPosition(0.0f, 0.0f, 0.0f);
-    /** ”wŒiƒ‚ƒfƒ‹‚ğ‰Šú‰»*/
+    /** èƒŒæ™¯ãƒ¢ãƒ‡ãƒ«ã‚’åˆæœŸåŒ–*/
     m_map.Init("Assets/modelData/Stage/map.tkm");
 
     m_hitBox.SetPosition(0.0f, 0.0f, 0.0f);
     m_hitBox.Init("Assets/modelData/Stage/map_HitBox.tkm");
     m_hitBox.Update();
-    /** •¨—Ã“IƒIƒuƒWƒFƒNƒg‚ğƒ‚ƒfƒ‹‚©‚ç¶¬*/
+    /** ç‰©ç†é™çš„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ¢ãƒ‡ãƒ«ã‹ã‚‰ç”Ÿæˆ*/
     physicsStaticObject.CreateFromModel(m_hitBox.GetModel(), m_hitBox.GetModel().GetWorldMatrix());
     
-    /** ƒfƒoƒbƒO—pƒƒCƒ„[ƒtƒŒ[ƒ€•\¦‚ğ—LŒø‰»*/
+    /** ãƒ‡ãƒãƒƒã‚°ç”¨ãƒ¯ã‚¤ãƒ¤ãƒ¼ãƒ•ãƒ¬ãƒ¼ãƒ è¡¨ç¤ºã‚’æœ‰åŠ¹åŒ–*/
     //PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 /**
- * @brief BackGroundƒNƒ‰ƒX‚ÌƒfƒXƒgƒ‰ƒNƒ^
+ * @brief BackGroundã‚¯ãƒ©ã‚¹ã®ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
  */
 BackGround::~BackGround()
 {
@@ -31,9 +31,9 @@ BackGround::~BackGround()
 }
 
 /**
- * @brief ”wŒi‚Ì•`‰æˆ—
- * @param rc •`‰æƒRƒ“ƒeƒLƒXƒg
- * @details ”wŒiƒ‚ƒfƒ‹‚Ì•`‰æ‚ğs‚¢‚Ü‚·B
+ * @brief èƒŒæ™¯ã®æç”»å‡¦ç†
+ * @param rc æç”»ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
+ * @details èƒŒæ™¯ãƒ¢ãƒ‡ãƒ«ã®æç”»ã‚’è¡Œã„ã¾ã™ã€‚
  */
 void BackGround::Render(RenderContext& rc)
 {

@@ -1,9 +1,9 @@
 #pragma once
-class Item : public IGameObject
+class GetItem : public IGameObject
 {
 public:
-	Item();
-	~Item();
+	GetItem();
+	~GetItem();
 
 	void Init(const Vector3& pos);
 	void Update();
