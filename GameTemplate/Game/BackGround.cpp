@@ -19,7 +19,7 @@ BackGround::BackGround()
     physicsStaticObject.CreateFromModel(m_hitBox.GetModel(), m_hitBox.GetModel().GetWorldMatrix());
     
     /** デバッグ用ワイヤーフレーム表示を有効化*/
-    PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+    //PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 /**

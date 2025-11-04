@@ -45,14 +45,6 @@ public:
      */
     void Rotation();
 
-    /**
-    * @brief コイン生成処理
-    * @details 敵が倒されたときに呼び出され、指定範囲にコインをランダムに生成します。
-    * @param center 敵の中心位置
-    * @param count 出すコインの数
-    * @param rangeX X方向のランダム範囲
-    * @param rangeZ Z方向のランダム範囲
-    */
     void SpawnCoins(const Vector3& center, int count, float rangeX, float rangeZ);
 
     void SetPosition(Vector3& pos) {
@@ -69,7 +61,6 @@ public:
     Quaternion m_rot;
 
     CollisionObject* collision;
-    //CollisionObject collisionObject; // 追加
 
 private:
     /** @brief 巡回ポイントのリスト */
