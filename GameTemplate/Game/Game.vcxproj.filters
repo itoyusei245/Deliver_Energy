@@ -38,6 +38,7 @@
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="TriggerBox.h" />
+    <ClInclude Include="Item.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />
