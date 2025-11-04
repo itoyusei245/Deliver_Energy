@@ -11,7 +11,7 @@
  * @details モデル・キャラクターコントローラー・巡回ルートの初期化を行います。
  */
 Enemy::Enemy() {
-    
+
 }
 
 /**
@@ -112,7 +112,7 @@ void Enemy::Rotation() {
         modelRender.SetRotation(m_rot);
     }
 }
-    
+
 void Enemy::SpawnCoins(const Vector3& center, int count, float rangeX, float rangeZ)
 {
     srand((unsigned int)time(nullptr));

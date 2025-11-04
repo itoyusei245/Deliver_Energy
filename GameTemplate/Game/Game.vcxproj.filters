@@ -21,7 +21,6 @@
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="TriggerBox.cpp" />
-    <ClCompile Include="Item.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -39,7 +38,6 @@
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="TriggerBox.h" />
-    <ClInclude Include="Item.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />
