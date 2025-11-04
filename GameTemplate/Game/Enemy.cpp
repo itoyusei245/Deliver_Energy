@@ -56,8 +56,6 @@ void Enemy::Update() {
     Rotation();
     modelRender.Update();
 
-    //    // CollisionObject‚ÌˆÊ’u‚ğƒLƒƒƒ‰ƒRƒ“‚É’Ç]
-    //    collisionObject.SetPosition(currentPos);
     Player* player = FindGO<Player>("player");
     if (!player)
     {
