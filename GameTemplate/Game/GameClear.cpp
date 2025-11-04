@@ -1,10 +1,10 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "GameClear.h"
 #include"Title.h"
 
 GameClear::GameClear()
 {
-    /**ƒQ[ƒ€ƒNƒŠƒA‚Ì‰æ‘œ‚ğ“Ç‚İ‚İ*/
+    /**ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢ã®ç”»åƒã‚’èª­ã¿è¾¼ã¿*/
 	spriteRender.Init("Assets/sprite/Clear.dds", 1920.0f, 1080.0f);
 }
 
@@ -14,25 +14,25 @@ GameClear::~GameClear()
 }
 
 /**
- * @brief –ˆƒtƒŒ[ƒ€‚ÌXVˆ—
- * @details Aƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚çƒ^ƒCƒgƒ‹‰æ–Ê‚Ö‘JˆÚ‚µA©g‚ğíœ‚µ‚Ü‚·B
+ * @brief æ¯ãƒ•ãƒ¬ãƒ¼ãƒ ã®æ›´æ–°å‡¦ç†
+ * @details Aãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã‚‰ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã¸é·ç§»ã—ã€è‡ªèº«ã‚’å‰Šé™¤ã—ã¾ã™ã€‚
  */
 void GameClear::Update()
 {
-    /** Aƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚çc*/
+    /** Aãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã‚‰â€¦*/
     if (g_pad[0]->IsTrigger(enButtonA))
     {
-		/** ƒ^ƒCƒgƒ‹‚ÌƒIƒuƒWƒFƒNƒg‚ğì¬*/
+		/** ã‚¿ã‚¤ãƒˆãƒ«ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ*/
         NewGO<Title>(0, "title");
-        /** ©g‚ğíœ‚·‚é*/
+        /** è‡ªèº«ã‚’å‰Šé™¤ã™ã‚‹*/
         DeleteGO(this);
     }
 }
 
 /**
- * @brief ƒQ[ƒ€ƒNƒŠƒA‰æ–Ê‚Ì•`‰æˆ—
- * @param rc •`‰æƒRƒ“ƒeƒLƒXƒg
- * @details ƒNƒŠƒA‰æ‘œ‚Ì•`‰æ‚ğs‚¢‚Ü‚·B
+ * @brief ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢ç”»é¢ã®æç”»å‡¦ç†
+ * @param rc æç”»ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
+ * @details ã‚¯ãƒªã‚¢ç”»åƒã®æç”»ã‚’è¡Œã„ã¾ã™ã€‚
  */
 void GameClear::Render(RenderContext& rc)
 {

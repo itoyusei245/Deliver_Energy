@@ -1,21 +1,21 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "Enemy.h"
 #include "EnemyManager.h"
 #include "Player.h"
-#include "Item.h"
+#include "GetItem.h"
 #include <random>
 #include <ctime>
 #include <cstdlib>
 /**
- * @brief EnemyƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @details ƒ‚ƒfƒ‹EƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[E„‰ñƒ‹[ƒg‚Ì‰Šú‰»‚ğs‚¢‚Ü‚·B
+ * @brief Enemyã‚¯ãƒ©ã‚¹ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+ * @details ãƒ¢ãƒ‡ãƒ«ãƒ»ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ãƒ»å·¡å›ãƒ«ãƒ¼ãƒˆã®åˆæœŸåŒ–ã‚’è¡Œã„ã¾ã™ã€‚
  */
 Enemy::Enemy() {
 
 }
 
 /**
- * @brief EnemyƒNƒ‰ƒX‚ÌƒfƒXƒgƒ‰ƒNƒ^
+ * @brief Enemyã‚¯ãƒ©ã‚¹ã®ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
  */
 Enemy::~Enemy() {}
 
@@ -25,22 +25,22 @@ bool Enemy::Start()
     modelRender.SetScale(Vector3(80.0f, 80.0f, 80.0f));
     modelRender.Update();
 
-    // ƒLƒƒƒ‰ƒRƒ“‚Ìƒpƒ‰ƒ[ƒ^
+    // ã‚­ãƒ£ãƒ©ã‚³ãƒ³ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
     float radius = 25.0f;
     float height = 50.0f;
     characterController.Init(radius, height, currentPos);
 
-    // CollisionObject¶¬
+    // CollisionObjectç”Ÿæˆ
     collision = NewGO<CollisionObject>(0, "CollisionObject");
 
-    // ƒLƒƒƒ‰ƒRƒ“‚Æ“¯‚¶ƒTƒCƒY‚ÅBox‚ğì¬
+    // ã‚­ãƒ£ãƒ©ã‚³ãƒ³ã¨åŒã˜ã‚µã‚¤ã‚ºã§Boxã‚’ä½œæˆ
     Vector3 boxSize(radius, height, radius);
 
     collision->CreateBox(currentPos, m_rot, boxSize);
 
-    collision->SetIsEnableAutoDelete(false);   //‚±‚±‚Åfalse‚ğİ’è‚µ‚È‚¢‚ÆƒLƒƒƒ‰ƒRƒ“‚ªŸ‚ÌƒtƒŒ[ƒ€‚ÅŸè‚ÉÁ‚³‚ê‚é
+    collision->SetIsEnableAutoDelete(false);   //ã“ã“ã§falseã‚’è¨­å®šã—ãªã„ã¨ã‚­ãƒ£ãƒ©ã‚³ãƒ³ãŒæ¬¡ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã§å‹æ‰‹ã«æ¶ˆã•ã‚Œã‚‹
 
-    // „‰ñƒ‹[ƒg‚ğİ’è
+    // å·¡å›ãƒ«ãƒ¼ãƒˆã‚’è¨­å®š
     waypoints.push_back(Vector3(3500.0f, -100.0f, -4200.0f));
     waypoints.push_back(Vector3(3500.0f, -100.0f, -4100.0f));
     waypoints.push_back(Vector3(3400.0f, -100.0f, -4100.0f));
@@ -48,8 +48,8 @@ bool Enemy::Start()
     return true;
 }
 /**
- * @brief –ˆƒtƒŒ[ƒ€‚ÌXVˆ—
- * @details ˆÚ“®E‰ñ“]Eƒ‚ƒfƒ‹‚ÌXV‚ğs‚¢‚Ü‚·B
+ * @brief æ¯ãƒ•ãƒ¬ãƒ¼ãƒ ã®æ›´æ–°å‡¦ç†
+ * @details ç§»å‹•ãƒ»å›è»¢ãƒ»ãƒ¢ãƒ‡ãƒ«ã®æ›´æ–°ã‚’è¡Œã„ã¾ã™ã€‚
  */
 void Enemy::Update() {
     Move();
@@ -70,8 +70,8 @@ void Enemy::Update() {
 }
 
 /**
- * @brief “G‚ÌˆÚ“®ˆ—
- * @details „‰ñƒ|ƒCƒ“ƒg‚ÉŒü‚©‚Á‚ÄˆÚ“®‚µA“’B‚µ‚½‚çŸ‚Ìƒ|ƒCƒ“ƒg‚Öi‚İ‚Ü‚·B
+ * @brief æ•µã®ç§»å‹•å‡¦ç†
+ * @details å·¡å›ãƒã‚¤ãƒ³ãƒˆã«å‘ã‹ã£ã¦ç§»å‹•ã—ã€åˆ°é”ã—ãŸã‚‰æ¬¡ã®ãƒã‚¤ãƒ³ãƒˆã¸é€²ã¿ã¾ã™ã€‚
  */
 void Enemy::Move() {
     if (waypoints.empty()) return;
@@ -81,24 +81,24 @@ void Enemy::Move() {
     float distance = dir.Length();
 
     if (distance < 1.0f) {
-        /** „‰ñƒ|ƒCƒ“ƒg“’BAŸ‚Ìƒ|ƒCƒ“ƒg‚Ö*/
+        /** å·¡å›ãƒã‚¤ãƒ³ãƒˆåˆ°é”æ™‚ã€æ¬¡ã®ãƒã‚¤ãƒ³ãƒˆã¸*/
         currentWaypoint = (currentWaypoint + 1) % waypoints.size();
     }
     else {
         dir.Normalize();
         Vector3 move = dir * speed;
 
-        /** ƒLƒƒƒ‰ƒRƒ“‚ğg‚Á‚ÄˆÚ“®i“–‚½‚è”»’è‚Â‚«*/
+        /** ã‚­ãƒ£ãƒ©ã‚³ãƒ³ã‚’ä½¿ã£ã¦ç§»å‹•ï¼ˆå½“ãŸã‚Šåˆ¤å®šã¤ã*/
         currentPos = characterController.Execute(move, 1.0f / 60.0f);
 
-        /** ƒ‚ƒfƒ‹‚É”½‰f*/
+        /** ãƒ¢ãƒ‡ãƒ«ã«åæ˜ */
         modelRender.SetPosition(currentPos);
     }
 }
 
 /**
- * @brief “G‚Ì‰ñ“]ˆ—
- * @details ˆÚ“®•ûŒü‚Éƒ‚ƒfƒ‹‚ÌŒü‚«‚ğ‡‚í‚¹‚Ü‚·B
+ * @brief æ•µã®å›è»¢å‡¦ç†
+ * @details ç§»å‹•æ–¹å‘ã«ãƒ¢ãƒ‡ãƒ«ã®å‘ãã‚’åˆã‚ã›ã¾ã™ã€‚
  */
 void Enemy::Rotation() {
     Vector3 targetPos = waypoints[currentWaypoint];
@@ -118,26 +118,26 @@ void Enemy::SpawnCoins(const Vector3& center, int count, float rangeX, float ran
     srand((unsigned int)time(nullptr));
     for (int i = 0; i < count; ++i)
     {
-        /**-rangeX~+rangeX‚Ì”ÍˆÍ‚Å—”‚ğo‚·*/
+        /**-rangeX~+rangeXã®ç¯„å›²ã§ä¹±æ•°ã‚’å‡ºã™*/
         float offsetX = ((float)rand() / RAND_MAX) * 2.0f * rangeX - rangeZ;
         float offsetZ = ((float)rand() / RAND_MAX) * 2.0f * rangeZ - rangeZ;
 
-        /**o‚·ˆÊ’u‚ğŒvZ*/
+        /**å‡ºã™ä½ç½®ã‚’è¨ˆç®—*/
         Vector3 pos = center;
         pos.x += offsetX;
         pos.z += offsetZ;
         pos.y += 10.0f;
 
-        /**ƒRƒCƒ“¶¬*/
-        Item* coin = NewGO<Item>(0, "coin");
+        /**ã‚³ã‚¤ãƒ³ç”Ÿæˆ*/
+        GetItem* coin = NewGO<GetItem>(0, "coin");
         coin->Init(pos);
     }
 }
 
 /**
- * @brief “G‚Ì•`‰æˆ—
- * @param rc •`‰æƒRƒ“ƒeƒLƒXƒg
- * @details ƒ‚ƒfƒ‹‚Ì•`‰æ‚ğs‚¢‚Ü‚·B
+ * @brief æ•µã®æç”»å‡¦ç†
+ * @param rc æç”»ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
+ * @details ãƒ¢ãƒ‡ãƒ«ã®æç”»ã‚’è¡Œã„ã¾ã™ã€‚
  */
 void Enemy::Render(RenderContext& rc) {
     modelRender.Draw(rc);

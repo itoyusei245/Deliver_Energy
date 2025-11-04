@@ -1,8 +1,9 @@
-/**gEnemyManagerh“GƒLƒƒƒ‰ƒNƒ^[‚ÌŠÇ—‚ğs‚¤ƒVƒ“ƒOƒ‹ƒgƒ“ƒpƒ^[ƒ“‚ğ—p‚¢‚½ƒNƒ‰ƒX*/
+ï»¿/**â€œEnemyManagerâ€æ•µã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ç®¡ç†ã‚’è¡Œã†ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’ç”¨ã„ãŸã‚¯ãƒ©ã‚¹*/
 #include "stdafx.h"
 #include "EnemyManager.h"
 #include "Enemy.h"
 #include "StageManager.h"
+#include "Player.h"
 
 EnemyManager* EnemyManager::m_instance = nullptr;
 
@@ -13,23 +14,51 @@ EnemyManager::EnemyManager()
 EnemyManager::~EnemyManager()
 {
 }
-/**“Gƒ}ƒl[ƒWƒƒ[‚ÌXVƒƒ\ƒbƒh*/
+/**æ•µãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®æ›´æ–°ãƒ¡ã‚½ãƒƒãƒ‰*/
 void EnemyManager::Update()
 {
+    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å–å¾—
+    Player* player = FindGO<Player>("player");
+    if (!player) return;
+
+    // å‰Šé™¤å¯¾è±¡ã®Enemyã‚’ä¸€æ™‚ä¿å­˜
+    std::vector<Enemy*> enemiesToDelete;
+
+    for (Enemy* enemy : m_enemyList)
+    {
+        // Enemyã®CollisionObjectã¨Playerã®CharacterControllerã§åˆ¤å®š
+        if (enemy->collision && enemy->collision->IsHit(player->characterController))
+        {
+            // â˜… ã‚³ã‚¤ãƒ³ã‚’50æšã€ç¯„å›²1000Ã—1000ã§ç”Ÿæˆ
+            enemy->SpawnCoins(enemy->characterController.GetPosition(), 100, 1000.0f, 1000.0f);
+            enemiesToDelete.push_back(enemy);
+        }
+    }
+
+    // å½“ãŸã£ãŸEnemyã‚’å‰Šé™¤
+    for (Enemy* enemy : enemiesToDelete)
+    {
+        DeleteGO(enemy); // GameObjectã¨ã—ã¦å‰Šé™¤
+        auto it = std::find(m_enemyList.begin(), m_enemyList.end(), enemy);
+        if (it != m_enemyList.end())
+        {
+            m_enemyList.erase(it);
+        }
+    }
 }
-/**“Gƒ}ƒl[ƒWƒƒ[‚Ì‰Šúİ’èƒƒ\ƒbƒh*/
+/**æ•µãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®åˆæœŸè¨­å®šãƒ¡ã‚½ãƒƒãƒ‰*/
 void EnemyManager::Setup()
 {
 
 }
-/**V‚µ‚¢“GƒIƒuƒWƒFƒNƒg‚ğ¶¬‚µ‚Ä“GƒŠƒXƒg‚É’Ç‰Á‚·‚éƒƒ\ƒbƒh*/
+/**æ–°ã—ã„æ•µã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã—ã¦æ•µãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰*/
 void EnemyManager::CreateEnemy(Vector3& pos)
 {
-	Enemy* enemy = NewGO<Enemy>(0,"enemy");/**(0,"hoge")0‚Íˆ—‚Ì—Dæ‡ˆÊ*/
+	Enemy* enemy = NewGO<Enemy>(0,"enemy");/**(0,"hoge")0ã¯å‡¦ç†ã®å„ªå…ˆé †ä½*/
 	enemy->SetPosition(pos);
 	m_enemyList.push_back(enemy);
 }
-/**“G‚ğíœ‚·‚éƒƒ\ƒbƒh*/
+/**æ•µã‚’å‰Šé™¤ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰*/
 void EnemyManager::RemoveEnemy()
 {
 }

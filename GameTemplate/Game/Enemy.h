@@ -1,47 +1,47 @@
-#pragma once
+ï»¿#pragma once
 
 /**
- * @brief “GƒLƒƒƒ‰ƒNƒX
- * @details ƒQ[ƒ€“à‚Ì“GƒIƒuƒWƒFƒNƒg‚ğŠÇ—‚µ‚Ü‚·B
+ * @brief æ•µã‚­ãƒ£ãƒ©ã‚¯ã‚¹
+ * @details ã‚²ãƒ¼ãƒ å†…ã®æ•µã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç®¡ç†ã—ã¾ã™ã€‚
  */
 class Enemy : public IGameObject
 {
 public:
     /**
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-     * @details “GƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰»‚ğs‚¢‚Ü‚·B
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+     * @details æ•µã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ–ã‚’è¡Œã„ã¾ã™ã€‚
      */
     Enemy();
 
     /**
-     * @brief ƒfƒXƒgƒ‰ƒNƒ^
-     * @details “GƒIƒuƒWƒFƒNƒg‚ÌI—¹ˆ—‚ğs‚¢‚Ü‚·B
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+     * @details æ•µã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®çµ‚äº†å‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
      */
     ~Enemy();
 
     bool Start();
     /**
-     * @brief XVˆ—
-     * @details –ˆƒtƒŒ[ƒ€ŒÄ‚Î‚ê‚é“G‚ÌXVˆ—‚Å‚·B
+     * @brief æ›´æ–°å‡¦ç†
+     * @details æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‘¼ã°ã‚Œã‚‹æ•µã®æ›´æ–°å‡¦ç†ã§ã™ã€‚
      */
     void Update();
 
     /**
-     * @brief •`‰æˆ—
-     * @param rc •`‰æƒRƒ“ƒeƒLƒXƒg
-     * @details “Gƒ‚ƒfƒ‹‚Ì•`‰æ‚ğs‚¢‚Ü‚·B
+     * @brief æç”»å‡¦ç†
+     * @param rc æç”»ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
+     * @details æ•µãƒ¢ãƒ‡ãƒ«ã®æç”»ã‚’è¡Œã„ã¾ã™ã€‚
      */
     void Render(RenderContext& rc);
 
     /**
-     * @brief ˆÚ“®ˆ—
-     * @details “G‚ÌˆÚ“®‚ğ§Œä‚µ‚Ü‚·B
+     * @brief ç§»å‹•å‡¦ç†
+     * @details æ•µã®ç§»å‹•ã‚’åˆ¶å¾¡ã—ã¾ã™ã€‚
      */
     void Move();
 
     /**
-     * @brief ‰ñ“]ˆ—
-     * @details “G‚Ì‰ñ“]‚ğ§Œä‚µ‚Ü‚·B
+     * @brief å›è»¢å‡¦ç†
+     * @details æ•µã®å›è»¢ã‚’åˆ¶å¾¡ã—ã¾ã™ã€‚
      */
     void Rotation();
 
@@ -51,27 +51,27 @@ public:
         currentPos = pos;
     }
 
-    /** @brief ƒ‚ƒfƒ‹ƒŒƒ“ƒ_ƒ‰[ */
+    /** @brief ãƒ¢ãƒ‡ãƒ«ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ */
     ModelRender modelRender;
 
-    /** @brief ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[iPlayer‚Æ“¯‚¶j */
+    /** @brief ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ï¼ˆPlayerã¨åŒã˜ï¼‰ */
     CharacterController characterController;
 
-    /** @brief “G‚Ì‰ñ“]iƒNƒH[ƒ^ƒjƒIƒ“j */
+    /** @brief æ•µã®å›è»¢ï¼ˆã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ï¼‰ */
     Quaternion m_rot;
 
     CollisionObject* collision;
 
 private:
-    /** @brief „‰ñƒ|ƒCƒ“ƒg‚ÌƒŠƒXƒg */
+    /** @brief å·¡å›ãƒã‚¤ãƒ³ãƒˆã®ãƒªã‚¹ãƒˆ */
     std::vector<Vector3> waypoints;
 
-    /** @brief Œ»İ‚Ì„‰ñƒ|ƒCƒ“ƒgƒCƒ“ƒfƒbƒNƒX */
+    /** @brief ç¾åœ¨ã®å·¡å›ãƒã‚¤ãƒ³ãƒˆã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ */
     int currentWaypoint = 0;
 
-    /** @brief ˆÚ“®‘¬“x */
+    /** @brief ç§»å‹•é€Ÿåº¦ */
     float speed = 20.0f;
 
-    /** @brief Œ»İˆÊ’u */
+    /** @brief ç¾åœ¨ä½ç½® */
     Vector3 currentPos;
 };

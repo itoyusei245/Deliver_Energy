@@ -1,36 +1,36 @@
-#pragma once
+ï»¿#pragma once
 
 /**
- * @brief ”wŒiƒIƒuƒWƒFƒNƒgƒNƒ‰ƒX
- * @details ƒXƒe[ƒW”wŒi‚Ìƒ‚ƒfƒ‹A•¨—ƒIƒuƒWƒFƒNƒgA‰ñ“]î•ñ‚ğŠÇ—‚µ‚Ü‚·B
+ * @brief èƒŒæ™¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¯ãƒ©ã‚¹
+ * @details ã‚¹ãƒ†ãƒ¼ã‚¸èƒŒæ™¯ã®ãƒ¢ãƒ‡ãƒ«ã€ç‰©ç†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€å›è»¢æƒ…å ±ã‚’ç®¡ç†ã—ã¾ã™ã€‚
  */
 class BackGround : public IGameObject
 {
 public:
     /**
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-     * @details ”wŒiƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰»‚ğs‚¢‚Ü‚·B
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+     * @details èƒŒæ™¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ–ã‚’è¡Œã„ã¾ã™ã€‚
      */
     BackGround();
 
     /**
-     * @brief ƒfƒXƒgƒ‰ƒNƒ^
-     * @details ”wŒiƒIƒuƒWƒFƒNƒg‚ÌI—¹ˆ—‚ğs‚¢‚Ü‚·B
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+     * @details èƒŒæ™¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®çµ‚äº†å‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
      */
     ~BackGround();
 
     /**
-     * @brief ”wŒi‚Ì•`‰æˆ—
-     * @param rc •`‰æƒRƒ“ƒeƒLƒXƒg
-     * @details ”wŒiƒ‚ƒfƒ‹‚Ì•`‰æ‚ğs‚¢‚Ü‚·B
+     * @brief èƒŒæ™¯ã®æç”»å‡¦ç†
+     * @param rc æç”»ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
+     * @details èƒŒæ™¯ãƒ¢ãƒ‡ãƒ«ã®æç”»ã‚’è¡Œã„ã¾ã™ã€‚
      */
     void Render(RenderContext& rc);
 
-    /** @brief ”wŒiƒ‚ƒfƒ‹‚ÌƒŒƒ“ƒ_ƒ‰[ */
+    /** @brief èƒŒæ™¯ãƒ¢ãƒ‡ãƒ«ã®ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ */
     ModelRender m_map;
     ModelRender m_hitBox;
 
-    /** @brief ”wŒi‚Ì•¨—Ã“IƒIƒuƒWƒFƒNƒg */
+    /** @brief èƒŒæ™¯ã®ç‰©ç†é™çš„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ */
     PhysicsStaticObject physicsStaticObject;
 
 };
