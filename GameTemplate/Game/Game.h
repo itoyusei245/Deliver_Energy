@@ -1,7 +1,7 @@
 #pragma once
 #include "Level3DRender/LevelRender.h"
 class Player;
-class Enemy;
+class NoobEnemy;
 class GameCamera;
 class BackGround;
 class EnemyManager;
@@ -56,7 +56,7 @@ private:
     Player* m_player = nullptr;
 
     /** @brief 敵オブジェクト */
-    Enemy* m_enemy = nullptr;
+    NoobEnemy* m_noobEnemy = nullptr;
 
     /** @brief ゲームカメラオブジェクト */
     GameCamera* m_gameCamera;

@@ -8,8 +8,9 @@ public:
 
 	void Init();
 
-	LevelRender m_levelRender;
-
+private:
+	LevelRender m_enemySpawnLevel;
+	LevelRender m_stageSpawnLevel;
 };
 
 

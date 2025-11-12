@@ -223,8 +223,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AthleticStage.cpp" />
     <ClCompile Include="BackGround.cpp" />
-    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="BossEnemy.cpp" />
+    <ClCompile Include="NoobEnemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
@@ -243,8 +245,10 @@
     <ClCompile Include="TriggerBox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AthleticStage.h" />
     <ClInclude Include="BackGround.h" />
-    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="BossEnemy.h" />
+    <ClInclude Include="NoobEnemy.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />

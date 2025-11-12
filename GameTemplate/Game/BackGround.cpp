@@ -17,9 +17,14 @@ BackGround::BackGround()
     m_hitBox.Update();
     /** 物理静的オブジェクトをモデルから生成*/
     physicsStaticObject.CreateFromModel(m_hitBox.GetModel(), m_hitBox.GetModel().GetWorldMatrix());
-    
+
+   /* m_mapAthletic.SetPosition(Vector3(1500.0f, -100.0f, -4200.0f));
+    m_mapAthletic.Init("Assets/modelData/Stage/map_Athletic.tkm");
+    m_mapAthletic.Update();*/
+    /** 物理静的オブジェクトをモデルから生成*/
+    //physicsStaticObject.CreateFromModel(m_mapAthletic.GetModel(), m_mapAthletic.GetModel().GetWorldMatrix());
     /** デバッグ用ワイヤーフレーム表示を有効化*/
-    //PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+    PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 /**
@@ -29,7 +34,6 @@ BackGround::~BackGround()
 {
 
 }
-
 /**
  * @brief 背景の描画処理
  * @param rc 描画コンテキスト
@@ -38,4 +42,5 @@ BackGround::~BackGround()
 void BackGround::Render(RenderContext& rc)
 {
     m_map.Draw(rc);
+    //m_mapAthletic.Draw(rc);
 }

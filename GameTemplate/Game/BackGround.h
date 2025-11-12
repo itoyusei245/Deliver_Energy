@@ -7,30 +7,23 @@
 class BackGround : public IGameObject
 {
 public:
-    /**
-     * @brief コンストラクタ
-     * @details 背景オブジェクトの初期化を行います。
-     */
+    
     BackGround();
-
-    /**
-     * @brief デストラクタ
-     * @details 背景オブジェクトの終了処理を行います。
-     */
     ~BackGround();
 
-    /**
-     * @brief 背景の描画処理
-     * @param rc 描画コンテキスト
-     * @details 背景モデルの描画を行います。
-     */
     void Render(RenderContext& rc);
 
-    /** @brief 背景モデルのレンダラー */
-    ModelRender m_map;
-    ModelRender m_hitBox;
+    void Init();
 
     /** @brief 背景の物理静的オブジェクト */
     PhysicsStaticObject physicsStaticObject;
+
+private:
+    /** @brief 背景モデルのレンダラー */
+    ModelRender m_map;
+    ModelRender m_hitBox;
+    ModelRender m_mapAthletic;
+
+
 
 };
