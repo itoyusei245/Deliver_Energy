@@ -4,20 +4,20 @@
  * @brief 敵キャラクス
  * @details ゲーム内の敵オブジェクトを管理します。
  */
-class Enemy : public IGameObject
+class NoobEnemy : public IGameObject
 {
 public:
     /**
      * @brief コンストラクタ
      * @details 敵オブジェクトの初期化を行います。
      */
-    Enemy();
+    NoobEnemy();
 
     /**
      * @brief デストラクタ
      * @details 敵オブジェクトの終了処理を行います。
      */
-    ~Enemy();
+    ~NoobEnemy();
 
     bool Start();
     /**
@@ -52,7 +52,7 @@ public:
     }
 
     /** @brief モデルレンダラー */
-    ModelRender modelRender;
+    ModelRender m_noobEnemy;
 
     /** @brief キャラクターコントローラー（Playerと同じ） */
     CharacterController characterController;

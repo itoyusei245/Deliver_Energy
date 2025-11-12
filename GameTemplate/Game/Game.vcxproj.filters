@@ -17,11 +17,13 @@
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="GameClear.cpp" />
-    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="NoobEnemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="TriggerBox.cpp" />
     <ClCompile Include="GetItem.cpp" />
+    <ClCompile Include="AthleticStage.cpp" />
+    <ClCompile Include="BossEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -35,11 +37,13 @@
     <ClInclude Include="Title.h" />
     <ClInclude Include="GameClear.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="NoobEnemy.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="TriggerBox.h" />
     <ClInclude Include="GetItem.h" />
+    <ClInclude Include="AthleticStage.h" />
+    <ClInclude Include="BossEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

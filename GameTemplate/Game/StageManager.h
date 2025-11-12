@@ -13,8 +13,8 @@ public:
 private:  
     static StageManager* m_instance;  
     TriggerBox* m_triggerBox = nullptr;
-    CollisionObject* m_collisionObject = nullptr; 
-
+    CollisionObject* m_spawnCollisionObject = nullptr; 
+    CollisionObject* m_stageCollisionObject = nullptr;
 
 public:  
     static void CreateInstance()  
@@ -37,5 +37,7 @@ public:
         return m_instance;  
     }  
 
-    void CreateBox(Vector3& pos, Quaternion& rot, Vector3& size);
+    void CreateEnemyBox(Vector3& pos, Quaternion& rot, Vector3& size);
+    void CreateStageBox(Vector3& pos, Quaternion& rot, Vector3& size);
+
 };

@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "Enemy.h"
+#include "NoobEnemy.h"
 #include "EnemyManager.h"
 #include "Player.h"
 #include "GetItem.h"
@@ -10,20 +10,20 @@
  * @brief Enemyクラスのコンストラクタ
  * @details モデル・キャラクターコントローラー・巡回ルートの初期化を行います。
  */
-Enemy::Enemy() {
+NoobEnemy::NoobEnemy() {
 
 }
 
 /**
  * @brief Enemyクラスのデストラクタ
  */
-Enemy::~Enemy() {}
+NoobEnemy::~NoobEnemy() {}
 
-bool Enemy::Start()
+bool NoobEnemy::Start()
 {
-    modelRender.Init("Assets/animData/main_bossEnemy.tkm");
-    modelRender.SetScale(Vector3(80.0f, 80.0f, 80.0f));
-    modelRender.Update();
+    m_noobEnemy.Init("Assets/animData/main_bossEnemy.tkm");
+    m_noobEnemy.SetScale(Vector3(80.0f, 80.0f, 80.0f));
+    m_noobEnemy.Update();
 
     // キャラコンのパラメータ
     float radius = 25.0f;
@@ -51,10 +51,10 @@ bool Enemy::Start()
  * @brief 毎フレームの更新処理
  * @details 移動・回転・モデルの更新を行います。
  */
-void Enemy::Update() {
+void NoobEnemy::Update() {
     Move();
     Rotation();
-    modelRender.Update();
+    m_noobEnemy.Update();
 
     Player* player = FindGO<Player>("player");
     if (!player)
@@ -73,7 +73,7 @@ void Enemy::Update() {
  * @brief 敵の移動処理
  * @details 巡回ポイントに向かって移動し、到達したら次のポイントへ進みます。
  */
-void Enemy::Move() {
+void NoobEnemy::Move() {
     if (waypoints.empty()) return;
 
     Vector3 targetPos = waypoints[currentWaypoint];
@@ -92,7 +92,7 @@ void Enemy::Move() {
         currentPos = characterController.Execute(move, 1.0f / 60.0f);
 
         /** モデルに反映*/
-        modelRender.SetPosition(currentPos);
+        m_noobEnemy.SetPosition(currentPos);
     }
 }
 
@@ -100,7 +100,7 @@ void Enemy::Move() {
  * @brief 敵の回転処理
  * @details 移動方向にモデルの向きを合わせます。
  */
-void Enemy::Rotation() {
+void NoobEnemy::Rotation() {
     Vector3 targetPos = waypoints[currentWaypoint];
     Vector3 dir = targetPos - currentPos;
     dir.y = 0;
@@ -109,11 +109,11 @@ void Enemy::Rotation() {
         dir.Normalize();
         float angle = atan2f(dir.x, dir.z);
         m_rot.SetRotation(Vector3::AxisY, angle);
-        modelRender.SetRotation(m_rot);
+        m_noobEnemy.SetRotation(m_rot);
     }
 }
 
-void Enemy::SpawnCoins(const Vector3& center, int count, float rangeX, float rangeZ)
+void NoobEnemy::SpawnCoins(const Vector3& center, int count, float rangeX, float rangeZ)
 {
     srand((unsigned int)time(nullptr));
     for (int i = 0; i < count; ++i)
@@ -139,6 +139,6 @@ void Enemy::SpawnCoins(const Vector3& center, int count, float rangeX, float ran
  * @param rc 描画コンテキスト
  * @details モデルの描画を行います。
  */
-void Enemy::Render(RenderContext& rc) {
-    modelRender.Draw(rc);
+void NoobEnemy::Render(RenderContext& rc) {
+    m_noobEnemy.Draw(rc);
 }
