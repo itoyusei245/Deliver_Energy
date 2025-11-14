@@ -1,5 +1,5 @@
 ﻿#pragma once
-class NoobEnemy;
+class BossEnemy;
 class EnemyManager
 {
 private:
@@ -11,7 +11,7 @@ private:
 
 private:
 	/**可変長配列(Vector)を使ってEnemyを保存する*/
-	std::vector<NoobEnemy*> m_enemyList;
+	std::vector<BossEnemy*> m_enemyList;
 
 public:
 	void Update();
