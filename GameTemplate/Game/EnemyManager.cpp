@@ -1,7 +1,7 @@
 ﻿/**“EnemyManager”敵キャラクターの管理を行うシングルトンパターンを用いたクラス*/
 #include "stdafx.h"
 #include "EnemyManager.h"
-#include "NoobEnemy.h"
+#include "BossEnemy.h"
 #include "StageManager.h"
 #include "Player.h"
 
@@ -22,9 +22,9 @@ void EnemyManager::Update()
     if (!player) return;
 
     // 削除対象のEnemyを一時保存
-    std::vector<NoobEnemy*> enemiesToDelete;
+    std::vector<BossEnemy*> enemiesToDelete;
 
-    for (NoobEnemy* n_Enemy : m_enemyList)
+    for (BossEnemy* n_Enemy : m_enemyList)
     {
         // EnemyのCollisionObjectとPlayerのCharacterControllerで判定
         if (n_Enemy->collision && n_Enemy->collision->IsHit(player->characterController))
@@ -36,7 +36,7 @@ void EnemyManager::Update()
     }
 
     // 当たったEnemyを削除
-    for (NoobEnemy* n_Enemy : enemiesToDelete)
+    for (BossEnemy* n_Enemy : enemiesToDelete)
     {
         DeleteGO(n_Enemy); // GameObjectとして削除
         auto it = std::find(m_enemyList.begin(), m_enemyList.end(), n_Enemy);
@@ -54,7 +54,7 @@ void EnemyManager::Setup()
 /**新しい敵オブジェクトを生成して敵リストに追加するメソッド*/
 void EnemyManager::CreateEnemy(Vector3& pos)
 {
-	NoobEnemy* n_Enemy = NewGO<NoobEnemy>(0,"enemy");/**(0,"hoge")0は処理の優先順位*/
+	BossEnemy* n_Enemy = NewGO<BossEnemy>(0,"enemy");/**(0,"hoge")0は処理の優先順位*/
 	n_Enemy->SetPosition(pos);
 	m_enemyList.push_back(n_Enemy);
 }

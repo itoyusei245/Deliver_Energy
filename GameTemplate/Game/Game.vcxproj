@@ -226,7 +226,6 @@
     <ClCompile Include="AthleticStage.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="BossEnemy.cpp" />
-    <ClCompile Include="NoobEnemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
@@ -243,12 +242,12 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="TriggerBox.cpp" />
+    <ClCompile Include="NoobEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AthleticStage.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="BossEnemy.h" />
-    <ClInclude Include="NoobEnemy.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
@@ -261,6 +260,7 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TriggerBox.h" />
+    <ClInclude Include="NoobEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />
