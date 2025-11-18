@@ -6,31 +6,46 @@ public:
     BossEnemy();
     ~BossEnemy();
 
-    bool Start() override;
-    void Update() override;
-    void Render(RenderContext& rc) override;
+    bool Start();
+    void Update();
+    void Render(RenderContext& rc);
+
+    // EnemyManager から呼ばれる
+    void SetBossPosition(const Vector3& pos) { m_initPos = pos; }
+    Vector3 GetCorePosition() const { return m_bossPos; }
+    CollisionObject* GetCoreCollider() { return m_coreCollision; }
 
     void SpawnCoins(const Vector3& center, int count, float rangeX, float rangeZ);
 
-    void SetBossPosition(const Vector3& pos)
-    {
-        m_spawnPos = pos;
-    }
+    // 倒されたときに EnemyManager が呼ぶ
+    void OnDefeated();
 
-    CollisionObject* GetCoreCollider() const { return m_coreCollision; }
-    const Vector3& GetCorePosition() const { return m_corePos; }
+private:
+    void Move();       // ← 上下移動処理（復活）
+    void Rotation();   // 見た目の回転（必要なら）
 
 private:
     // モデル
-    ModelRender m_body;
-    ModelRender m_bossEnemy;
-
-    // 衝突判定
-    CollisionObject* m_bodyCollision = nullptr;
-    CollisionObject* m_coreCollision = nullptr;
+    ModelRender m_bossEnemy;   // 本体
+    ModelRender m_body;        // 体（上下に動く床的なもの）
 
     // 位置
-    Vector3 m_spawnPos = Vector3::Zero;  // スポーン位置
-    Vector3 m_bodyPos = Vector3::Zero;   // 体の位置
-    Vector3 m_corePos = Vector3::Zero;   // 本体の位置
+    Vector3 m_initPos;     // StageManager が渡す初期座標
+    Vector3 m_bodyPos;     // 体の位置
+    Vector3 m_bossPos;     // 本体の位置（体の上に乗る）
+
+    // 回転
+    Quaternion m_rot = Quaternion::Identity;
+
+    // 当たり判定（本体の中心当たり判定）
+    CollisionObject* m_coreCollision = nullptr;
+
+    // 上下移動
+    float m_moveSpeed = 100.0f;
+    float m_minY = -120.0f;
+    float m_maxY = 80.0f;
+    bool  m_movingUp = true;
+
+    // 状態フラグ
+    bool m_isAlive = true;
 };
