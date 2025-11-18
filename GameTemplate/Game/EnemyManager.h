@@ -1,49 +1,41 @@
 ﻿#pragma once
 class BossEnemy;
+
 class EnemyManager
 {
 private:
-	EnemyManager();
-	~EnemyManager();
-
-private:
-	static EnemyManager* m_instance;
-
-private:
-	/**可変長配列(Vector)を使ってEnemyを保存する*/
-	std::vector<BossEnemy*> m_enemyList;
+    EnemyManager();
+    ~EnemyManager();
 
 public:
-	void Update();
-	void Setup();
-	void CreateEnemy(Vector3& pos);
-	void RemoveEnemy();
+    // シングルトン
+    static EnemyManager* GetInstance()
+    {
+        return m_instance;
+    }
+    static void CreateInstance()
+    {
+        if (!m_instance)
+            m_instance = new EnemyManager();
+    }
+    static void DeleteInstance()
+    {
+        if (m_instance)
+        {
+            delete m_instance;
+            m_instance = nullptr;
+        }
+    }
 
-public:
-	/**EnemyManagerクラスのインスタンスを作成(NewGO)*/
-	static void CreateInstance()
-	{
-		if (m_instance == nullptr)
-		{
-			m_instance = new EnemyManager();
-		}
-	}
-	/**EnemyManagerクラスのインスタンスを削除(DeleteGO)*/
-	static void DeleteInstance()
-	{
-		if (m_instance!=nullptr)
-		{
-			delete m_instance;
-			m_instance = nullptr;
-		}
-	}
-	/**EnemyManagerクラスのインスタンスを取得(FindGO)*/
-	static EnemyManager*GetInstance()
-	{
+    void Update();                 // 毎フレーム更新
+    void Setup();                  // 初期化（現状は空）
 
-		return m_instance;
-	}
-	
-	
+    // BossEnemy を生成してリストに追加
+    void CreateEnemy(const Vector3& pos);
+
+private:
+    static EnemyManager* m_instance;
+
+    // BossEnemy だけ管理
+    std::vector<BossEnemy*> m_bossList;
 };
-
