@@ -24,6 +24,8 @@
     <ClCompile Include="GetItem.cpp" />
     <ClCompile Include="AthleticStage.cpp" />
     <ClCompile Include="NoobEnemy.cpp" />
+    <ClCompile Include="Setting.cpp" />
+    <ClCompile Include="Countdown.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -44,6 +46,8 @@
     <ClInclude Include="GetItem.h" />
     <ClInclude Include="AthleticStage.h" />
     <ClInclude Include="NoobEnemy.h" />
+    <ClInclude Include="Setting.h" />
+    <ClInclude Include="Countdown.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

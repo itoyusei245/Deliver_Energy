@@ -33,5 +33,11 @@ public:
     void Render(RenderContext& rc);
 
     /** @brief タイトル画面用スプライトレンダラー */
-    SpriteRender spriteRender;
+    SpriteRender m_titleSprite;
+    SpriteRender m_picUpSprite[3];
+
+private:
+    int m_currentBar = 0;
+
+    void UpdatePicUp();
 };
