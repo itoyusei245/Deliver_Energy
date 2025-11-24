@@ -6,6 +6,7 @@
 #include "Title.h"
 #include "sound/SoundEngine.h"
 
+
 void ReportLiveObjects()
 {
 	IDXGIDebug* pDxgiDebug;
@@ -41,7 +42,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//////////////////////////////////////
 	
 	// ここからゲームループ。
-	while (DispatchWindowMessage())
+	while (DispatchWindowMessage()&& g_gameLoop.m_isLoop==true)
 	{
 		if (g_pad[0]->IsTrigger(enButtonA) ){
 			g_pad[0]->SetVibration(/*durationSec=*/0.5f, /*normalizedPower=*/1.0f);

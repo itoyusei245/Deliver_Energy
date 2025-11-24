@@ -2,7 +2,7 @@
 #include "Game.h"
 #include"BackGround.h"
 #include"Player.h"
-#include"BossEnemy.h"
+//#include"BossEnemy.h"
 #include"GameCamera.h"
 #include"EnemyManager.h"
 #include"StageManager.h"

@@ -21,13 +21,16 @@ public:
     void OnDefeated();
 
 private:
-    void Move();       // ← 上下移動処理（復活）
-    void Rotation();   // 見た目の回転（必要なら）
+    void Move();       // 上下移動処理
+    void Rotation();   // 見た目の回転
 
 private:
     // モデル
     ModelRender m_bossEnemy;   // 本体
     ModelRender m_body;        // 体（上下に動く床的なもの）
+
+    // ★ 追加: 動く土台の物理判定 (MovingFloorの実装を参考)
+    PhysicsStaticObject m_bodyPhysicsStaticObject;
 
     // 位置
     Vector3 m_initPos;     // StageManager が渡す初期座標
