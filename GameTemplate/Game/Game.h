@@ -1,5 +1,7 @@
 #pragma once
 #include "Level3DRender/LevelRender.h"
+class GameTimeUI;
+class Countdown;
 class Player;
 class NoobEnemy;
 class GameCamera;
@@ -44,6 +46,8 @@ public:
      */
     void Render(RenderContext& rc);
 
+    static bool IsGamePlay;
+
 private:
 
     /** @brief ゲームシーンのモデルレンダラー */
@@ -66,6 +70,10 @@ private:
 
     /** @brief 汎用座標変数 */
     Vector3 position;
+
+    Countdown* m_countdown = nullptr;
+
+    GameTimeUI* m_gameTimeUI = nullptr;
 
     /** @brief スプライトレンダラー */
     SpriteRender spriteRender;
