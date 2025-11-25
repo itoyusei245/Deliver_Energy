@@ -6,11 +6,16 @@
 #include"GameCamera.h"
 #include"EnemyManager.h"
 #include"StageManager.h"
+#include "Countdown.h"
+#include "GameTimeUI.h"
 
 /**
  * @brief Gameクラスのコンストラクタ
  * @details プレイヤー、敵、ゲームカメラ、背景の各オブジェクトを生成します。
  */
+bool Game::IsGamePlay = false;
+
+
 Game::Game()
 {
 	/** プレイヤーのオブジェクトを作成: */
@@ -45,6 +50,9 @@ Game::~Game()
  */
 bool Game::Start()
 {
+	IsGamePlay = false;
+	m_gameTimeUI = NewGO<GameTimeUI>(0, "gameTimeUI");
+	m_countdown = NewGO<Countdown>(0, "countdown");
 	/**ステージ管理クラスのインスタンスを生成*/
 	StageManager::CreateInstance();
 	/** ステージ管理クラスのインスタンスを初期化*/
@@ -55,6 +63,7 @@ bool Game::Start()
 	EnemyManager::GetInstance()->Setup();
 	/** 背景の初期化*/
 	NewGO<BackGround>(0, "background");
+
 	return true;
 }
 
@@ -63,6 +72,15 @@ bool Game::Start()
  */
 void Game::Update()
 {
+	if (!IsGamePlay)
+	{
+		// カウントダウンが終わったらゲーム開始フラグを立てる
+		if (m_countdown && m_countdown->IsFinished())
+		{
+			IsGamePlay = true;
+			m_countdown = nullptr; // DeleteGO済みなのでポインタ切っておく
+		}
+	}
 	/**↓IGameOdjectを継承するやりかた↓*/
 	StageManager::GetInstance()->Update();
 	/**↓IGameOdjectを継承しないやりかた↓*/
