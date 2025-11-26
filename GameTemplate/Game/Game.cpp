@@ -74,7 +74,7 @@ void Game::Update()
 {
 	if (!IsGamePlay)
 	{
-		// カウントダウンが終わったらゲーム開始フラグを立てる
+		/**カウントダウンが終わったらゲーム開始フラグを立てる*/
 		if (m_countdown && m_countdown->IsFinished())
 		{
 			IsGamePlay = true;

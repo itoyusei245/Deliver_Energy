@@ -3,13 +3,13 @@
 
 Countdown::Countdown()
 {
-     //最初に「3」の画像で初期化（サイズは適宜調整してください）
+    /**最初に「3」の画像で初期化（サイズは適宜調整してください）*/
     m_spriteRender.Init(TEX_3, 500.0f, 500.0f);
 
-    // 画面中央に配置
+    /**画面中央に配置*/
     m_spriteRender.SetPosition(Vector3::Zero);
 
-    // タイマーリセット
+    /**タイマーリセット*/
     m_timer = 0.0f;
 }
 
@@ -19,7 +19,7 @@ Countdown::~Countdown()
 
 void Countdown::Update()
 {
-    // 時間を進める
+    /**時間を進める*/
     m_timer += g_gameTime->GetFrameDeltaTime();
 
     if (m_timer < 1.5f) {
@@ -44,9 +44,9 @@ void Countdown::Update()
         m_spriteRender.Init(TEX_GO, 1920.0f, 1080.0f);
     }
     else {
-        // 8.5秒経ったら終了
+        /**8.5秒経ったら終了*/
         m_isFinished = true;
-        // 自身を削除（表示を消すため）
+        /**自身を削除（表示を消すため）*/
         DeleteGO(this);
     }
 
@@ -55,7 +55,7 @@ void Countdown::Update()
 
 void Countdown::Render(RenderContext& rc)
 {
-    // まだ終わってなければ描画
+    /**まだ終わってなければ描画*/
     if (!m_isFinished) {
         m_spriteRender.Draw(rc);
     }

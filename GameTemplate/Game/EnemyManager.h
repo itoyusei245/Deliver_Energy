@@ -8,7 +8,7 @@ private:
     ~EnemyManager();
 
 public:
-    // シングルトン
+    /**シングルトン*/
     static EnemyManager* GetInstance()
     {
         return m_instance;
@@ -27,15 +27,15 @@ public:
         }
     }
 
-    void Update();                 // 毎フレーム更新
-    void Setup();                  // 初期化（現状は空）
+    void Update();                 /**毎フレーム更新*/
+    void Setup();                  /**初期化（現状は空)*/
 
-    // BossEnemy を生成してリストに追加
+    /**BossEnemy を生成してリストに追加*/
     void CreateEnemy(const Vector3& pos);
 
 private:
     static EnemyManager* m_instance;
 
-    // BossEnemy だけ管理
+    /**BossEnemy だけ管理*/
     std::vector<BossEnemy*> m_bossList;
 };
