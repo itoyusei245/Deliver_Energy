@@ -9,7 +9,7 @@
  */
 Title::Title()
 {
-    //! タイトル画面の画像を読み込み
+    /**タイトル画面の画像を読み込み*/
     m_titleSprite.Init("Assets/sprite/Title.DDS", 1920.0f, 1080.0f);
     m_picUpSprite[0].Init("Assets/sprite/selectBer_GameState.DDS", 1920.0f, 1080.0f);
     m_picUpSprite[1].Init("Assets/sprite/selectBer_Settings.DDS", 1920.0f, 1080.0f);
@@ -69,7 +69,7 @@ void Title::UpdatePicUp()
     }
     if (g_pad[0]->IsTrigger(enButtonDown))
     {
-        if (m_currentBar == 2/*カレントが最大値の時*/) {
+        if (m_currentBar == 2/**カレントが最大値の時*/) {
             m_currentBar = 2;
         }
         else {
