@@ -2,7 +2,7 @@
 #include "GetItem.h"
 #include "Player.h" 
 #include "BackGround.h"
-
+#include"Game.h"
 
 int GetItem::m_totalCoinCount = 0;
 
@@ -42,6 +42,9 @@ void GetItem::Init(const Vector3& pos)
 
 void GetItem::Update()
 {
+    if (Game::IsPaused) return;
+
+
     float deltaTime = g_gameTime->GetFrameDeltaTime();
     m_spawnTime += deltaTime;
 

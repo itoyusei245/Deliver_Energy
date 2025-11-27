@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
-
+#include"Game.h"
 /**
  * @brief Playerクラスのコンストラクタ
  * @details モデルとキャラクターコントローラーの初期化を行い、初期位置・回転を設定します。
@@ -30,6 +30,8 @@ Player::~Player()
  */
 void Player::Update()
 {
+    if (Game::IsPaused) return;
+
     /**移動処理*/
 	Move();
 

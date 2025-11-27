@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GameCamera.h"
 #include "Player.h"
+#include"Game.h"
 
 /**
  * @brief GameCameraクラスのコンストラクタ
@@ -57,6 +58,9 @@ bool GameCamera::Start()
  */
 void GameCamera::Update()
 {
+    if (Game::IsPaused) return;
+
+
     /** カメラを更新*/
     /** 注視点を計算*/
     Vector3 target = player->position;
