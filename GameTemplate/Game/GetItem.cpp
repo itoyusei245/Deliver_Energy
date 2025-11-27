@@ -3,6 +3,9 @@
 #include "Player.h" 
 #include "BackGround.h"
 
+
+int GetItem::m_totalCoinCount = 0;
+
 GetItem::GetItem()
 {
 }
@@ -78,6 +81,9 @@ void GetItem::Update()
     Player* player = FindGO<Player>("player");
     if (player && m_collision && m_collision->IsHit(player->characterController))
     {
+        m_totalCoinCount++;
+
+
         DeleteGO(this);
         return;
     }
