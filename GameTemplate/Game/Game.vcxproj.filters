@@ -28,6 +28,7 @@
     <ClCompile Include="Countdown.cpp" />
     <ClCompile Include="GameTimeUI.cpp" />
     <ClCompile Include="CoinUI.cpp" />
+    <ClCompile Include="Pause.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -52,6 +53,7 @@
     <ClInclude Include="Countdown.h" />
     <ClInclude Include="GameTimeUI.h" />
     <ClInclude Include="CoinUI.h" />
+    <ClInclude Include="Pause.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

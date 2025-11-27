@@ -44,6 +44,8 @@ void GameTimeUI::Update()
     if (!Game::IsGamePlay) return; 
 
 
+    if (Game::IsPaused) return;
+
     m_timer += g_gameTime->GetFrameDeltaTime();
 
 

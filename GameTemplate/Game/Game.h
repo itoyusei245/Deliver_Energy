@@ -49,6 +49,7 @@ public:
 
     static bool IsGamePlay;
     static int CoinCount;
+    static bool IsPaused;
 
 private:
 

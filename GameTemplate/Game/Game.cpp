@@ -10,6 +10,7 @@
 #include "GameTimeUI.h"
 #include"GetItem.h"
 #include"CoinUI.h"
+#include"Pause.h"
 
 /**
  * @brief Gameクラスのコンストラクタ
@@ -17,6 +18,7 @@
  */
 bool Game::IsGamePlay = false;
 
+bool Game::IsPaused = false;
 
 Game::Game()
 {
@@ -53,9 +55,21 @@ Game::~Game()
 bool Game::Start()
 {
 	IsGamePlay = false;
+	IsPaused = false;
+	
+	
 	GetItem::ResetCoinCount();
+	
+	
 	m_coinUI = NewGO<CoinUI>(0, "coinUI");
+	
+	
 	m_gameTimeUI = NewGO<GameTimeUI>(0, "gameTimeUI");
+	
+	
+	NewGO<Pause>(0, "pause");
+
+
 	m_countdown = NewGO<Countdown>(0, "countdown");
 	/**ステージ管理クラスのインスタンスを生成*/
 	StageManager::CreateInstance();

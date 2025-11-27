@@ -2,6 +2,7 @@
 #include "BossEnemy.h"
 #include "Player.h"
 #include "GetItem.h"
+#include"Game.h"
 
 BossEnemy::BossEnemy() {}
 BossEnemy::~BossEnemy()
@@ -56,6 +57,9 @@ bool BossEnemy::Start()
 
 void BossEnemy::Update()
 {
+    if (Game::IsPaused) return;
+
+
     if (!m_isAlive) return;
 
     Move();

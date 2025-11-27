@@ -235,6 +235,7 @@
     <ClCompile Include="GameTimeUI.cpp" />
     <ClCompile Include="GetItem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Setting.cpp" />
     <ClCompile Include="StageManager.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="GameClear.h" />
     <ClInclude Include="GameTimeUI.h" />
     <ClInclude Include="GetItem.h" />
+    <ClInclude Include="Pause.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Setting.h" />
