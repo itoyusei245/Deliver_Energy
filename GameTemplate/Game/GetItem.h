@@ -10,12 +10,19 @@ public:
 	void Render(RenderContext& rc);
 
 
+public:
+	/**現在のコイン枚数を取得する関数*/
+	static int GetCoinCount() { return m_totalCoinCount; }
+	/**コイン枚数をリセットする関数*/
+	static void ResetCoinCount() { m_totalCoinCount = 0; }
+
+
 private:
 	ModelRender m_coin;
 	CollisionObject* m_collision = nullptr;
 	Vector3 m_position = Vector3::Zero;
 	Vector3 m_velocity = Vector3::Zero;
-
+	static int m_totalCoinCount;
 
 private:
 	float m_rotation = 0.0f;

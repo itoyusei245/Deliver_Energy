@@ -8,6 +8,8 @@
 #include"StageManager.h"
 #include "Countdown.h"
 #include "GameTimeUI.h"
+#include"GetItem.h"
+#include"CoinUI.h"
 
 /**
  * @brief Gameクラスのコンストラクタ
@@ -51,6 +53,8 @@ Game::~Game()
 bool Game::Start()
 {
 	IsGamePlay = false;
+	GetItem::ResetCoinCount();
+	m_coinUI = NewGO<CoinUI>(0, "coinUI");
 	m_gameTimeUI = NewGO<GameTimeUI>(0, "gameTimeUI");
 	m_countdown = NewGO<Countdown>(0, "countdown");
 	/**ステージ管理クラスのインスタンスを生成*/

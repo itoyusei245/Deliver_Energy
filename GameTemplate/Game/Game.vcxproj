@@ -226,6 +226,7 @@
     <ClCompile Include="AthleticStage.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="BossEnemy.cpp" />
+    <ClCompile Include="CoinUI.cpp" />
     <ClCompile Include="Countdown.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -251,6 +252,7 @@
     <ClInclude Include="AthleticStage.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="BossEnemy.h" />
+    <ClInclude Include="CoinUI.h" />
     <ClInclude Include="Countdown.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Game.h" />

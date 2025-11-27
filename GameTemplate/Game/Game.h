@@ -1,5 +1,6 @@
 #pragma once
 #include "Level3DRender/LevelRender.h"
+class CoinUI;
 class GameTimeUI;
 class Countdown;
 class Player;
@@ -47,6 +48,7 @@ public:
     void Render(RenderContext& rc);
 
     static bool IsGamePlay;
+    static int CoinCount;
 
 private:
 
@@ -74,6 +76,8 @@ private:
     Countdown* m_countdown = nullptr;
 
     GameTimeUI* m_gameTimeUI = nullptr;
+
+    CoinUI* m_coinUI = nullptr;
 
     /** @brief スプライトレンダラー */
     SpriteRender spriteRender;
