@@ -12,11 +12,13 @@ BackGround::BackGround()
     /** 背景モデルを初期化*/
     m_map.Init("Assets/modelData/Stage/map.tkm");
 
+
     m_hitBox.SetPosition(0.0f, 0.0f, 0.0f);
     m_hitBox.Init("Assets/modelData/Stage/map_HitBox.tkm");
     m_hitBox.Update();
     /** 物理静的オブジェクトをモデルから生成*/
     physicsStaticObject.CreateFromModel(m_hitBox.GetModel(), m_hitBox.GetModel().GetWorldMatrix());
+
 
    /* m_mapAthletic.SetPosition(Vector3(1500.0f, -100.0f, -4200.0f));
     m_mapAthletic.Init("Assets/modelData/Stage/map_Athletic.tkm");
@@ -32,7 +34,6 @@ BackGround::BackGround()
  */
 BackGround::~BackGround()
 {
-
 }
 /**
  * @brief 背景の描画処理

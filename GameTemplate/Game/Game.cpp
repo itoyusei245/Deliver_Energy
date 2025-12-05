@@ -12,13 +12,14 @@
 #include"CoinUI.h"
 #include"Pause.h"
 
+
 /**
  * @brief Gameクラスのコンストラクタ
  * @details プレイヤー、敵、ゲームカメラ、背景の各オブジェクトを生成します。
  */
 bool Game::IsGamePlay = false;
-
 bool Game::IsPaused = false;
+
 
 Game::Game()
 {
@@ -29,6 +30,7 @@ Game::Game()
 	/** 背景のオブジェクトを作成*/
 	m_backGround = NewGO<BackGround>(0);
 }
+
 
 /**
  * @brief Gameクラスのデストラクタ
@@ -47,6 +49,7 @@ Game::~Game()
 	/**ステージクラスのインスタンスを削除*/
 	StageManager::DeleteInstance();
 }
+
 
 /**
  * @brief ゲーム開始時の初期化処理
@@ -85,6 +88,7 @@ bool Game::Start()
 	return true;
 }
 
+
 /**
  * @brief 毎フレームの更新処理
  */
@@ -105,7 +109,7 @@ void Game::Update()
 	EnemyManager::GetInstance()->Update();
 }
 
+
 void Game::Render(RenderContext& rc)
 {
-
 }
