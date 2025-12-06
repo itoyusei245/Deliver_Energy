@@ -232,8 +232,10 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameClear.cpp" />
+    <ClCompile Include="GameStateBase.cpp" />
     <ClCompile Include="GameTimeUI.cpp" />
     <ClCompile Include="GetItem.cpp" />
+    <ClCompile Include="InGameState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -259,8 +261,10 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameClear.h" />
+    <ClInclude Include="GameStateBase.h" />
     <ClInclude Include="GameTimeUI.h" />
     <ClInclude Include="GetItem.h" />
+    <ClInclude Include="InGameState.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />

@@ -1,16 +1,15 @@
 #include "stdafx.h"
 #include "Game.h"
-#include"BackGround.h"
-#include"Player.h"
-//#include"BossEnemy.h"
-#include"GameCamera.h"
-#include"EnemyManager.h"
-#include"StageManager.h"
+#include "BackGround.h"
+#include "Player.h"
+#include "GameCamera.h"
+#include "EnemyManager.h"
+#include "StageManager.h"
 #include "Countdown.h"
 #include "GameTimeUI.h"
-#include"GetItem.h"
-#include"CoinUI.h"
-#include"Pause.h"
+#include "GetItem.h"
+#include "CoinUI.h"
+#include "Pause.h"
 
 
 /**
@@ -27,8 +26,9 @@ Game::Game()
 	m_player = NewGO<Player>(0, "player");
 	/** ゲームカメラのオブジェクトを作成*/
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
+	m_gameCamera->player = m_player;
 	/** 背景のオブジェクトを作成*/
-	m_backGround = NewGO<BackGround>(0);
+	//m_backGround = NewGO<BackGround>(0);
 }
 
 
@@ -38,9 +38,7 @@ Game::Game()
  */
 Game::~Game()
 {
-	/** 背景を削除*/
 	DeleteGO(m_backGround);
-	/** ゲームカメラを削除*/
 	DeleteGO(m_gameCamera);
 	/** プレイヤーを削除*/
 	DeleteGO(m_player);
@@ -83,8 +81,9 @@ bool Game::Start()
 	/** 敵管理クラスのインスタンスを初期化*/
 	EnemyManager::GetInstance()->Setup();
 	/** 背景の初期化*/
-	NewGO<BackGround>(0, "background");
-
+	if (m_backGround == nullptr) {
+		m_backGround = NewGO<BackGround>(0, "background");
+	}
 	return true;
 }
 

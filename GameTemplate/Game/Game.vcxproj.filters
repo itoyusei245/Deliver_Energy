@@ -29,6 +29,8 @@
     <ClCompile Include="GameTimeUI.cpp" />
     <ClCompile Include="CoinUI.cpp" />
     <ClCompile Include="Pause.cpp" />
+    <ClCompile Include="GameStateBase.cpp" />
+    <ClCompile Include="InGameState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -54,6 +56,8 @@
     <ClInclude Include="GameTimeUI.h" />
     <ClInclude Include="CoinUI.h" />
     <ClInclude Include="Pause.h" />
+    <ClInclude Include="GameStateBase.h" />
+    <ClInclude Include="InGameState.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />
