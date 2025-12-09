@@ -11,6 +11,9 @@ public:
     BackGround();
     ~BackGround();
 
+
+    void Update();
+
     void Render(RenderContext& rc);
 
     void Init();
@@ -23,7 +26,15 @@ private:
     ModelRender m_map;
     ModelRender m_hitBox;
     ModelRender m_mapAthletic;
+    ModelRender m_anim;
 
 
+    float m_openAngle = 0.0f;
 
+
+    //初期の位置を記憶しておく変数
+    Vector3 m_initialPos = Vector3::Zero;
+
+    //モデルの中心から「ヒンジ（蝶番）」までの距離
+    Vector3 m_hingeOffset = Vector3::Zero;
 };
