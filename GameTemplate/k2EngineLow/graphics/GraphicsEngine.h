@@ -289,7 +289,8 @@ namespace nsK2EngineLow {
 		/// <returns>trueが返ってきたらレイトレを行える。</returns>
 		bool IsPossibleRaytracing() const 
 		{
-			return m_isPossibleRaytracing;
+			/*return m_isPossibleRaytracing;*/
+			return false;
 		}
 #ifdef K2_DEBUG
 		void BeginGPUEvent(const char* eventName)
