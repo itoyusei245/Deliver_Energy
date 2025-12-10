@@ -8,14 +8,18 @@
 Player::Player()
 {
     /**缶のモデルを読み込む*/
-	modelRender.Init("Assets/animData/Player.tkm");
+    modelRender.Init("Assets/animData/Player.tkm");
+    position = { 0.0f, -200.0f, 0.0f };
 
-    /**キャラクターコントローラーを初期化*/
-	characterController.Init(25.0f, 50.0f, position);
-	position = { 10.0f, 10.0f, 0.0f }; //!< 初期位置
-	rotation.SetRotationDeg(Vector3::AxisX, 0.0f);
-	targetRotation = rotation;
+
+    /**キャラクターコントローラーを初期化（設定した座標を使う）*/
+    characterController.Init(25.0f, 50.0f, position);
+
+
+    rotation.SetRotationDeg(Vector3::AxisX, 0.0f);
+    targetRotation = rotation;
 }
+
 
 /**
  * @brief Playerクラスのデストラクタ
@@ -23,6 +27,7 @@ Player::Player()
 Player::~Player()
 {
 }
+
 
 /**
  * @brief 毎フレームの更新処理
@@ -32,14 +37,17 @@ void Player::Update()
 {
     if (Game::IsPaused) return;
 
+
     /**移動処理*/
-	Move();
+    Move();
+
 
     /**回転処理*/
-	Rotation();
+    Rotation();
+
 
     /**モデルの更新処理*/
-	modelRender.Update();
+    modelRender.Update();
 }
 
 /**
@@ -69,7 +77,7 @@ void Player::Move()
     if (isFallen) {
         /**
          * 倒れているとき → 転がり加速をつける
-		 */
+         */
         if (inputMove.LengthSq() > 0.01f) {
             inputMove.Normalize();
             /** 現在の速度に少しずつ加速（10.0fが加速の強さ）*/
@@ -136,7 +144,7 @@ void Player::Rotation()
             /** 起き上がる*/
             targetRotation.SetRotationDeg(Vector3::AxisX, 0.0f);
             isFallen = false;
-			rollAngle = 0.0f; /**< 累積回転リセット*/
+            rollAngle = 0.0f; /**< 累積回転リセット*/
         }
     }
 
@@ -146,25 +154,25 @@ void Player::Rotation()
     stickL.z = g_pad[0]->GetLStickYF();
     Vector3 inputDir = { stickL.x, 0.0f, stickL.z };
 
-	if (inputDir.LengthSq() > 0.01f) { /**< 入力があるときのみ回転処理*/
-		inputDir.Normalize(); /**< 正規化*/
+    if (inputDir.LengthSq() > 0.01f) { /**< 入力があるときのみ回転処理*/
+        inputDir.Normalize(); /**< 正規化*/
 
         if (isFallen) {
             /**
              * 倒れているとき：入力方向ベクトルを軸にゴロゴロ回転
              */
-			
-			/** 入力方向を向く回転*/
-			Quaternion dirRot;
 
-			/** Y軸回転のみで向きを合わせる*/
-			dirRot.SetRotationYFromDirectionXZ(inputDir);
+             /** 入力方向を向く回転*/
+            Quaternion dirRot;
 
-			/** 倒れたときの基本回転*/
-			Quaternion fallenBase;
-			
-			/** X軸90度倒れ*/
-			fallenBase.SetRotationDeg(Vector3::AxisX, 90.0f);
+            /** Y軸回転のみで向きを合わせる*/
+            dirRot.SetRotationYFromDirectionXZ(inputDir);
+
+            /** 倒れたときの基本回転*/
+            Quaternion fallenBase;
+
+            /** X軸90度倒れ*/
+            fallenBase.SetRotationDeg(Vector3::AxisX, 90.0f);
 
             /** このフレームの移動距離*/
             float distance = moveSpeed.Length() * (1.0f / 60.0f);
@@ -176,13 +184,13 @@ void Player::Rotation()
             Vector3 rollAxis = inputDir;
             rollAxis.Normalize();
 
-			/** 転がり回転*/
-			Quaternion rollRot;
+            /** 転がり回転*/
+            Quaternion rollRot;
 
-			/** 軸と角度で回転をセット*/
+            /** 軸と角度で回転をセット*/
             rollRot.SetRotation(rollAxis, rollAngle);
 
-			/** 最終的な目標回転を計算*/
+            /** 最終的な目標回転を計算*/
             Quaternion tmp;
             tmp.Multiply(fallenBase, dirRot);
             targetRotation.Multiply(tmp, rollRot);
@@ -195,7 +203,7 @@ void Player::Rotation()
         }
     }
 
-	/** 回転補間*/
+    /** 回転補間*/
     rotation.Slerp(0.2f, rotation, targetRotation);
 
     /** 描画用の位置補正*/
@@ -222,5 +230,5 @@ void Player::Rotation()
  */
 void Player::Render(RenderContext& rc)
 {
-	modelRender.Draw(rc);
+    modelRender.Draw(rc);
 }
