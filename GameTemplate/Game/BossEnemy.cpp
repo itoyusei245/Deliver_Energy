@@ -36,9 +36,9 @@ bool BossEnemy::Start()
     m_bossPos = m_bodyPos + Vector3(0.0f, 1000.0f, 0.0f);
 
     // モデルと物理判定を正しい位置へセット
-    m_body.SetPosition(m_bodyPos);
+    /*m_body.SetPosition(m_bodyPos);
     m_body.Update();
-    m_bodyPhysicsStaticObject.SetPosition(m_bodyPos);
+    m_bodyPhysicsStaticObject.SetPosition(m_bodyPos);*/
 
     // === 4. 本体（コア）の初期化 ===
     m_bossEnemy.Init("Assets/animData/main_bossEnemy.tkm");
@@ -104,7 +104,7 @@ void BossEnemy::Move()
         }
     }
 
-    // 本体は土台の +1000.0f 上
+    // 本体は土台の +800.0f 上
     m_bossPos = m_bodyPos + Vector3(0.0f, 800.0f, 0.0f);
 
     m_body.SetPosition(m_bodyPos);

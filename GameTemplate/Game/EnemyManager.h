@@ -1,5 +1,6 @@
 ﻿#pragma once
-class BossEnemy;
+class Boss;
+class Familiar;
 
 class EnemyManager
 {
@@ -37,5 +38,6 @@ private:
     static EnemyManager* m_instance;
 
     /**BossEnemy だけ管理*/
-    std::vector<BossEnemy*> m_bossList;
+    Boss* m_boss = nullptr;
+    Familiar* m_familia = nullptr;
 };

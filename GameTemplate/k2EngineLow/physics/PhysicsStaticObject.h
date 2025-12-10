@@ -58,6 +58,14 @@ namespace nsK2EngineLow {
 			btPos = btVector3(pos.x, pos.y, pos.z);
 			btTrans.setOrigin(btPos);
 		}
+
+		void SetTRS(const Vector3& pos, const Quaternion& rotation, const Vector3& scale)
+		{
+			auto& btTrans = m_rigidBody.GetBody()->getWorldTransform();
+			btVector3 btPos;
+			btPos = btVector3(pos.x, pos.y, pos.z);
+			btTrans.setOrigin(btPos);
+		}
 	private:
 		MeshCollider m_meshCollider;		//メッシュコライダー。
 		RigidBody m_rigidBody;				//剛体。
