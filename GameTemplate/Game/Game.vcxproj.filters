@@ -7,6 +7,9 @@
     <Filter Include="Enemy">
       <UniqueIdentifier>{81f49f75-6bd4-4f23-8d81-8240f8c05070}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{f4eeb44b-bbee-4c4e-8b6f-9ab5952d834a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -52,6 +55,12 @@
     <ClCompile Include="Enemy\NoobEnemy.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Collision\CollisionHitManager.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\BossStatusUI.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -95,6 +104,12 @@
       <Filter>Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Enemy\NoobEnemy.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\CollisionHitManager.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\BossStatusUI.h">
       <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>

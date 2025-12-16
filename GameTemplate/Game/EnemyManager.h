@@ -1,6 +1,7 @@
 ﻿#pragma once
 class Boss;
 class Familiar;
+class BossStatusUI;
 
 class EnemyManager
 {
@@ -28,6 +29,11 @@ public:
         }
     }
 
+
+    //Bossへのアクセス権を作る
+    Boss* GetBoss()const { return m_boss; }
+
+
     void Update();                 /**毎フレーム更新*/
     void Setup();                  /**初期化（現状は空)*/
 
@@ -40,4 +46,6 @@ private:
     /**BossEnemy だけ管理*/
     Boss* m_boss = nullptr;
     Familiar* m_familia = nullptr;
+    bool m_isChangeType = true;
+    BossStatusUI* m_bossUI = nullptr;
 };

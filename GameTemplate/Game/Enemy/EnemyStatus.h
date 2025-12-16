@@ -25,6 +25,14 @@ public:
 	int GetMaxHP() { return m_maxHP; }
 
 
+	//現在のHPを取得する関数
+	int GetCurrentHP()const { return m_currentHP; }
+
+
+	//死亡判定
+	bool IsDead()const { return m_currentHP <= 0; }
+
+
 	void Damage(int damgeValue)
 	{
 		m_currentHP -= damgeValue;
@@ -57,7 +65,8 @@ public:
 	void Setup() override
 	{
 		// 初期パラメーターの設定
-		m_maxHP = 10;
+		// 3体の眷属に対応するため、HPを3にする（1体倒すごとに1ダメージ）
+		m_maxHP = 3;
 		m_currentHP = m_maxHP;
 		m_moveSpeed = 100.0f;
 	}
