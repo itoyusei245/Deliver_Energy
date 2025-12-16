@@ -26,10 +26,32 @@ bool Familiar::Start()
 
 	m_stateList[enFamiliarStateType_Idle] = new FamiliarIdleState(this);
 	m_stateList[enFamiliarStateType_Move] = new FamiliarMoveState(this);
-	m_modelRender.Init("Assets/animData/bossEnemy_TypeA.tkm");
+	
+
+	switch (m_familiaType)
+	{
+	case enFamiliarType_A:
+		m_modelRender.Init("Assets/animData/bossEnemy_TypeA.tkm");
+		break;
+	case enFamiliarType_B:
+		m_modelRender.Init("Assets/animData/m_boss_Enemy_TypeB.tkm");
+		break;
+	default:
+		break;
+	}
 	m_modelRender.SetTRS(Vector3::Zero, m_rotation, m_scale);
 	m_modelRender.Update();
 	m_physicsStaticObject.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix());
+
+
+	//m_coreModel.Init("Assets/animData/familiarCore.tkm");
+	//m_coreModel.SetTRS(Vector3::Zero, m_rotation, m_scale);
+	//m_coreModel.Update();
+	//m_physicsStaticObject.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix());
+	
+
+	m_collisionObject.CreateSphere(m_position, m_rotation, 110.0f);
+
 	return true;
 }
 
@@ -47,10 +69,19 @@ void Familiar::Update()
 	m_physicsStaticObject.SetPosition(m_position);
 	m_modelRender.SetTRS(m_position, m_rotation, m_scale);
 	m_modelRender.Update();
+
+	m_collisionObject.SetPosition(m_position);
+	m_collisionObject.Update();
 }
 
 
 void Familiar::Render(RenderContext& rc)
 {
 	m_modelRender.Draw(rc);
+}
+
+
+void Familiar::Setup(const enFamiliarType type)
+{
+	m_familiaType = type;
 }

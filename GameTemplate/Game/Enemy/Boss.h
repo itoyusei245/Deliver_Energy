@@ -38,6 +38,15 @@ public:
 	bool IsCreatedFamiliar() const { return m_isCreatedFamiliar; }
 
 
+public:
+	bool IsMovingUp()const { return m_isMovingUp;}
+	void SetMovingUp(bool flg) { m_isMovingUp = flg; }
+
+
+private:
+	// 移動方向フラグをBossクラスのメンバ変数に追加
+	bool m_isMovingUp = true;
+
 
 private:
 	EnBossStateType m_currentState = enBossStateType_Idle;

@@ -9,6 +9,7 @@ class GameCamera;
 class BackGround;
 class EnemyManager;
 class StageManager;
+class CollisionHitManagerObject;
 
 /**
  * @brief ゲームシーン管理クラス
@@ -82,4 +83,8 @@ private:
 
     /** @brief スプライトレンダラー */
     SpriteRender spriteRender;
+
+    CollisionHitManagerObject* m_collisionHitManagerObject = nullptr;
+
+    
 };

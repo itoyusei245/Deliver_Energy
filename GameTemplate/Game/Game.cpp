@@ -10,7 +10,7 @@
 #include "GetItem.h"
 #include "CoinUI.h"
 #include "Pause.h"
-
+#include "Collision/CollisionHitManager.h"
 
 /**
  * @brief Gameクラスのコンストラクタ
@@ -46,6 +46,7 @@ Game::~Game()
 	EnemyManager::DeleteInstance();
 	/**ステージクラスのインスタンスを削除*/
 	StageManager::DeleteInstance();
+	DeleteGO(m_collisionHitManagerObject);
 }
 
 
@@ -70,6 +71,7 @@ bool Game::Start()
 	
 	NewGO<Pause>(0, "pause");
 
+	m_collisionHitManagerObject = NewGO<CollisionHitManagerObject>(0, "collisionHitManagerObject");
 
 	m_countdown = NewGO<Countdown>(0, "countdown");
 	/**ステージ管理クラスのインスタンスを生成*/

@@ -3,6 +3,7 @@
 #include "Boss.h"
 #include "Familiar.h"
 #include "NoobEnemy.h"
+#include "EnemyManager.h"
 
 
 namespace
@@ -11,8 +12,8 @@ namespace
     static const float BOSS_MAX_Y = 80.0f;
 
 
-    static const float FAMILIAR_MIN_Y = -120.0f;
-    static const float FAMILIAR_MAX_Y = 80.0f;
+    static const float FAMILIAR_OFFSET_Y = 140.0f;
+
 
     Vector3 ComputeNextPosition(const Vector3& position, const float maxY, const float minY, const float moveSpeed, bool& isMovingUp)
     {
@@ -74,8 +75,21 @@ void BossMoveState::Update()
     const float deltaTime = g_gameTime->GetFrameDeltaTime();
 
     const float moveSpeed = m_owner->GetStatus()->GetMoveSpeed() * deltaTime;
-    Vector3 nextPosition = ComputeNextPosition(m_owner->GetPosition(), BOSS_MAX_Y, BOSS_MIN_Y, moveSpeed, m_isMovingUp);
 
+    //Bossクラスから現在のフラグを取得
+    bool isMovingUp = m_owner->IsMovingUp();
+
+
+    Vector3 nextPosition = ComputeNextPosition(
+        m_owner->GetPosition(),
+        BOSS_MAX_Y, 
+        BOSS_MIN_Y, 
+        moveSpeed, 
+        m_isMovingUp
+    );
+
+
+    m_owner->SetMovingUp(m_isMovingUp);
     m_owner->SetPosition(nextPosition);
 }
 
@@ -169,24 +183,43 @@ void FamiliarMoveState::Update()
 {
     const float deltaTime = g_gameTime->GetFrameDeltaTime();
 
-    float moveSpeed = m_owner->GetStatus()->GetMoveSpeed() * deltaTime;
 
-    //Vector3 nextPosition = m_owner->GetPosition();
+    //Bossを取得
+    Boss* boss = EnemyManager::GetInstance()->GetBoss();
 
-    //nextPosition.y += m_isMovingUp ? moveSpeed : moveSpeed * -1.0f;
-    //if (m_isMovingUp) {
-    //    nextPosition.y = min(nextPosition.y, _MAX_Y);
-    //}
-    //else {
-    //    nextPosition.y = max(nextPosition.y, BOSS_MIN_Y);
-    //}
-    //if (nextPosition.y >= BOSS_MAX_Y || nextPosition.y <= BOSS_MIN_Y) {
-    //    m_isMovingUp = !m_isMovingUp;
-    //}
 
-    Vector3 nextPosition = ComputeNextPosition(m_owner->GetPosition(), FAMILIAR_MAX_Y, FAMILIAR_MIN_Y, moveSpeed, m_isMovingUp);
+    //Bossがいる場合、方向を同期させて速度を修正する
+    if (boss) {
+        m_isMovingUp = boss->IsMovingUp();
 
-    m_owner->SetPosition(nextPosition);
+
+        float syncSpeedRatio = 140.0f / 200.0f;
+        float moveSpeed = m_owner->GetStatus()->GetMoveSpeed() * deltaTime * syncSpeedRatio;
+        //float moveSpeed = m_owner->GetStatus()->GetMoveSpeed() * deltaTime;
+
+        //Vector3 nextPosition = m_owner->GetPosition();
+
+        //nextPosition.y += m_isMovingUp ? moveSpeed : moveSpeed * -1.0f;
+        //if (m_isMovingUp) {
+        //    nextPosition.y = min(nextPosition.y, _MAX_Y);
+        //}
+        //else {
+        //    nextPosition.y = max(nextPosition.y, BOSS_MIN_Y);
+        //}
+        //if (nextPosition.y >= BOSS_MAX_Y || nextPosition.y <= BOSS_MIN_Y) {
+        //    m_isMovingUp = !m_isMovingUp;
+        //}
+
+        Vector3 nextPosition = ComputeNextPosition(
+            m_owner->GetPosition(), 
+            m_owner->GetDefaultPosition().y + FAMILIAR_OFFSET_Y,
+            m_owner->GetDefaultPosition().y,
+            moveSpeed,
+            m_isMovingUp
+        );
+
+        m_owner->SetPosition(nextPosition);
+    }
 }
 
 

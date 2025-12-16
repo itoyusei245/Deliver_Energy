@@ -6,6 +6,12 @@
 #include "EnemyBase.h"
 #include "EnemyStatePattern.h"
 
+enum enFamiliarType
+{
+	enFamiliarType_A,
+	enFamiliarType_B,
+};
+
 
 /**
  * 敵キャラクターの基底クラス
@@ -27,6 +33,10 @@ public:
 
 
 public:
+	void Setup(const enFamiliarType type);
+
+
+public:
 	FamiliarStatus* GetStatus() { return dynamic_cast<FamiliarStatus*>(m_status); }
 
 
@@ -36,4 +46,9 @@ private:
 	// 配列の中をEnFamiliarStateType_MaxにすることでEnFamiliarStateTypeの中に状態を追加するだけで箱の数を追加できる
 	// ステートごとに作ったクラスの情報を入れるための箱
 	IFamiliarState* m_stateList[EnFamiliarStateType_Max];
+
+
+private:
+	ModelRender m_coreModel;
+	enFamiliarType m_familiaType;
 };

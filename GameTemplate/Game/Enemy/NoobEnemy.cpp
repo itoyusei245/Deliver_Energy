@@ -30,6 +30,10 @@ bool NoobEnemy::Start()
 	m_modelRender.SetTRS(m_position, m_rotation, m_scale);
 	m_modelRender.Update();
 	m_physicsStaticObject.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix());
+	
+	m_collisionObject.CreateSphere(m_position, m_rotation, 10.0f);
+	m_collisionObject.Update();
+
 	return true;
 }
 

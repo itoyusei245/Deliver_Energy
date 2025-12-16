@@ -227,9 +227,11 @@
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="BossEnemy.cpp" />
     <ClCompile Include="CoinUI.cpp" />
+    <ClCompile Include="Collision\CollisionHitManager.cpp" />
     <ClCompile Include="Countdown.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Enemy\Boss.cpp" />
+    <ClCompile Include="Enemy\BossStatusUI.cpp" />
     <ClCompile Include="Enemy\EnemyBase.cpp" />
     <ClCompile Include="Enemy\EnemyStatePattern.cpp" />
     <ClCompile Include="Enemy\EnemyStatus.cpp" />
@@ -262,9 +264,11 @@
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="BossEnemy.h" />
     <ClInclude Include="CoinUI.h" />
+    <ClInclude Include="Collision\CollisionHitManager.h" />
     <ClInclude Include="Countdown.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Enemy\Boss.h" />
+    <ClInclude Include="Enemy\BossStatusUI.h" />
     <ClInclude Include="Enemy\EnemyBase.h" />
     <ClInclude Include="Enemy\EnemyStatePattern.h" />
     <ClInclude Include="Enemy\EnemyStatus.h" />
