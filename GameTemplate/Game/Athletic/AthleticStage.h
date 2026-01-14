@@ -16,7 +16,7 @@ public:
 	bool Start() override;
 	void Update() override; // Updateを追加
 
-	// 位置の設定（AthleticBaseにあれば不要ですが、念のため）
+	// 位置の設定
 	void SetPosition(const Vector3& pos) { m_position = pos; }
 	const Vector3& GetPosition() const { return m_position; }
 

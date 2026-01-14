@@ -58,16 +58,12 @@ bool AthleticTrigger::Start()
 
 						// 4. 動かない床
 						{ "Assets/modelData/Stage/athletic_addStage.tkm", 0.0f, 0.0f },
-
-						// 以下、残りのファイルも設定（必要に応じて数値をいじってください）
 						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor1.tkm", 100.0f, 200.0f },
 						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor2.tkm", 120.0f, 200.0f },
 						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor3.tkm", 140.0f, 200.0f },
 						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor4.tkm", 160.0f, 200.0f },
 						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor5.tkm", 180.0f, 200.0f },
 						{ "Assets/modelData/Stage/athletic_add3_UpdownFloor.tkm", 80.0f, 150.0f },
-
-						// 最後の足場（動かない）
 						{ "Assets/modelData/Stage/athletic_add2_Return.tkm", 0.0f, 0.0f }
 					}
 				);

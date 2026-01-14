@@ -7,7 +7,6 @@ Countdown::Countdown()
     m_operation.SetPosition(Vector3::Zero);
 
 
-    /**最初に「3」の画像で初期化（サイズは適宜調整してください）*/
     m_countdown.Init(TEX_3, 500.0f, 500.0f);
     /**画面中央に配置*/
     m_countdown.SetPosition(Vector3::Zero);

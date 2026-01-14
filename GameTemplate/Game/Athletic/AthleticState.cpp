@@ -4,7 +4,7 @@
 
 namespace
 {
-	// 上下移動の次の位置を計算する関数（EnemyStatePattern.cppのロジックを流用）
+	// 上下移動の次の位置を計算する関数
 	Vector3 ComputeNextPosition(const Vector3& position, const float maxY, const float minY, const float moveSpeed, bool& isMovingUp)
 	{
 		Vector3 nextPosition = position;
@@ -48,7 +48,7 @@ void AthleticIdleState::Exit()
 
 bool AthleticIdleState::RequestState(int& request)
 {
-	// すぐに移動ステートへ遷移する（必要ならタイマーなどで調整可能）
+	// すぐに移動ステートへ遷移する
 	request = enAthleticStateType_Move;
 	return true;
 }
@@ -58,7 +58,7 @@ bool AthleticIdleState::RequestState(int& request)
 // --------------------------------------------------------
 void AthleticMoveState::Enter()
 {
-	// 初期方向をセット（必要ならOwnerから取得）
+	// 初期方向をセット
 	m_isMovingUp = true;
 }
 

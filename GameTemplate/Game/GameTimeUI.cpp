@@ -58,7 +58,6 @@ void GameTimeUI::Update()
 
 
     /**左側全体の値：初期値4 + 増加分*/
-    /**※ % 10 を外したので、10, 11, 12...と無限に増えます */
     int valLeftTotal = 4 + (totalCounts / 10);
 
 
