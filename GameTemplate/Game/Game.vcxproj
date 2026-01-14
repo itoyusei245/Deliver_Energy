@@ -229,7 +229,6 @@
     <ClCompile Include="Athletic\AthleticState.cpp" />
     <ClCompile Include="Athletic\AthleticTrigger.cpp" />
     <ClCompile Include="BackGround.cpp" />
-    <ClCompile Include="BossEnemy.cpp" />
     <ClCompile Include="CoinUI.cpp" />
     <ClCompile Include="Collision\CollisionHitManager.cpp" />
     <ClCompile Include="Countdown.cpp" />
@@ -269,7 +268,6 @@
     <ClInclude Include="Athletic\AthleticState.h" />
     <ClInclude Include="Athletic\AthleticTrigger.h" />
     <ClInclude Include="BackGround.h" />
-    <ClInclude Include="BossEnemy.h" />
     <ClInclude Include="CoinUI.h" />
     <ClInclude Include="Collision\CollisionHitManager.h" />
     <ClInclude Include="Countdown.h" />

@@ -18,7 +18,7 @@ struct AthleticSpawnInfo {
 /**トリガーと生成リストをセットで管理する構造体*/
 struct AthleticTriggerInfo {
     CollisionObject* trigger;
-    std::vector<AthleticSpawnInfo> spawnInfos; // stringのベクターから変更
+    std::vector<AthleticSpawnInfo> spawnInfos; 
 };
 
 class StageManager
@@ -61,7 +61,5 @@ public:
 
     void CreateEnemyBox(Vector3& pos, Quaternion& rot, Vector3& size);
     void CreateStageBox(Vector3& pos, Quaternion& rot, Vector3& size);
-
-    // 引数を AthleticSpawnInfo の vector に変更
     void CreateAthleticBox(Vector3& pos, Quaternion& rot, Vector3& size, const std::vector<AthleticSpawnInfo>& spawnInfos);
 };

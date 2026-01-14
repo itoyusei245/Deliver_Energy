@@ -34,8 +34,6 @@ bool AthleticStage::Start()
 	// ワールド行列を取得
 	Matrix mat = m_modelRender.GetModel().GetWorldMatrix();
 
-	// ★修正箇所：Trans関数がないため、直接メンバ変数を操作して座標成分を0にします
-	// DirectXの行列(row-major)では、_41, _42, _43 が平行移動成分(X, Y, Z)です
 	mat.mat._41 = 0.0f;
 	mat.mat._42 = 0.0f;
 	mat.mat._43 = 0.0f;
@@ -47,7 +45,7 @@ bool AthleticStage::Start()
 }
 void AthleticStage::Update()
 {
-	// ステートの更新処理（Boss.cppと同じやり方）
+	// ステートの更新処理
 	int requestState = EnAthleticStateType_Max;
 	if (m_stateList[m_currentState]->RequestState(requestState)) {
 		m_stateList[m_currentState]->Exit();

@@ -23,7 +23,7 @@ void StageManager::Update()
 		return;
 	}
 
-	// ▼▼▼ 1. 敵の生成処理（ここは変更しません） ▼▼▼
+	// ▼▼▼ 1. 敵の生成処理 ▼▼▼
 	if (m_spawnCollisionObject && m_spawnCollisionObject->IsHit(Spawn->characterController))
 	{
 		// 元の座標のまま
@@ -34,14 +34,13 @@ void StageManager::Update()
 	}
 	// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
-	// ▼▼▼ 2. ステージ生成処理（単発） ▼▼▼
+	// ▼▼▼ 2. ステージ生成処理▼▼▼
 	if (m_stageCollisionObject && m_stageCollisionObject->IsHit(Spawn->characterController))
 	{
 		AthleticStage* bg = FindGO<AthleticStage>("athleticStage");
 
 		AthleticStage* newStage = NewGO<AthleticStage>(0, "athleticStage");
 
-		// ★ここに位置指定を追加
 		newStage->SetPosition(Vector3(900.0f, -150.0f, -3500.0f));
 
 		DeleteGO(m_stageCollisionObject);
@@ -60,7 +59,6 @@ void StageManager::Update()
 				AthleticStage* newStage = NewGO<AthleticStage>(0, "athleticStage");
 				newStage->SetModelPath(info.filePath.c_str());
 
-				// ★ここに位置指定を追加（すべての床がこの位置に重なって生成されます）
 				newStage->SetPosition(Vector3(900.0f, -150.0f, -3500.0f));
 
 				// 速度が設定されていたらパラメータを渡す
@@ -84,8 +82,6 @@ void StageManager::Setup()
 {
 	NewGO<AthleticTrigger>(0, "athleticTriggerLoader");
 
-	// Setup内でのテスト生成も新しい形式に対応させる場合は以下のように書きますが、
-	// 基本的にはAthleticTrigger.cpp側で設定するので、ここは空でも良いかもしれません。
 	/*
 	Vector3 pos = { 0.0f, 0.0f, 0.0f };
 	Quaternion rot = Quaternion::Identity;
