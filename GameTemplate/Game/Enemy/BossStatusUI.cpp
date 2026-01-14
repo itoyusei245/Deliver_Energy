@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "BossStatusUI.h"
-#include "EnemyManager.h"
+#include "Enemy/EnemyManager.h"
 #include "Enemy/Boss.h"
 #include "EnemyStatus.h"
 

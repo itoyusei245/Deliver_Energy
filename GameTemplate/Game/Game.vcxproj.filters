@@ -10,6 +10,9 @@
     <Filter Include="Collision">
       <UniqueIdentifier>{f4eeb44b-bbee-4c4e-8b6f-9ab5952d834a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Athletic">
+      <UniqueIdentifier>{4d82827f-0b50-4a22-b980-dd701a4d723e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -24,12 +27,8 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="BossEnemy.cpp" />
-    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="StageManager.cpp" />
-    <ClCompile Include="TriggerBox.cpp" />
     <ClCompile Include="GetItem.cpp" />
-    <ClCompile Include="AthleticStage.cpp" />
-    <ClCompile Include="NoobEnemy.cpp" />
     <ClCompile Include="Setting.cpp" />
     <ClCompile Include="Countdown.cpp" />
     <ClCompile Include="GameTimeUI.cpp" />
@@ -61,6 +60,27 @@
     <ClCompile Include="Enemy\BossStatusUI.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy\EnemyController.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Athletic\AthleticBase.cpp">
+      <Filter>Athletic</Filter>
+    </ClCompile>
+    <ClCompile Include="Athletic\AthleticStage.cpp">
+      <Filter>Athletic</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\EnemyManager.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Athletic\AthleticManager.cpp">
+      <Filter>Athletic</Filter>
+    </ClCompile>
+    <ClCompile Include="Athletic\AthleticTrigger.cpp">
+      <Filter>Athletic</Filter>
+    </ClCompile>
+    <ClCompile Include="Athletic\AthleticState.cpp">
+      <Filter>Athletic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -75,12 +95,8 @@
     <ClInclude Include="GameClear.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="BossEnemy.h" />
-    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="StageManager.h" />
-    <ClInclude Include="TriggerBox.h" />
     <ClInclude Include="GetItem.h" />
-    <ClInclude Include="AthleticStage.h" />
-    <ClInclude Include="NoobEnemy.h" />
     <ClInclude Include="Setting.h" />
     <ClInclude Include="Countdown.h" />
     <ClInclude Include="GameTimeUI.h" />
@@ -111,6 +127,27 @@
     </ClInclude>
     <ClInclude Include="Enemy\BossStatusUI.h">
       <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\EnemyController.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Athletic\AthleticBase.h">
+      <Filter>Athletic</Filter>
+    </ClInclude>
+    <ClInclude Include="Athletic\AthleticStage.h">
+      <Filter>Athletic</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\EnemyManager.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Athletic\AthleticManager.h">
+      <Filter>Athletic</Filter>
+    </ClInclude>
+    <ClInclude Include="Athletic\AthleticTrigger.h">
+      <Filter>Athletic</Filter>
+    </ClInclude>
+    <ClInclude Include="Athletic\AthleticState.h">
+      <Filter>Athletic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

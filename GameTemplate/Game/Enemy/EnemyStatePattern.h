@@ -9,6 +9,7 @@ class Boss;
 class Familiar;
 class NoobEnemy;
 
+
 class IEnemyState : public Noncopyable
 {
 public:
@@ -253,6 +254,4 @@ public:
 	void Update() override;
 	void Exit() override;
 	bool RequestState(int& request) override;
-
-
 };

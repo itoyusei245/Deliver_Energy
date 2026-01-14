@@ -223,16 +223,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AthleticStage.cpp" />
+    <ClCompile Include="Athletic\AthleticBase.cpp" />
+    <ClCompile Include="Athletic\AthleticManager.cpp" />
+    <ClCompile Include="Athletic\AthleticStage.cpp" />
+    <ClCompile Include="Athletic\AthleticState.cpp" />
+    <ClCompile Include="Athletic\AthleticTrigger.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="BossEnemy.cpp" />
     <ClCompile Include="CoinUI.cpp" />
     <ClCompile Include="Collision\CollisionHitManager.cpp" />
     <ClCompile Include="Countdown.cpp" />
-    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Enemy\Boss.cpp" />
     <ClCompile Include="Enemy\BossStatusUI.cpp" />
     <ClCompile Include="Enemy\EnemyBase.cpp" />
+    <ClCompile Include="Enemy\EnemyController.cpp" />
+    <ClCompile Include="Enemy\EnemyManager.cpp" />
     <ClCompile Include="Enemy\EnemyStatePattern.cpp" />
     <ClCompile Include="Enemy\EnemyStatus.cpp" />
     <ClCompile Include="Enemy\Familiar.cpp" />
@@ -256,20 +261,23 @@
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Title.cpp" />
-    <ClCompile Include="TriggerBox.cpp" />
-    <ClCompile Include="NoobEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AthleticStage.h" />
+    <ClInclude Include="Athletic\AthleticBase.h" />
+    <ClInclude Include="Athletic\AthleticManager.h" />
+    <ClInclude Include="Athletic\AthleticStage.h" />
+    <ClInclude Include="Athletic\AthleticState.h" />
+    <ClInclude Include="Athletic\AthleticTrigger.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="BossEnemy.h" />
     <ClInclude Include="CoinUI.h" />
     <ClInclude Include="Collision\CollisionHitManager.h" />
     <ClInclude Include="Countdown.h" />
-    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Enemy\Boss.h" />
     <ClInclude Include="Enemy\BossStatusUI.h" />
     <ClInclude Include="Enemy\EnemyBase.h" />
+    <ClInclude Include="Enemy\EnemyController.h" />
+    <ClInclude Include="Enemy\EnemyManager.h" />
     <ClInclude Include="Enemy\EnemyStatePattern.h" />
     <ClInclude Include="Enemy\EnemyStatus.h" />
     <ClInclude Include="Enemy\Familiar.h" />
@@ -289,8 +297,6 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />
-    <ClInclude Include="TriggerBox.h" />
-    <ClInclude Include="NoobEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />
