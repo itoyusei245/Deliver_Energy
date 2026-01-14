@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "Title.h"
 #include "sound/SoundEngine.h"
+#include "Enemy/EnemyController.h"
 
 
 void ReportLiveObjects()
@@ -35,6 +36,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	
 	//Gameクラスのオブジェクトを作成。
 	//NewGO<Game>(0, "game");
+
+	EnemyController::Initialize();
 
 	NewGO<Title>(0, "title");
 	//////////////////////////////////////

@@ -22,12 +22,12 @@ NoobEnemy::~NoobEnemy()
 
 bool NoobEnemy::Start()
 {
-	SetScale(Vector3(70.0f, 70.0f, 70.0f));
+	SetScale(Vector3(1.7f, 1.7f, 1.7f));
 
 	m_stateList[enNoobEnemyStateType_Idle] = new NoobEnemyIdleState(this);
 	m_stateList[enNoobEnemyStateType_Move] = new NoobEnemyMoveState(this);
-	m_modelRender.Init("Assets/animData/main_bossEnemy.tkm");
-	m_modelRender.SetTRS(m_position, m_rotation, m_scale);
+	m_modelRender.Init("Assets/animData/noobEnemy.tkm");
+	m_modelRender.SetTRS(Vector3::Zero, m_rotation, m_scale);
 	m_modelRender.Update();
 	m_physicsStaticObject.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix());
 	

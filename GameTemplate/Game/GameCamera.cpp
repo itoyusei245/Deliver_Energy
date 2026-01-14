@@ -91,13 +91,13 @@ void GameCamera::Update()
     float y = g_pad[0]->GetRStickYF();
     //Y軸周りの回転
     Quaternion qRot;
-    qRot.SetRotationDeg(Vector3::AxisY, 1.3f * x);
+    qRot.SetRotationDeg(Vector3::AxisY, 1.0f * x);
     qRot.Apply(m_toCameraPos);
     //X軸周りの回転。
     Vector3 axisX;
     axisX.Cross(Vector3::AxisY, m_toCameraPos);
     axisX.Normalize();
-    qRot.SetRotationDeg(axisX, 1.3f * y);
+    qRot.SetRotationDeg(axisX, 1.0 * y);
     qRot.Apply(m_toCameraPos);
     //カメラの回転の上限をチェックする。
     //注視点から視点までのベクトルを正規化する。

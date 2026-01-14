@@ -3,7 +3,8 @@
 #include "BackGround.h"
 #include "Player.h"
 #include "GameCamera.h"
-#include "EnemyManager.h"
+#include "Enemy/EnemyManager.h"
+#include "Athletic/AthleticManager.h"
 #include "StageManager.h"
 #include "Countdown.h"
 #include "GameTimeUI.h"
@@ -42,6 +43,8 @@ Game::~Game()
 	DeleteGO(m_gameCamera);
 	/** プレイヤーを削除*/
 	DeleteGO(m_player);
+	/** アスレチック管理クラスのインスタンスを削除*/
+	AthleticManager::DeleteInstance();
 	/** 敵管理クラスのインスタンスを削除*/
 	EnemyManager::DeleteInstance();
 	/**ステージクラスのインスタンスを削除*/
@@ -82,6 +85,10 @@ bool Game::Start()
 	EnemyManager::CreateInstance();
 	/** 敵管理クラスのインスタンスを初期化*/
 	EnemyManager::GetInstance()->Setup();
+	/** アスレチック管理クラスのインスタンスを生成*/
+	AthleticManager::CreateInstance();
+	/** アスレチック管理クラスのインスタンスを初期化*/
+	AthleticManager::GetInstance()->Setup();
 	/** 背景の初期化*/
 	if (m_backGround == nullptr) {
 		m_backGround = NewGO<BackGround>(0, "background");

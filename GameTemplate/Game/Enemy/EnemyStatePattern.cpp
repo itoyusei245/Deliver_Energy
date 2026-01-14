@@ -2,8 +2,8 @@
 #include "EnemyStatePattern.h"
 #include "Boss.h"
 #include "Familiar.h"
-#include "NoobEnemy.h"
-#include "EnemyManager.h"
+#include "Enemy/NoobEnemy.h"
+#include "Enemy/EnemyManager.h"
 
 
 namespace
@@ -276,9 +276,12 @@ void NoobEnemyMoveState::Eneter()
 
 void NoobEnemyMoveState::Update()
 {
-    // const float deltaTime = g_gameTime->GetFrameDeltaTime();
-
-    //float moveSpeed = m_owner->GetStatus()->GetMoveSpeed() * deltaTime;
+    const float deltaTime = g_gameTime->GetFrameDeltaTime();
+    float speed = m_owner->GetStatus()->GetMoveSpeed() * deltaTime;
+    const Vector3 moveDirection = m_owner->m_moveVector;
+    const Vector3 moveSpeed = moveDirection * speed;
+    const Vector3 nextPosition = m_owner->m_position + moveSpeed;
+    m_owner->SetPosition(nextPosition);
 
     //Vector3 nextPosition = m_owner->GetPosition();
 
