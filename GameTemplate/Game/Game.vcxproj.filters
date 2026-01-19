@@ -80,6 +80,7 @@
     <ClCompile Include="Athletic\AthleticState.cpp">
       <Filter>Athletic</Filter>
     </ClCompile>
+    <ClCompile Include="GameUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="Athletic\AthleticState.h">
       <Filter>Athletic</Filter>
     </ClInclude>
+    <ClInclude Include="GameUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

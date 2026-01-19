@@ -1,3 +1,7 @@
+/**
+ * @file InGameState.cpp
+ * @brief ゲーム本編ステートの実装
+ */
 #include "stdafx.h"
 #include "InGameState.h"
 #include "Player.h"
@@ -10,28 +14,27 @@
 #include "CoinUI.h"
 #include "Pause.h"
 
-// ★静的変数の実体定義（旧Gameクラスから移動）
+ // 静的変数の実体定義
 bool InGameState::IsGamePlay = false;
 bool InGameState::IsPaused = false;
 int InGameState::CoinCount = 0;
 
 InGameState::InGameState()
 {
-    // コンストラクタはシンプルに
 }
 
 InGameState::~InGameState()
 {
-    // デストラクタでオブジェクト削除を呼ぶ
+    // デストラクタでオブジェクト削除を呼ぶ（安全策）
     DeleteGameObjects();
 }
 
-// ------------------------------------
-// ライフサイクル処理
-// ------------------------------------
-
 /**
  * @brief シーン開始時の初期化処理
+ * @details
+ * 1. StageManager, EnemyManagerのシングルトン生成とセットアップ
+ * 2. ゲーム進行フラグのリセット
+ * 3. プレイヤー、カメラ、背景、UI、ポーズ機能の生成
  */
 void InGameState::OnEnter()
 {
@@ -59,6 +62,7 @@ void InGameState::OnEnter()
 
 /**
  * @brief 毎フレームの更新処理
+ * @details カウントダウン終了を監視してゲームプレイフラグを立てます。また、各マネージャを更新します。
  */
 void InGameState::OnUpdate()
 {
@@ -71,34 +75,23 @@ void InGameState::OnUpdate()
     // マネージャーの更新 
     StageManager::GetInstance()->Update();
     EnemyManager::GetInstance()->Update();
-
 }
 
-/**
- * @brief シーン終了時のクリーンアップ処理
- */
 void InGameState::OnExit()
 {
 }
 
-/**
- * @brief 状態変更の必要性を判定する (Gameクラスがこの戻り値を見て遷移を実行します)
- */
 bool InGameState::ShouldChangeState()
 {
     return false;
 }
 
-// ------------------------------------
-// オブジェクト管理
-// ------------------------------------
-
 /**
- * @brief シーン内の全オブジェクトを削除する (旧 Gameのデストラクタの役割)
+ * @brief シーン内の全オブジェクトを削除する
+ * @details 保持しているポインタを使ってDeleteGOを行い、ポインタをnullptrで無効化します。
  */
 void InGameState::DeleteGameObjects()
 {
-    // OnEnter()で作成した全オブジェクトをポインタを使って削除
     DeleteGO(m_player);
     DeleteGO(m_gameCamera);
     DeleteGO(m_backGround);
@@ -107,7 +100,6 @@ void InGameState::DeleteGameObjects()
     DeleteGO(m_coinUI);
     DeleteGO(m_pause);
 
-    // 削除後、ポインタをnullptrにリセット
     m_player = nullptr;
     m_gameCamera = nullptr;
     m_backGround = nullptr;

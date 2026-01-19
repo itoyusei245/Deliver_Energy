@@ -1,45 +1,55 @@
-﻿#pragma once
-#include"camera/SpringCamera.h"
+﻿/**
+ * @file GameCamera.h
+ * @brief ゲームプレイ中のカメラ制御クラス定義
+ */
+#pragma once
+#include "camera/SpringCamera.h"
 
 class Player;
 
 /**
- * @brief ゲーム中のカメラを制御するクラス
- * @details プレイヤーを追従し、カメラの位置・注視点を管理します。
+ * @class GameCamera
+ * @brief プレイヤー追従型カメラ（TPS視点）クラス
+ * @details プレイヤーの周囲を回転移動でき、SpringCameraを利用して滑らかに追従します。
  */
 class GameCamera : public IGameObject
 {
 public:
     /**
      * @brief コンストラクタ
-     * @details カメラオブジェクトの初期化を行います。
      */
     GameCamera();
 
     /**
      * @brief デストラクタ
-     * @details カメラオブジェクトの終了処理を行います。
      */
     ~GameCamera();
 
     /**
-     * @brief カメラの初期化処理
-     * @return 初期化が成功した場合はtrue
+     * @brief 初期化処理
+     * @details プレイヤーの参照取得、スプリングカメラのパラメータ設定、
+     * および初期位置への強制ワープ（フレーム飛び防止）を行います。
+     * @return bool 初期化成功ならtrue
      */
     bool Start();
 
     /**
-     * @brief カメラの更新処理
-     * @details プレイヤーの位置に応じてカメラの位置・注視点を更新します。
+     * @brief 更新処理
+     * @details コントローラー入力による視点回転計算と、追従座標の更新を行います。
      */
     void Update();
 
-    /** @brief 追従対象のプレイヤー */
-    Player* player= nullptr;
+    /** @brief 追従対象のプレイヤーへのポインタ */
+    Player* player = nullptr;
 
-    /** @brief 注視点から視点に向かうベクトル */
+    /** * @brief 注視点（プレイヤー）からカメラ位置への相対ベクトル
+     * @details このベクトルを回転させることで、カメラのアングルを変更します。
+     */
     Vector3 m_toCameraPos = Vector3::One;
-private:
-	SpringCamera m_springCamera; /**< スプリングカメラオブジェクト */
-};
 
+private:
+    /** * @brief スプリングカメラオブジェクト
+     * @details 目標地点に対してバネのような動きで滑らかに追従する機能を提供します。
+     */
+    SpringCamera m_springCamera;
+};
