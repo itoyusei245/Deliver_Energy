@@ -17,7 +17,10 @@ namespace nsK2Engine {
 		
 		//Sprite初期化オブジェクトを使用して、Spriteを初期化する。
 		m_sprite.Init(initData);
+
+
 	}
+
 
 	void SpriteRender::Draw(RenderContext& rc)
 	{
@@ -29,12 +32,14 @@ namespace nsK2Engine {
 		SpriteInitData initData;
 		//DDSファイル(画像データ)のファイルパスを指定する。
 		initData.m_ddsFilePath[0] = filePath;
-		//Sprite表示用のシェーダーのファイルパスを指定する。
-		initData.m_fxFilePath = "Assets/shader/sprite.fx";
+		initData.m_fxFilePath = "Assets/shader/circle 1 1.fx";
 		//スプライトの幅と高さを指定する。
 		initData.m_width = static_cast<UINT>(w);
 		initData.m_height = static_cast<UINT>(h);
 		initData.m_alphaBlendMode = alphaBlendMode;
+
+		// すでに確保済みなら一度消す（念の為の安全策）
+		if (m_circleData) delete m_circleData;
 
 		m_circleData = new CircleData;
 		m_circleData->InitData(p, size, w);
@@ -45,4 +50,5 @@ namespace nsK2Engine {
 		//Sprite初期化オブジェクトを使用して、Spriteを初期化する。
 		m_sprite.Init(initData);
 	}
+
 }

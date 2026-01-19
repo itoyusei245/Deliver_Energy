@@ -1,80 +1,70 @@
+/**
+ * @file Player.h
+ * @brief プレイヤーキャラクター（缶）のクラス定義
+ */
 #pragma once
 
-/**
- * @brief プレイヤークラス
- * @details ゲーム内のプレイヤーオブジェクトを管理します。
- */
+ /**
+  * @class Player
+  * @brief プレイヤー操作キャラクタークラス
+  * @details CharacterControllerを使用した移動、ジャンプに加え、
+  * 「倒れて転がる（Roll）」という独自の挙動を持っています。
+  */
 class Player : public IGameObject
 {
 public:
-    /**
-     * @brief コンストラクタ
-     * @details NewGOで作成されたときに呼ばれます。
-     */
     Player();
-
-    /**
-     * @brief デストラクタ
-     * @details DeleteGOで削除されたときに呼ばれます。
-     */
     ~Player();
 
-    /**
-     * @brief 更新処理
-     * @details 毎フレーム呼ばれる更新処理です。
-     */
     void Update();
-
-    /**
-     * @brief 描画処理
-     * @param rc 描画コンテキスト
-     * @details プレイヤーの描画を行います。
-     */
     void Render(RenderContext& rc);
 
     /**
-     * @brief 移動処理
-     * @details プレイヤーの移動を制御します。
+     * @brief 移動制御
+     * @details 左スティック入力による移動、ジャンプ、および転がり時の加速処理を行います。
      */
     void Move();
 
     /**
-     * @brief 回転処理
-     * @details プレイヤーの回転を制御します。
+     * @brief 回転制御
+     * @details 入力方向への旋回や、倒れた状態でのゴロゴロ回転（自転）を計算します。
      */
     void Rotation();
 
-    /** @name メンバ変数*/
-
-    /** @brief モデルレンダラー */
+    /** @name コンポーネント */
     ModelRender modelRender;
+    CharacterController characterController;
+    
 
-    /** @brief 座標 */
+    /** 現在の座標 */
     Vector3 position;
 
-    /** @brief 倒れているときの転がり速度 */
-    Vector3 rollVelocity = { 0.0f, 0.0f, 0.0f };
+    /** @name 移動パラメータ */
+    
+    Vector3 moveSpeed;              /**< 現在の移動速度ベクトル */
+    Vector3 rollVelocity = { 0.0f, 0.0f, 0.0f }; /**< 転がり時の慣性速度 */
+    int jump = 0;                   /**< ジャンプ状態（※現在Move内で直接処理しているため未使用の可能性あり） */
+    
 
-    /** @brief 移動速度 */
-    Vector3 moveSpeed;
+    /** @name 回転制御用 */
+    Quaternion targetRotation;      /**< 目標とする回転 */
+    Quaternion rotation;            /**< 現在の回転 */
+    bool isFallen = false;          /**< 倒れている（転がりモード）かどうか */
+    float rollAngle = 0.0f;         /**< 転がり回転の累積角度 */
+    // HPの割合を取得する関数s
+    float GetHPRate() const {
+        return m_hp / m_maxHp;
+    }
 
-    /** @brief キャラクターコントローラー */
-    CharacterController characterController;
+    // ダメージ処理などのテスト用
+    void Damage(float damage) {
+        m_hp -= damage;
+        if (m_hp < 0.0f) m_hp = 0.0f;
+    }
 
-    /** @brief 目標の回転 */
-    Quaternion targetRotation;
 
-    /** @brief 現在の回転（クォータニオン） */
-    Quaternion rotation;
+private:
 
-    /** @brief ジャンプ状態 */
-    int jump = 0;
-
-    /** @brief 倒れているかどうか */
-    bool isFallen = false;
-
-    /** @brief ゴロゴロ用の回転角 */
-    float rollAngle = 0.0f;
-
+    float m_hp = 100.0f;
+    float m_maxHp = 100.0f;
 };
-

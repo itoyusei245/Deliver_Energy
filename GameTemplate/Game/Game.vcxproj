@@ -246,6 +246,7 @@
     <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="GameStateBase.cpp" />
     <ClCompile Include="GameTimeUI.cpp" />
+    <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="GetItem.cpp" />
     <ClCompile Include="InGameState.cpp" />
     <ClCompile Include="main.cpp" />
@@ -285,6 +286,7 @@
     <ClInclude Include="GameClear.h" />
     <ClInclude Include="GameStateBase.h" />
     <ClInclude Include="GameTimeUI.h" />
+    <ClInclude Include="GameUI.h" />
     <ClInclude Include="GetItem.h" />
     <ClInclude Include="InGameState.h" />
     <ClInclude Include="Pause.h" />

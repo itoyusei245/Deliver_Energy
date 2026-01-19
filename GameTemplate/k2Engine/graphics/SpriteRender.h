@@ -112,17 +112,29 @@ namespace nsK2Engine {
 		void Draw(RenderContext& rc);
 
 		void CircleInit(float& p, float& size, const char* filePath, const float w, const float h, AlphaBlendMode alphaBlendMode);/**w・・・広さ(Wide)、h・・・高さ(High)*/
+		
+		// ★これを追加してください
+	// HPの割合(0.0～1.0)をセットする関数
+		void SetCircleProgress(float progress)
+		{
+			if (m_circleData) {
+				m_circleData->circlePoint = progress;
+			}
+		}
+		
 		struct CircleData
 		{
 			float circlePoint;/**ゲージの割合*/
 			float spriteSize;/**画像のサイズ*/
 			float circleSize;/**円のサイズ*/
-			
+			float dummy; // これを追加して float 4つ (16byte) に揃えるのが定石
+
 			void InitData(float circleP, float spriteS, float circleS)
 			{
 				circlePoint = circleP;
 				spriteSize = spriteS;
 				circleSize = circleS;
+				dummy = 0.0f;
 			}
 
 			void AddGaugePoint(float P) {/**ゲージを足す*/

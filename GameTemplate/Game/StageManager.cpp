@@ -1,3 +1,7 @@
+/**
+ * @file StageManager.cpp
+ * @brief ステージマネージャの実装
+ */
 #include "stdafx.h"
 #include "StageManager.h"
 #include "Player.h"
@@ -15,59 +19,61 @@ StageManager::~StageManager()
 {
 }
 
+/**
+ * @brief 更新処理
+ * @details プレイヤーと各種トリガー（敵生成、ステージ生成、アスレチック生成）の接触判定を行い、
+ * ヒットした場合は対応するオブジェクト生成処理を実行します。
+ * 生成後はトリガーを削除して二重生成を防ぎます。
+ */
 void StageManager::Update()
 {
 	Player* Spawn = FindGO<Player>("player");
-	if (!Spawn)
-	{
-		return;
-	}
+	if (!Spawn) return;
 
 	// ▼▼▼ 1. 敵の生成処理 ▼▼▼
 	if (m_spawnCollisionObject && m_spawnCollisionObject->IsHit(Spawn->characterController))
 	{
-		// 元の座標のまま
+		// ボス敵の生成（座標は固定値）
 		Vector3 pos = { 3500.0f, -100.0f, -4200.0f };
 		EnemyManager::GetInstance()->CreateEnemy(pos);
+
+		// トリガー削除
 		DeleteGO(m_spawnCollisionObject);
 		m_spawnCollisionObject = nullptr;
 	}
-	// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
-	// ▼▼▼ 2. ステージ生成処理▼▼▼
+	// ▼▼▼ 2. ステージ（特定ギミック）生成処理 ▼▼▼
 	if (m_stageCollisionObject && m_stageCollisionObject->IsHit(Spawn->characterController))
 	{
+		// 既存のを探して、新しく作り直す処理？（実装意図要確認）
 		AthleticStage* bg = FindGO<AthleticStage>("athleticStage");
-
 		AthleticStage* newStage = NewGO<AthleticStage>(0, "athleticStage");
-
 		newStage->SetPosition(Vector3(900.0f, -150.0f, -3500.0f));
 
 		DeleteGO(m_stageCollisionObject);
 		m_stageCollisionObject = nullptr;
 	}
 
-	// ▼▼▼ 3. アスレチックトリガーによる生成処理（リスト） ▼▼▼
+	// ▼▼▼ 3. アスレチックトリガーリストの処理 ▼▼▼
 	auto it = m_athleticTriggers.begin();
 	while (it != m_athleticTriggers.end())
 	{
 		if (it->trigger != nullptr && it->trigger->IsHit(Spawn->characterController))
 		{
-			// 登録されている情報の数だけループして生成
+			// リストに登録されている全アスレチック情報を元に生成
 			for (const auto& info : it->spawnInfos)
 			{
 				AthleticStage* newStage = NewGO<AthleticStage>(0, "athleticStage");
 				newStage->SetModelPath(info.filePath.c_str());
+				newStage->SetPosition(Vector3(900.0f, -150.0f, -3500.0f)); // ※固定座標になっています。動的にする場合は引数等が必要かも
 
-				newStage->SetPosition(Vector3(900.0f, -150.0f, -3500.0f));
-
-				// 速度が設定されていたらパラメータを渡す
+				// 移動パラメータの設定
 				if (info.moveSpeed > 0.0f) {
 					newStage->SetMoveSettings(info.moveSpeed, info.moveRange);
 				}
 			}
 
-			// トリガー削除などの後処理
+			// 使用済みトリガーの削除とリストからの消去
 			DeleteGO(it->trigger);
 			it = m_athleticTriggers.erase(it);
 		}
@@ -80,19 +86,8 @@ void StageManager::Update()
 
 void StageManager::Setup()
 {
+	// レベルデータ読み込み用ローダーを起動
 	NewGO<AthleticTrigger>(0, "athleticTriggerLoader");
-
-	/*
-	Vector3 pos = { 0.0f, 0.0f, 0.0f };
-	Quaternion rot = Quaternion::Identity;
-	Vector3 size = Vector3::One;
-	CreateAthleticBox(pos, rot, size, {
-		// パスだけのコンストラクタも有効
-		AthleticSpawnInfo("Assets/modelData/Stage/athletic_NormalMoveFloor.tkm"),
-		// パラメータ付き
-		AthleticSpawnInfo("Assets/modelData/Stage/athletic_add_MoveFloor.tkm", 2.0f, 100.0f)
-	});
-	*/
 }
 
 void StageManager::CreateEnemyBox(Vector3& pos, Quaternion& rot, Vector3& size)
@@ -111,7 +106,7 @@ void StageManager::CreateStageBox(Vector3& pos, Quaternion& rot, Vector3& size)
 	m_stageCollisionObject->SetName("spawnStage");
 }
 
-// 引数を変更した実装
+// アスレチック生成用トリガー作成（情報リストを登録）
 void StageManager::CreateAthleticBox(Vector3& pos, Quaternion& rot, Vector3& size, const std::vector<AthleticSpawnInfo>& spawnInfos)
 {
 	CollisionObject* newTrigger = NewGO<CollisionObject>(0);
@@ -121,7 +116,7 @@ void StageManager::CreateAthleticBox(Vector3& pos, Quaternion& rot, Vector3& siz
 
 	AthleticTriggerInfo info;
 	info.trigger = newTrigger;
-	info.spawnInfos = spawnInfos; // リストをコピー
+	info.spawnInfos = spawnInfos; // 情報をコピーして保存
 
 	m_athleticTriggers.push_back(info);
 }
