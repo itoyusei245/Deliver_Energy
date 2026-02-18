@@ -41,6 +41,9 @@ public:
 	 */
 	virtual void Render(RenderContext& rc) override {}
 
+	// 死亡時に呼ぶ関数
+	virtual void OnDead();
+
 	/**
 	 * @brief 座標を設定する
 	 * @param[in] position 設定する座標

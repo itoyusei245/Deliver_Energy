@@ -6,7 +6,7 @@
 #include "Title.h"
 #include "sound/SoundEngine.h"
 #include "Enemy/EnemyController.h"
-
+#include "Sound/SoundManager.h"
 
 void ReportLiveObjects()
 {
@@ -39,6 +39,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	EnemyController::Initialize();
 
+
+	SoundManager::CreateInstance();
+
+
 	NewGO<Title>(0, "title");
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
@@ -52,6 +56,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		}
 		K2Engine::GetInstance()->Execute();
 	}
+
+	SoundManager::DestroyInstance();
 
 	K2Engine::DeleteInstance();
 

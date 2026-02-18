@@ -4,6 +4,8 @@
  */
 #pragma once
 #include "Level3DRender/LevelRender.h"
+#include "Sound/SoundManager.h"
+#include "Camera/EventCamera.h"
 
  // 前方宣言
 class CoinUI;
@@ -46,6 +48,7 @@ public:
      */
     bool Start();
 
+    void StartRefrigeratorSound();
     /**
      * @brief 更新処理
      * @details カウントダウンの監視、ゲームプレイフラグの制御、各マネージャの更新を行います。
@@ -58,6 +61,14 @@ public:
      * @note Gameクラス自体は特定のモデルを持たないため、ここでの描画処理は基本的に空です。
      */
     void Render(RenderContext& rc);
+
+
+    //リザルトに渡すための静的メンバ変数
+    static int DefeatedEnemyCount; // 敵を倒した数
+    static float ClearTime;        // クリアタイム
+    static float FinalTemperature; // 最終温度
+    static float FinalHP;          // 最終HP
+
 
     // --- 静的メンバ変数（グローバルな状態管理） ---
 
@@ -85,7 +96,10 @@ private:
     NoobEnemy* m_noobEnemy = nullptr;
 
     /** ゲームカメラ */
-    GameCamera* m_gameCamera;
+    GameCamera* m_gameCamera = nullptr;
+
+    /** イベントカメラ */
+    EventCamera* m_eventCamera = nullptr;
 
     /** 背景オブジェクト（冷蔵庫ギミック等含む） */
     BackGround* m_backGround;
@@ -108,6 +122,20 @@ private:
     /** スプライトレンダラー */
     SpriteRender spriteRender;
 
-    /** 当たり判定管理用オブジェクト（Managerのラッパー） */
+    /** 当たり判定管理用オブジェクト */
     CollisionHitManagerObject* m_collisionHitManagerObject = nullptr;
+
+    SoundHandle m_refrigeratorHandle = INVALID_SOUND_HANDLE;
+
+    //
+    const Vector3 m_fridgePos = { 0.0f,-200.0f,0.0f };
+
+    //
+    const float m_minRange = 300.0f;
+
+    //
+    const float m_maxRange = 600.0f;
+
+    float m_eventStartTimer = 0.0f;
+    bool m_isEventTriggered = false;
 };

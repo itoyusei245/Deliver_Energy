@@ -117,7 +117,7 @@ namespace nsK2EngineLow {
 				Play(m_isLoop);
 			}
 			else {
-				DeleteGO(this);
+				//DeleteGO(this);
 				Remove3DSound();
 			}
 		}

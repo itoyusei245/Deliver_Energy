@@ -4,7 +4,8 @@
  */
 #include "stdafx.h"
 #include "Player.h"
-#include"Game.h"
+#include "Game.h"
+#include "Sound/SoundManager.h"
 
  /**
   * @brief コンストラクタ
@@ -15,6 +16,7 @@ Player::Player()
     /**缶のモデルを読み込む*/
     modelRender.Init("Assets/animData/Player.tkm");
     position = { 0.0f, -200.0f, 0.0f };
+    //position = { 900.0f, -150.0f, -3500.0f }; //アスレチックステージテスト用
 
     /**キャラクターコントローラーを初期化（半径25, 高さ50）*/
     characterController.Init(25.0f, 50.0f, position);
@@ -29,6 +31,8 @@ Player::~Player()
 
 void Player::Update()
 {
+    // 無効なら更新せずに終了（入力も受け付けない）
+    if (!m_isEnable) return;
     // ポーズ中は停止
     if (Game::IsPaused) return;
 
@@ -41,12 +45,12 @@ void Player::Update()
     // ========== テスト用コード ==========
 
     // HPを少しずつ減らす (60FPSなら1秒で約30減る)
-    m_hp -= 0.1f;
+    //m_hp -= 0.1f;
 
-    // 0以下になったら満タンに戻してループさせる
-    if (m_hp <= 0.0f) {
-        m_hp = m_maxHp;
-    }
+    //// 0以下になったら満タンに戻してループさせる
+    //if (m_hp <= 0.0f) {
+    //    m_hp = m_maxHp;
+    //}
     /**モデルの更新処理*/
     modelRender.Update();
 }
@@ -84,6 +88,75 @@ void Player::Move()
 
     Vector3 inputMove = right + forward;
 
+
+    //現在の接地判定を取得
+    bool isGrounded = characterController.IsOnGround();
+
+
+    //==========================================
+    //着地音
+    //==========================================
+    //「前フレームは浮いていた」かつ「今は接地している」なら着地の瞬間
+    if (!m_isGroundPrev && isGrounded)
+    {
+        //着地音を再生
+        SoundManager::Get().PlaySE(enSoundKind_Landing);
+    }
+    m_isGroundPrev = isGrounded;
+
+
+    //==========================================
+    //移動音
+    //==========================================
+    //条件: 接地している && 倒れていない && 移動入力がある
+    bool isWalkng = isGrounded && !isFallen && (inputMove.LengthSq() > 0.01f);
+
+
+    if (isWalkng)
+    {
+        //再生されていなければ再生する
+        if (m_walkHandle == INVALID_SOUND_HANDLE)
+        {
+            //第2引数をtrueにしてループ再生
+            m_walkHandle = SoundManager::Get().PlaySE(enSoundKind_Walk, true);
+        }
+    }
+    else
+    {
+        //歩いていないのに音が鳴っていたら止める
+        if (m_walkHandle !=INVALID_SOUND_HANDLE)
+        {
+            SoundManager::Get().StopSE(m_walkHandle);
+            m_walkHandle = INVALID_SOUND_HANDLE;
+        }
+    }
+
+
+    //==========================================
+    //回転音
+    //==========================================
+    // 条件: 接地している && 倒れている && 速度が出ている
+    bool isRolling = isGrounded && isFallen && (rollVelocity.Length() > 10.0f);
+
+
+    if (isRolling)
+    {
+        if (m_rollHandle == INVALID_SOUND_HANDLE)
+        {
+            //ループ再生
+            m_rollHandle = SoundManager::Get().PlaySE(enSoundKind_Walk, true);
+        }
+    }
+    else
+    {
+        if (m_rollHandle != INVALID_SOUND_HANDLE)
+        {
+            SoundManager::Get().StopSE(m_rollHandle);
+            m_rollHandle = INVALID_SOUND_HANDLE;
+        }
+    }
+
+
     // --- 状態による移動ロジック分岐 ---
     if (isFallen) {
         /** 倒れ時：慣性のある転がり移動 */
@@ -112,7 +185,9 @@ void Player::Move()
     // --- ジャンプと重力 ---
     if (characterController.IsOnGround()) {
         moveSpeed.y = 0.0f;
+    
         if (g_pad[0]->IsTrigger(enButtonA)) {
+            SoundManager::Get().PlaySE(enSoundKind_Jump);
             if (isFallen) {
                 /** 転がり中は速度に応じてジャンプ力アップ */
                 float boost = rollVelocity.Length() * 0.4f;

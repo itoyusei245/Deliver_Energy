@@ -5,7 +5,7 @@
 #include "stdafx.h"
 #include "InGameState.h"
 #include "Player.h"
-#include "GameCamera.h"
+#include "Camera/GameCamera.h"
 #include "BackGround.h"
 #include "Enemy/EnemyManager.h"
 #include "StageManager.h"

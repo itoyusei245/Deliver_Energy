@@ -58,6 +58,9 @@ private:
     /** アニメーションするモデル（冷蔵庫のドアなどを想定） */
     ModelRender m_anim;
 
+    /***/
+    ModelRender m_pro;
+
     /** * @brief 現在の開閉角度
      * @note 0度から始まり、マイナス方向へ開いていきます。
      */

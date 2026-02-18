@@ -9,6 +9,7 @@
 #include "Enemy/BossStatusUI.h"
 #include "Enemy/NoobEnemy.h"
 #include "Enemy/EnemyController.h"
+#include "Sound/SoundManager.h"
 
 EnemyManager* EnemyManager::m_instance = nullptr;
 
@@ -116,6 +117,13 @@ void EnemyManager::Update()
     if (m_familia) {
         // ファミリアが倒されたかチェック
         if (m_familia->GetStatus()->IsDead()) {
+            //SoundManager::Get().PlaySE(enSoundKind_DieEnemy);
+            
+
+            //ここで呼べばカウントが増える
+            m_familia->OnDead();
+
+
             // 倒されたら削除
             DeleteGO(m_familia);
             m_familia = nullptr;
@@ -126,6 +134,14 @@ void EnemyManager::Update()
                 m_boss->GetStatus()->Damage(1);
 
                 if (m_boss->GetStatus()->IsDead()) {
+                    SoundManager::Get().PlaySE(enSoundKind_DieBoss);
+
+                    // ---------------------------------------------------
+                    // BGMの切り替え処理
+                    // ---------------------------------------------------
+                    SoundManager::Get().StopBGM();
+                    // ノーマルBGMを再生
+                    SoundManager::Get().PlayBGM(enSoundKind_Normal);
                     // HPが0になったらボスを倒す（削除）
                     DeleteGO(m_boss);
                     m_boss = nullptr;

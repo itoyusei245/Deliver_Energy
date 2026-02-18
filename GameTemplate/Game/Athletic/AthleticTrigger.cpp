@@ -62,24 +62,36 @@ bool AthleticTrigger::Start()
 					{
 						// { "モデルのファイルパス", 移動速度, 移動範囲 }
 
-						// 1. 普通の床（動かない）
-						{ "Assets/modelData/Stage/athletic_NormalMoveFloor.tkm", 0.0f, 0.0f },
-
-						// 2. 上下に動く床 (速度100.0f, 範囲150.0f)
-						{ "Assets/modelData/Stage/athletic_add_MoveFloor.tkm", 100.0f, 150.0f },
-
-						// 3. 上下に動く床 (速度を遅く、範囲を大きく)
-						{ "Assets/modelData/Stage/athletic_add_UpdownFloor.tkm", 50.0f, 300.0f },
-
-						// 4. 動かない床、または固有の動きを持つ床の定義
+						// 普通の床（動かない）
 						{ "Assets/modelData/Stage/athletic_addStage.tkm", 0.0f, 0.0f },
-						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor1.tkm", 100.0f, 200.0f },
-						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor2.tkm", 120.0f, 200.0f },
-						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor3.tkm", 140.0f, 200.0f },
-						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor4.tkm", 160.0f, 200.0f },
-						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor5.tkm", 180.0f, 200.0f },
-						{ "Assets/modelData/Stage/athletic_add3_UpdownFloor.tkm", 80.0f, 150.0f },
-						{ "Assets/modelData/Stage/athletic_add2_Return.tkm", 0.0f, 0.0f }
+
+						// 平行移動に動く床
+						{ "Assets/modelData/Stage/athletic_add_MoveFloor.tkm", 0.0f, 0.0f },
+
+						// シーソー床
+						{ "Assets/modelData/Stage/athletic_add_UpdownFloor.tkm", 0.0f, 0.0f },
+
+						//
+						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor1.tkm", 100.0f, 100.0f },
+						
+						//
+						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor2.tkm", 100.0f, 125.0f },
+						
+						//
+						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor3.tkm", 75.0f, 125.0f },
+						
+						//
+						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor4.tkm", 100.0f, 100.0f },
+						
+						//
+						{ "Assets/modelData/Stage/athletic_add2_UpdownFloor5.tkm", 100.0f, 125.0f },
+						
+						//
+						{ "Assets/modelData/Stage/athletic_add3_UpdownFloor.tkm", 200.0f, 200.0f },
+						
+						// 復帰床
+						{ "Assets/modelData/Stage/athletic_add2_Return.tkm", 75.0f, 350.0f },
+						{ "Assets/modelData/Stage/athletic_NormalMoveFloor.tkm", 100.0f, 250.0f }
 					}
 				);
 				return true;

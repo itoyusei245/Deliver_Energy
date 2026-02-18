@@ -45,6 +45,12 @@ public:
     void Update();
     void Setup();
 
+    // ボスのイベント発生リクエストがあるかどうか
+    bool IsBossEventRequested() { return m_isBossEventRequested; }
+
+    // リクエストを消化（オフに）する関数
+    void ClearBossEventRequest() { m_isBossEventRequested = false; }
+
     /** @name 生成メソッド */
     /*@{*/
     void CreateEnemyBox(Vector3& pos, Quaternion& rot, Vector3& size);
@@ -74,6 +80,9 @@ public:
 
 private:
     static StageManager* m_instance;
+
+    // フラグ変数
+    bool m_isBossEventRequested = false;
 
     CollisionObject* m_spawnCollisionObject = nullptr;
     CollisionObject* m_stageCollisionObject = nullptr;

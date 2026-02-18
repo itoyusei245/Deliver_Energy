@@ -1,49 +1,51 @@
-﻿/**
- * @file GameClear.cpp
- * @brief ゲームクリア画面の実装
- */
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "GameClear.h"
-#include "Title.h" // タイトル画面への遷移用
+#include "Game.h"
+#include "Player.h"
+#include "GameResult.h"
+#include "GameTimeUI.h" 
 
- /**
-  * @brief コンストラクタ
-  * @details "Assets/sprite/Clear.dds" を読み込み、画面サイズ(1920x1080)で初期化します。
-  */
 GameClear::GameClear()
 {
-    /** ゲームクリアの画像を読み込み */
-    spriteRender.Init("Assets/sprite/Clear.dds", 1920.0f, 1080.0f);
+    // ゴールのモデル読み込み
+    m_modelRender.Init("Assets/modelData/Stage/Goal.tkm");
+    m_modelRender.SetScale(Vector3(1.0f, 1.0f, 1.0f));
 }
 
 GameClear::~GameClear()
 {
 }
 
-/**
- * @brief 更新処理
- * @details
- * コントローラーのAボタン入力を検知すると、以下の処理を行います。
- * 1. Title（タイトル画面）オブジェクトの生成
- * 2. 自身（GameClear）の削除
- */
 void GameClear::Update()
 {
-    /** Aボタンが押されたら… */
-    if (g_pad[0]->IsTrigger(enButtonA))
-    {
-        /** タイトルのオブジェクトを作成 */
-        NewGO<Title>(0, "title");
+    if (m_isGoal) return;
 
-        /** 自身を削除する（シーン遷移） */
-        DeleteGO(this);
+    // プレイヤーとの距離判定
+    Player* player = FindGO<Player>("player");
+    if (player != nullptr)
+    {
+        Vector3 diff = player->GetPosition() - m_position;
+        if (diff.Length() < 50.0f) // 半径50以内ならゴールとみなす
+        {
+            m_isGoal = true;
+            Game::IsGamePlay = false; // ゲーム停止
+
+            // --- リザルトへデータを渡す ---
+
+            Game::FinalHP = player->GetHPRate() * 100.0f;
+
+            // リザルト画面へ遷移
+            // 現在のGameシーンを削除
+            DeleteGO(FindGO<Game>("game"));
+
+            // リザルトシーン生成
+            NewGO<GameResult>(0, "gameResult");
+        }
     }
+    m_modelRender.Update();
 }
 
-/**
- * @brief 描画処理
- */
 void GameClear::Render(RenderContext& rc)
 {
-    spriteRender.Draw(rc);
+    m_modelRender.Draw(rc);
 }

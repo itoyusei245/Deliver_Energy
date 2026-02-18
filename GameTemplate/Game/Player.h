@@ -3,7 +3,7 @@
  * @brief プレイヤーキャラクター（缶）のクラス定義
  */
 #pragma once
-
+#include "Sound/SoundManager.h"
  /**
   * @class Player
   * @brief プレイヤー操作キャラクタークラス
@@ -18,6 +18,10 @@ public:
 
     void Update();
     void Render(RenderContext& rc);
+
+    const Vector3& GetPosition() const {
+        return position;
+    }
 
     /**
      * @brief 移動制御
@@ -62,9 +66,15 @@ public:
         if (m_hp < 0.0f) m_hp = 0.0f;
     }
 
+    // プレイヤーの動きを止めるための関数(デバッグ時など)
+    void SetEnable(bool isEnable) { m_isEnable = isEnable; }
 
 private:
 
     float m_hp = 100.0f;
     float m_maxHp = 100.0f;
+    SoundHandle m_walkHandle = INVALID_SOUND_HANDLE;    // 歩き音のハンドル
+    SoundHandle m_rollHandle = INVALID_SOUND_HANDLE;    // 回転音のハンドル
+    bool m_isGroundPrev = true;                         // 1フレーム前の接地状態（着地判定用）
+    bool m_isEnable = true;                             // 有効フラグ (初期値は true)
 };

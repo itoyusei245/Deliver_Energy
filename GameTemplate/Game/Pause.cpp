@@ -4,7 +4,8 @@
  */
 #include "stdafx.h"
 #include "Pause.h"
-#include "Game.h" // ※InGameStateに移行中の場合はInGameState.hを参照すべき箇所かもしれません
+#include "Game.h" 
+#include "Setting.h"
 #include "Title.h"
 #include "CoinUI.h"
 #include "GameTimeUI.h"
@@ -52,11 +53,23 @@ void Pause::Update()
     {
         m_isActive = !m_isActive;
         Game::IsPaused = m_isActive; // 静的フラグを更新して他のオブジェクトを停止させる
+        // ポーズを解除したとき、もし設定画面が開いていたら強制的に閉じる
+        if (!m_isActive) {
+            Setting* setting = FindGO<Setting>("setting");
+            if (setting != nullptr) {
+                DeleteGO(setting);
+            }
+        }
     }
 
     /**表示中ならメニュー操作を受け付ける*/
     if (m_isActive)
     {
+        // 設定画面が開いている間は、ポーズ画面の操作を受け付けない
+        if (FindGO<Setting>("setting") != nullptr) {
+            return;
+        }
+
         m_filterSprite.Update();
         m_pauseSprite.Update();
 
@@ -106,8 +119,8 @@ void Pause::Update()
             }
             else if (m_selectBar == 2)
             {
-                // 2: Setting（設定）
-                // 未実装
+                NewGO<Setting>(0, "setting");
+
             }
             else if (m_selectBar == 3)
             {

@@ -57,6 +57,12 @@ bool BossStatusUI::Start()
  */
 void BossStatusUI::Update()
 {
+	//マネージャーが削除されていたら、処理を中断する
+	if (EnemyManager::GetInstance() == nullptr)
+	{
+		return;
+	}
+	
 	// シングルトンのマネージャからボスを取得
 	Boss* boss = EnemyManager::GetInstance()->GetBoss();
 
