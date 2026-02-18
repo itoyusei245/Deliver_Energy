@@ -84,6 +84,17 @@ void NoobEnemy::Update()
 	// 物理座標の更新
 	m_physicsStaticObject.SetPosition(m_position);
 
+	//死亡チェック
+	if (m_status !=nullptr&&m_status->IsDead())
+	{
+		//共通の死亡処理を呼ぶ
+		OnDead();
+
+
+		//自身を消去
+		DeleteGO(this);
+	}
+
 	// モデル座標の更新
 	m_modelRender.SetTRS(m_position, m_rotation, m_scale);
 	m_modelRender.Update();

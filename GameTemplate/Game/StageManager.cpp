@@ -37,6 +37,9 @@ void StageManager::Update()
 		Vector3 pos = { 3500.0f, -100.0f, -4200.0f };
 		EnemyManager::GetInstance()->CreateEnemy(pos);
 
+		// イベント再生をリクエストする
+		m_isBossEventRequested = true;
+
 		// トリガー削除
 		DeleteGO(m_spawnCollisionObject);
 		m_spawnCollisionObject = nullptr;

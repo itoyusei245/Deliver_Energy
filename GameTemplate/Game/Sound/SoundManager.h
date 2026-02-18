@@ -1,0 +1,136 @@
+﻿/**
+ * SoundManager.h
+ * サウンド管理
+ * 必要なサウンドファイルを読み込んだり再生したりなど管理する
+ */
+#pragma once
+#include <memory>
+#include "Sound/SoundSource.h"
+#include "sound/Type.h"
+
+
+/** サウンド用のハンドル名 */
+using SoundHandle = uint32_t;
+/** ハンドル無効値 */
+static constexpr SoundHandle INVALID_SOUND_HANDLE = 0xffffffff;
+
+
+/**
+ * サウンド管理クラス
+ */
+class SoundManager
+{
+private:
+    /** BMG用のサウンドソースインスタンスを保持 */
+    SoundSource* bgm_ = nullptr;
+    /** SE用のサウンドソースインスタンスを保持 */
+    std::map<SoundHandle, SoundSource*> seList_;
+    /**
+     * マップで参照するようにハンドル数を保持
+     * NOTE: 各サウンドソースを参照するための数値はユニークな数値になる
+     */
+    SoundHandle soundHandleCount_ = 0;
+
+
+private:
+    /* コンストラクタ */
+    SoundManager();
+    /* デストラクタ */
+    ~SoundManager();
+
+
+public:
+    /**
+     * 更新処理
+     * NOTE: 不要になったインスタンスの削除など
+     */
+    void Update();
+
+
+public:
+    /** BGM再生 */
+    void PlayBGM(const int kind);
+    /** BGM停止 */
+    void StopBGM();
+
+    /** SE再生 */
+    SoundHandle PlaySE(const int kind, const bool isLood = false, const bool is3D = false);
+    /** SE停止 */
+    void StopSE(const SoundHandle handle);
+
+    /* SEを探す */
+    SoundSource* FindSE(const SoundHandle handle)
+    {
+        auto it = seList_.find(handle);
+        if (it != seList_.end()) {
+            return it->second;
+        }
+        K2_ASSERT(false, "削除済みか追加されていないSEにアクセスしようとしています。\n");
+        return nullptr;
+    }
+
+
+public:
+    //音量を設定する関数
+    void SetVolumeMaster(float vol);
+    void SetVolumeBGM(float vol);
+    void SetVolumeSE(float vol);
+
+
+    //現在の音量を取得する関数
+    float GetVolumeMastor()const { return volumeMaster_; }
+    float GetVolumeBGM()const { return volumeBGM_; }
+    float GetVolumeSE()const { return volumeSE_; }
+
+
+private:
+    //音量変数
+    float volumeMaster_ = 1.0f;
+    float volumeBGM_ = 1.0f;
+    float volumeSE_ = 1.0f;
+
+
+
+
+    /**
+     * シングルトン用
+     */
+public:
+    /**
+     * インスタンスを作る
+     */
+    static void CreateInstance()
+    {
+        if (instance_ == nullptr)
+        {
+            instance_ = new SoundManager();
+        }
+    }
+
+
+    /**
+     * インスタンスを取得
+     */
+    static SoundManager& Get()
+    {
+        return *instance_;
+    }
+
+
+    /**
+     * インスタンスを破棄
+     */
+    static void DestroyInstance()
+    {
+        if (instance_ != nullptr)
+        {
+            delete instance_;
+            instance_ = nullptr;
+        }
+    }
+
+
+private:
+    /** シングルトンインスタンス */
+    static SoundManager* instance_;
+};

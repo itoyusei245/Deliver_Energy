@@ -18,12 +18,15 @@ BackGround::BackGround()
 {
     /** モデルの位置を設定*/
     m_map.SetPosition(0.0f, 0.0f, 0.0f);
-    /** 背景モデルを初期化*/
-    m_map.Init("Assets/modelData/Stage/map.tkm");
+    m_map.Init("Assets/modelData/Stage/map_new.tkm");
 
     // アニメーション用モデル（冷蔵庫）の初期化
     m_anim.SetPosition(0.0f, 0.0f, 0.0f);
     m_anim.Init("Assets/modelData/Stage/reizouko_anim.tkm");
+
+    /***/
+    m_pro.SetPosition(0.0f, 0.0f, 0.0f);
+    m_pro.Init("Assets/modelData/Stage/Programmer.tkm");
 
     // ヒンジ（回転軸）のローカル座標オフセットを設定
     m_hingeOffset = Vector3(250.0f, 0.0f, 220.0f);
@@ -32,7 +35,7 @@ BackGround::BackGround()
 
     // 当たり判定用モデルのロード
     m_hitBox.SetPosition(0.0f, 0.0f, 0.0f);
-    m_hitBox.Init("Assets/modelData/Stage/map_HitBox.tkm");
+    m_hitBox.Init("Assets/modelData/Stage/map_new.tkm");
     m_hitBox.Update();
 
     /** 物理静的オブジェクトをモデルから生成*/
@@ -100,6 +103,7 @@ void BackGround::Update()
     // 各モデルの更新
     m_map.Update();
     m_anim.Update();
+    m_pro.Update();
 }
 
 /**
@@ -111,4 +115,5 @@ void BackGround::Render(RenderContext& rc)
 {
     m_map.Draw(rc);
     m_anim.Draw(rc);
+    m_pro.Draw(rc);
 }

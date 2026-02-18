@@ -229,9 +229,12 @@
     <ClCompile Include="Athletic\AthleticState.cpp" />
     <ClCompile Include="Athletic\AthleticTrigger.cpp" />
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="Camera\EventCamera.cpp" />
+    <ClCompile Include="Camera\GameCamera.cpp" />
     <ClCompile Include="CoinUI.cpp" />
     <ClCompile Include="Collision\CollisionHitManager.cpp" />
     <ClCompile Include="Countdown.cpp" />
+    <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="Enemy\Boss.cpp" />
     <ClCompile Include="Enemy\BossStatusUI.cpp" />
     <ClCompile Include="Enemy\EnemyBase.cpp" />
@@ -242,8 +245,8 @@
     <ClCompile Include="Enemy\Familiar.cpp" />
     <ClCompile Include="Enemy\NoobEnemy.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameClear.cpp" />
+    <ClCompile Include="GameResult.cpp" />
     <ClCompile Include="GameStateBase.cpp" />
     <ClCompile Include="GameTimeUI.cpp" />
     <ClCompile Include="GameUI.cpp" />
@@ -253,6 +256,7 @@
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Setting.cpp" />
+    <ClCompile Include="Sound\SoundManager.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -269,9 +273,12 @@
     <ClInclude Include="Athletic\AthleticState.h" />
     <ClInclude Include="Athletic\AthleticTrigger.h" />
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="Camera\EventCamera.h" />
+    <ClInclude Include="Camera\GameCamera.h" />
     <ClInclude Include="CoinUI.h" />
     <ClInclude Include="Collision\CollisionHitManager.h" />
     <ClInclude Include="Countdown.h" />
+    <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="Enemy\Boss.h" />
     <ClInclude Include="Enemy\BossStatusUI.h" />
     <ClInclude Include="Enemy\EnemyBase.h" />
@@ -282,8 +289,8 @@
     <ClInclude Include="Enemy\Familiar.h" />
     <ClInclude Include="Enemy\NoobEnemy.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameClear.h" />
+    <ClInclude Include="GameResult.h" />
     <ClInclude Include="GameStateBase.h" />
     <ClInclude Include="GameTimeUI.h" />
     <ClInclude Include="GameUI.h" />
@@ -293,6 +300,8 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Setting.h" />
+    <ClInclude Include="Sound\SoundManager.h" />
+    <ClInclude Include="Sound\Type.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />

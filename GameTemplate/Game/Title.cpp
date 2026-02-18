@@ -1,7 +1,13 @@
 #include "stdafx.h"
 #include "Title.h"
 #include "Game.h"
+#include "Setting.h"
 #include"system/system.h"
+#include"Sound/SoundManager.h"
+
+bool Title::IsTitle = false;
+bool Title::IsSetting = false;
+
 
 /**
  * @brief Titleクラスのコンストラクタ
@@ -14,15 +20,26 @@ Title::Title()
     m_picUpSprite[0].Init("Assets/sprite/selectBer_GameState.DDS", 1920.0f, 1080.0f);
     m_picUpSprite[1].Init("Assets/sprite/selectBer_Settings.DDS", 1920.0f, 1080.0f);
     m_picUpSprite[2].Init("Assets/sprite/selectBer_Quit.DDS", 1920.0f, 1080.0f);
+
+    SoundManager::Get().PlayBGM(enSoundKind_Title);
 }
 
 /**
  * @brief Titleクラスのデストラクタ
  */
 Title::~Title()
-{
-	
+{ 
 }
+
+
+bool Title::Start()
+{
+    IsTitle = false;
+    IsSetting = false;
+
+    return true;
+}
+
 
 /**
  * @brief 毎フレームの更新処理
@@ -30,9 +47,14 @@ Title::~Title()
  */
 void Title::Update()
 {
+    if (IsSetting) {
+        return;
+    }
+
     UpdatePicUp();
     if (g_pad[0]->IsTrigger(enButtonA))
     {
+        SoundManager::Get().PlaySE(enSoundKind_Decision);
         /**ゲームを始める*/
         if (m_currentBar == 0) {
             //! ゲームのオブジェクトを作成
@@ -42,10 +64,11 @@ void Title::Update()
         }
         /**設定を開く*/
         if (m_currentBar == 1) {
-            //! ゲームのオブジェクトを作成
-            NewGO<Game>(0, "game");
-            //! 自身を削除する
-            DeleteGO(this);
+            //設定画面であることを記録
+            IsSetting = true;
+
+            //! 設定画面を作成
+            NewGO<Setting>(0, "setting");
         }
         /**ゲームを終了する*/
         if (m_currentBar == 2) {
@@ -57,9 +80,10 @@ void Title::Update()
 
 void Title::UpdatePicUp()
 {
- 
+    
     if (g_pad[0]->IsTrigger(enButtonUp))
     {
+        SoundManager::Get().PlaySE(enSoundKind_Choose);
         if(m_currentBar==0){
             m_currentBar = 0;
         }
@@ -69,6 +93,7 @@ void Title::UpdatePicUp()
     }
     if (g_pad[0]->IsTrigger(enButtonDown))
     {
+        SoundManager::Get().PlaySE(enSoundKind_Choose);
         if (m_currentBar == 2/**カレントが最大値の時*/) {
             m_currentBar = 2;
         }
