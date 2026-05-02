@@ -4,7 +4,7 @@
  */
 #pragma once
 #include "AthleticBase.h"
-#include "AthleticState.h" // 追加
+#include "AthleticState.h"
 #include <string>
 
  /**
@@ -90,8 +90,10 @@ public:
 	float GetMinY() const { return m_defaultPosition.y - m_moveRange; }
 
 private:
+	static constexpr const char* DEFAULT_MODEL_PATH = "Assets/modelData/Stage/map_Athletic.tkm";
+
 	Vector3 m_position = Vector3::Zero;
-	std::string m_modelPath = "Assets/modelData/Stage/map_Athletic.tkm";
+	std::string m_modelPath = DEFAULT_MODEL_PATH;
 
 	// --- ステートパターン用変数 ---
 	/** 現在のステートID */

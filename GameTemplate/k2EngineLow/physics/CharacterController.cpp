@@ -104,6 +104,51 @@ namespace nsK2EngineLow {
 				return 0.0f;
 			}
 		};
+
+		// ---------------------------------------------------------
+		// 衝突したときに呼ばれる関数オブジェクト(天井用)
+		// ---------------------------------------------------------
+		struct SweepResultCeiling : public btCollisionWorld::ConvexResultCallback
+		{
+			bool isHit = false;						//衝突フラグ。
+			Vector3 hitPos;							//衝突点。
+			Vector3 startPos;						//レイの始点。
+			float dist = FLT_MAX;					//衝突点までの距離。
+			btCollisionObject* me = nullptr;		//自分自身。
+
+			virtual	btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+			{
+				if (convexResult.m_hitCollisionObject == me
+					|| convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character
+					|| convexResult.m_hitCollisionObject->getInternalType() == btCollisionObject::CO_GHOST_OBJECT
+					) {
+					// 自分自身や他のキャラクタ、すり抜けるゴーストオブジェクトは無視
+					return 0.0f;
+				}
+
+				// 衝突点の法線を引っ張ってくる。
+				Vector3 hitNormalTmp;
+				Vector3CopyFrom(hitNormalTmp, convexResult.m_hitNormalLocal);
+
+				// 天井（法線が下を向いているか）をチェック。
+				// 法線のY成分がマイナスなら、下を向いている面（＝天井や浮いている足場の裏側）
+				if (hitNormalTmp.y < -0.1f) {
+					isHit = true;
+					Vector3 hitPosTmp;
+					Vector3CopyFrom(hitPosTmp, convexResult.m_hitPointLocal);
+
+					// 一番近い衝突点を求める
+					Vector3 vDist;
+					vDist.Subtract(hitPosTmp, startPos);
+					float distTmp = vDist.Length();
+					if (distTmp < dist) {
+						hitPos = hitPosTmp;
+						dist = distTmp;
+					}
+				}
+				return 0.0f;
+			}
+		};
 	}
 
 
@@ -226,6 +271,43 @@ namespace nsK2EngineLow {
 		//XZの移動は確定。
 		m_position.x = nextPosition.x;
 		m_position.z = nextPosition.z;
+
+		// ---------------------------------------------------
+		// 上方向（天井）を調べる
+		// ---------------------------------------------------
+		if (moveSpeed.y > 0.0f) {
+			btTransform start, end;
+			start.setIdentity();
+			end.setIdentity();
+
+			// 始点はカプセルコライダーの中心
+			start.setOrigin(btVector3(m_position.x, m_position.y + m_height * 0.5f + m_radius, m_position.z));
+			// 終点は上方向の移動先（XとZは壁ずり後のnextPositionを使う）
+			end.setOrigin(btVector3(nextPosition.x, nextPosition.y + m_height * 0.5f + m_radius, nextPosition.z));
+
+			SweepResultCeiling callback;
+			callback.me = m_rigidBody.GetBody();
+			Vector3CopyFrom(callback.startPos, start.getOrigin());
+
+			// 上に向かってSweepTest（カプセルを飛ばして衝突検出）
+			PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
+
+			if (callback.isHit) {
+				// 天井にぶつかった！
+				moveSpeed.y = 0.0f; // 上昇の力を消して、これ以上上に上がらないようにする（落下を開始させる）
+
+				// カプセルの全高を計算（円柱の高さ ＋ 上下の球の半径）
+				float totalHeight = m_height + m_radius * 2.0f;
+
+				// 少しだけモデルがめり込むのを許容（オフセット）して、隙間をなくす！
+				float headOffset = 15.0f; // ここの数値を大きくするほど、頭が上までめり込むようになる（10.0f～30.0fくらいで調整）
+
+				// 足元の座標(nextPosition.y)を、天井の衝突座標から全高を引いた位置に補正する
+				nextPosition.y = callback.hitPos.y - totalHeight + headOffset;
+			}
+		}
+		// ---------------------------------------------------
+
 		//下方向を調べる。
 		{
 			Vector3 addPos;

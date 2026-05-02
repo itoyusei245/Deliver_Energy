@@ -1,38 +1,24 @@
+/**
+ * @file Setting.h
+ * @brief 設定画面（ロジック）クラス定義
+ */
 #pragma once
+#include "UI/SettingUI.h"
+
 class Setting : public IGameObject
 {
 public:
 	Setting();
 	~Setting();
 
+	void Update() override;
+	void Render(RenderContext& rc) override;
 
-	void Update();
-
-
-	void Render(RenderContext& rc);
-
-
-	SpriteRender m_settingSprite;
-	SpriteRender m_picUpSprite[4];
-	SpriteRender m_barMaster;
-	SpriteRender m_barBGM;
-	SpriteRender m_barSE;
-	SpriteRender m_barMasterFlame;
-	SpriteRender m_barBGMFlame;
-	SpriteRender m_barSEFlame;
-
-	
 private:
-	int m_currentBar = 0;
+	SettingUI* m_ui = nullptr;
 
-	int m_state = 0;
-
-	/** 表示中かどうかのフラグ */
-	bool m_isActive = false;
+	int m_currentBar = 0; 
 
 	void UpdatePicUp();
-	
-	//音量操作用の関数
 	void UpdateVolumeControl();
 };
-

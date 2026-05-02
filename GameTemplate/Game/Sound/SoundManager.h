@@ -54,7 +54,7 @@ public:
     void StopBGM();
 
     /** SE再生 */
-    SoundHandle PlaySE(const int kind, const bool isLood = false, const bool is3D = false);
+    SoundHandle PlaySE(const int kind, const bool isLoop = false, const bool is3D = false);
     /** SE停止 */
     void StopSE(const SoundHandle handle);
 
@@ -78,7 +78,7 @@ public:
 
 
     //現在の音量を取得する関数
-    float GetVolumeMastor()const { return volumeMaster_; }
+    float GetVolumeMaster()const { return volumeMaster_; }
     float GetVolumeBGM()const { return volumeBGM_; }
     float GetVolumeSE()const { return volumeSE_; }
 

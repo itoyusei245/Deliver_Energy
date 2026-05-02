@@ -79,6 +79,12 @@ public:
      */
     void CreateEnemy(const Vector3& pos);
 
+
+public:
+    bool IsBossClearEventRequested()const { return m_isBossClearEventRequested; }
+    void ClearBossClearEventRequest() { m_isBossClearEventRequested = false; }
+
+
 private:
     static EnemyManager* m_instance;
 
@@ -95,4 +101,14 @@ private:
 
     /** ボスのHPバーなどのUI */
     BossStatusUI* m_bossUI = nullptr;
+
+    // 眷属の死亡遅延用
+    bool m_isFamiliarDying = false;
+    int m_familiarDeathTimer = 0;
+
+    bool m_isBossClearEventRequested = false;
+
+    // ボスの死亡遅延用
+    bool m_isBossDying = false;
+    int m_bossDeathTimer = 0;
 };

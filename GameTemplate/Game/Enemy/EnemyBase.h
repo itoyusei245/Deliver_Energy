@@ -113,7 +113,6 @@ protected:
 	/** 3Dモデル描画用オブジェクト */
 	ModelRender m_modelRender;
 
-	/** 当たり判定用オブジェクト（球やボックスなど） */
 	CollisionObject m_collisionObject;
 
 	/** * @brief 敵のステータス情報（HP、攻撃力など）
@@ -122,8 +121,6 @@ protected:
 	IEnemyStatus* m_status = nullptr;
 
 	/** * @brief 物理挙動用オブジェクト（静的）
-	 * @note CharacterControllerではなくPhysicsStaticObjectを使っているため、
-	 * 物理演算で吹き飛ぶのではなく、プログラムで座標制御するタイプ（あるいは不動）の敵として扱われます。
 	 */
 	PhysicsStaticObject m_physicsStaticObject;
 };

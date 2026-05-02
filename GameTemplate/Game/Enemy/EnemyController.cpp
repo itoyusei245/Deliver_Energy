@@ -5,7 +5,8 @@
 #include "stdafx.h"
 #include "EnemyController.h"
 #include "Enemy/NoobEnemy.h"
-
+#include "Enemy/EnemyManager.h" 
+#include "Enemy/Boss.h"         
 
 namespace
 {
@@ -42,9 +43,11 @@ namespace
 	static MovePositionInfo MOVE_POSITION_LIST[] = {
 		MovePositionInfo(Vector3(3200.0f, -450.0f, -4000.0f), Vector3(3300.0f, -450.0f, -4000.0f), Vector3(3300.0f, -450.0f, -3900.0f), Vector3(3200.0f, -450.0f, -4000.0f)),	// TypeA
 		MovePositionInfo(Vector3(3400.0f, -450.0f, -3200.0f), Vector3(3500.0f, -450.0f, -3200.0f), Vector3(3500.0f, -450.0f, -3100.0f), Vector3(3400.0f, -450.0f, -3200.0f)),	// TypeB
-		// ... (省略) ...
 		MovePositionInfo(Vector3(3900.0f, -450.0f, -3300.0f), Vector3(4000.0f, -450.0f, -3300.0f), Vector3(4000.0f, -450.0f, -3400.0f), Vector3(3900.0f, -450.0f, -3500.0f)),	// TypeL
 	};
+
+	constexpr float MOVE_POWER_NORMAL = 1.0f;
+	constexpr float ARRIVE_THRESHOLD  = 30.0f; 
 }
 
 
@@ -88,6 +91,25 @@ bool EnemyController::Start()
  */
 void EnemyController::Update()
 {
+	if (EnemyManager::GetInstance() == nullptr) return;
+	// ---------------------------------------------------
+	// 操作対象が消えるなら、も一緒に消滅させる
+	// ---------------------------------------------------
+
+	// ボスが死んだ場合（体が強制消滅するため、AIも自滅する）
+	Boss* boss = EnemyManager::GetInstance()->GetBoss();
+	if (boss != nullptr && boss->GetStatus()->IsDead()) {
+		DeleteGO(this);
+		return;
+	}
+
+	// プレイヤーに倒されてHPが0になった場合（10フレーム後に体が消えるため、AIを先に止める）
+	if (m_target != nullptr && m_target->GetStatus() != nullptr && m_target->GetStatus()->IsDead()) {
+		DeleteGO(this);
+		return;
+	}
+	// ---------------------------------------------------
+
 	auto& stateFunc = m_stateFuncList[m_currentState];
 	if (stateFunc->m_check(this)) {
 		stateFunc->m_exit(this);
@@ -109,7 +131,6 @@ void EnemyController::Update()
  */
 void EnemyController::Render(RenderContext& rc)
 {
-	// 描画はしない
 }
 
 /**
@@ -120,25 +141,27 @@ void EnemyController::Render(RenderContext& rc)
 void EnemyController::SetEnemyType(EnEnemyType type)
 {
 	m_enemyType = type;
-	// ターゲット（NoobEnemy）の位置を、ルートの最初の地点に強制移動させる
+	// NoobEnemyの位置を、ルートの最初の地点に強制移動させる
 	m_target->SetPosition(MOVE_POSITION_LIST[m_enemyType].m_target[0]);
 }
 
+Vector3 EnemyController::GetInitPosition(EnEnemyType type)
+{
+	return MOVE_POSITION_LIST[type].m_target[0];
+}
 
 /**
  * @brief ステートマシンの初期構築
  * @details
  * - Idle (待機)
  * - Move (移動)
- * - SarchMoveTarget (次の移動先決定)
- * の順で関数を登録しています。EnAITypeのenum定義順と合わせる必要があります。
  */
 void EnemyController::Initialize()
 {
-	// Enumで書いている順番通りに追加してください
+	if (!m_stateFuncList.empty()) return;
 	AddStateFunc(IdleEnter, IdleUpdate, IdleExit, IdleCheck);
 	AddStateFunc(MoveEnter, MoveUpdate, MoveExit, MoveCheck);
-	AddStateFunc(SarchMoveTargetEnter, SarchMoveTargetUpdate, SarchMoveTargetExit, SarchMoveTargetCheck);
+	AddStateFunc(SearchMoveTargetEnter, SearchMoveTargetUpdate, SearchMoveTargetExit, SearchMoveTargetCheck);
 }
 
 // -----------------------------------------------------------
@@ -150,7 +173,6 @@ void EnemyController::Initialize()
  */
 void EnemyController::IdleEnter(EnemyController* enemy)
 {
-	// 特に何もしない
 }
 
 
@@ -159,7 +181,6 @@ void EnemyController::IdleEnter(EnemyController* enemy)
  */
 void EnemyController::IdleUpdate(EnemyController* enemy)
 {
-	// 特に何もしない
 }
 
 
@@ -168,18 +189,17 @@ void EnemyController::IdleUpdate(EnemyController* enemy)
  */
 void EnemyController::IdleExit(EnemyController* enemy)
 {
-	// 特に何もしない
 }
 
 
 /**
  * @brief 待機ステート：遷移判定
- * @details 無条件で「移動先決定(SarchTargetMove)」へ遷移します。
+ * @details 無条件で「移動先決定」へ遷移します。
  */
 bool EnemyController::IdleCheck(EnemyController* enemy)
 {
 	// 即座に「移動先決定」ステートへ遷移
-	enemy->m_requestState = enAIType_SarchTargetMove;
+	enemy->m_requestState = enAIType_SearchTargetMove;
 	return true;
 }
 
@@ -193,7 +213,6 @@ bool EnemyController::IdleCheck(EnemyController* enemy)
  */
 void EnemyController::MoveEnter(EnemyController* enemy)
 {
-	// 特になし
 }
 
 
@@ -208,7 +227,7 @@ void EnemyController::MoveUpdate(EnemyController* enemy)
 
 	// エネミー本体に移動ベクトルとパワーを設定
 	enemy->m_target->SetMoveVector(direction);
-	enemy->m_target->SetMovePower(1.0f);
+	enemy->m_target->SetMovePower(MOVE_POWER_NORMAL);
 }
 
 
@@ -230,8 +249,8 @@ void EnemyController::MoveExit(EnemyController* enemy)
 bool EnemyController::MoveCheck(EnemyController* enemy)
 {
 	Vector3 direction = enemy->m_targetPosition - enemy->m_target->GetPosition();
-	if (direction.Length() < 30.0f) {
-		enemy->m_requestState = enAIType_SarchTargetMove;
+	if (direction.Length() < ARRIVE_THRESHOLD) {
+		enemy->m_requestState = enAIType_SearchTargetMove;
 		return true;
 	}
 	return false;
@@ -246,7 +265,7 @@ bool EnemyController::MoveCheck(EnemyController* enemy)
  * @brief 移動先決定ステート：開始
  * @details 定義済みリストから次の座標を取得し、インデックスを進めます（ループ再生）。
  */
-void EnemyController::SarchMoveTargetEnter(EnemyController* enemy)
+void EnemyController::SearchMoveTargetEnter(EnemyController* enemy)
 {
 	const auto& moveInfo = MOVE_POSITION_LIST[enemy->m_enemyType];
 	const Vector3 targetPosition = moveInfo.m_target[enemy->m_moveIndex];
@@ -264,7 +283,7 @@ void EnemyController::SarchMoveTargetEnter(EnemyController* enemy)
 /**
  * @brief 移動先決定ステート：更新
  */
-void EnemyController::SarchMoveTargetUpdate(EnemyController* enemy)
+void EnemyController::SearchMoveTargetUpdate(EnemyController* enemy)
 {
 
 }
@@ -273,7 +292,7 @@ void EnemyController::SarchMoveTargetUpdate(EnemyController* enemy)
 /**
  * @brief 移動先決定ステート：終了
  */
-void EnemyController::SarchMoveTargetExit(EnemyController* enemy)
+void EnemyController::SearchMoveTargetExit(EnemyController* enemy)
 {
 
 }
@@ -283,7 +302,7 @@ void EnemyController::SarchMoveTargetExit(EnemyController* enemy)
  * @brief 移動先決定ステート：遷移判定
  * @details 目的地が決定したため、即座に「移動(Move)」ステートへ遷移します。
  */
-bool EnemyController::SarchMoveTargetCheck(EnemyController* enemy)
+bool EnemyController::SearchMoveTargetCheck(EnemyController* enemy)
 {
 	// 目的地が決まったので、移動ステートへ遷移
 	enemy->m_requestState = enAIType_Move;

@@ -6,6 +6,11 @@
 #include "stdafx.h"
 #include "SoundManager.h"
 
+namespace
+{
+	constexpr const char* NAME_BGM = "bgm";
+	constexpr const char* NAME_SE  = "se";
+}
 
 SoundManager* SoundManager::instance_ = nullptr;//初期化
 
@@ -52,7 +57,7 @@ void SoundManager::PlayBGM(const int kind)
 	// BGMが生成されていない
 	if (bgm_ == nullptr) {
 		//生成
-		bgm_ = NewGO<SoundSource>(0, "bgm");
+		bgm_ = NewGO<SoundSource>(0, NAME_BGM);
 	}
 	else {
 		// すでに生成されているならBGMを停止する
@@ -74,7 +79,7 @@ void SoundManager::StopBGM()
 }
 
 
-SoundHandle SoundManager::PlaySE(const int kind, const bool isLood, const bool is3D)
+SoundHandle SoundManager::PlaySE(const int kind, const bool isLoop, const bool is3D)
 {
 	// ハンドルが最大数になったら使えない
 	// NOTE: そんなに再生するはずがない
@@ -82,10 +87,10 @@ SoundHandle SoundManager::PlaySE(const int kind, const bool isLood, const bool i
 		K2_ASSERT(false, "サウンドの再生が多いです。\n");
 		return INVALID_SOUND_HANDLE;
 	}
-	auto* se = NewGO<SoundSource>(0, "se");
+	auto* se = NewGO<SoundSource>(0, NAME_SE);
 	se->Init(kind, is3D);						// SEの初期化
 	se->SetVolume(volumeMaster_ * volumeSE_);	//再生開始時に音量を適用(Master * SE)
-	se->Play(isLood);						
+	se->Play(isLoop);						
 
 	seList_.emplace(++soundHandleCount_, se);
 

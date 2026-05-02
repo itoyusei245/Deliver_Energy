@@ -6,7 +6,6 @@
 #include "Athletic/AthleticManager.h"
 #include "Athletic/AthleticTrigger.h"
 
- // 静的メンバ変数の初期化
 AthleticManager* AthleticManager::m_instance = nullptr;
 
 AthleticManager::AthleticManager()
@@ -19,7 +18,7 @@ AthleticManager::~AthleticManager()
 
 /**
  * @brief 初期化処理
- * @details トリガーローダー(AthleticTrigger)を生成し、監視を開始させます。
+ * @details トリガーローダー(AthleticTrigger)を生成し、監視を開始させる。
  */
 void AthleticManager::Setup()
 {

@@ -35,31 +35,25 @@ public:
      */
     void Render(RenderContext& rc);
 
-    /**
-     * @brief 初期化処理（※現状未使用のようです）
-     */
     void Init();
 
     /** * @brief 背景の物理静的オブジェクト
      * @note プレイヤーや敵が乗るための当たり判定です。
      */
     PhysicsStaticObject physicsStaticObject;
+    PhysicsStaticObject m_physicsState; // カウントダウン用
+    PhysicsStaticObject m_physicsBoss;  // ボス戦用
 
 private:
-    /** 背景モデル（不動）のレンダラー */
+    /** 背景モデルのレンダラー */
     ModelRender m_map;
-
     /** 当たり判定用の透明モデル */
     ModelRender m_hitBox;
-
-    /** アスレチック用マップモデル（※未使用） */
-    ModelRender m_mapAthletic;
-
-    /** アニメーションするモデル（冷蔵庫のドアなどを想定） */
+    /** アニメーションするモデル */
     ModelRender m_anim;
-
-    /***/
     ModelRender m_pro;
+    ModelRender m_blockState;
+    ModelRender m_brockBoss;
 
     /** * @brief 現在の開閉角度
      * @note 0度から始まり、マイナス方向へ開いていきます。

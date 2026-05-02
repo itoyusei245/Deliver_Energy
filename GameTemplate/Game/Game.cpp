@@ -11,16 +11,23 @@
 #include "Athletic/AthleticManager.h"
 #include "StageManager.h"
 #include "Countdown.h"
-#include "GameTimeUI.h"
+#include "UI/GameTimeUI.h"
 #include "GetItem.h"
-#include "CoinUI.h"
-#include "GameUI.h"
+#include "UI/CoinUI.h"
+#include "UI/GameUI.h"
 #include "Pause.h"
 #include "Collision/CollisionHitManager.h"
 #include "Sound/SoundManager.h"
 #include "GameClear.h"
 #include "GameResult.h" 
-#include "DebugCamera.h"
+#include "Camera/DebugCamera.h"
+#include "graphics/effect/EffectEmitter.h"
+#include "UI/EventUI.h"
+
+
+namespace Scale {
+	const Vector3 SKYCUBE_SCALE = {1000.0f, 1000.0f, 1000.0f};
+}
 
  // 静的メンバ変数の初期化
 bool  Game::IsGamePlay = false;
@@ -48,9 +55,6 @@ Game::Game()
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
 	m_gameCamera->player = m_player;
 
-
-	/** 背景のオブジェクトを作成（※Startへ移動済み） */
-	//m_backGround = NewGO<BackGround>(0);
 }
 
 
@@ -93,10 +97,21 @@ Game::~Game()
  */
 bool Game::Start()
 {
+
+	SkyCube* skyCube = NewGO<SkyCube>(0, "SkyCube");
+	skyCube->SetType(enSkyCubeType_Day);
+	skyCube->SetScale(Scale::SKYCUBE_SCALE);
+
 	SoundManager::Get().StopBGM();
 
 
 	StartRefrigeratorSound();
+
+	//エフェクトを読み込む。
+	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/DieEnemy.efk");
+	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/NextSoft01/expro_in.efk");
+	EffectEngine::GetInstance()->ResistEffect(2, u"Assets/effect/NextSoft01/kyusyu.efk");
+	EffectEngine::GetInstance()->ResistEffect(3, u"Assets/effect/MAGICALxSPIRAL/expro_M.efk");
 
 
 	IsGamePlay = false;
@@ -104,23 +119,22 @@ bool Game::Start()
 	// リザルト用変数のリセット
 	DefeatedEnemyCount = 0;
 	ClearTime = 0.0f;
-	FinalTemperature = 4.0f; // GameTimeUIの初期値に合わせる
+	FinalTemperature = 4.0f;
 	FinalHP = 100.0f;
-
-	//// コイン所持数をリセット
-	//GetItem::ResetCoinCount();
 
 	CoinCount = 0;
 
 	// GameUIを生成して、Playerの情報を渡す
 	m_gameUI = NewGO<GameUI>(0, "gameUI");
-	m_gameUI->SetPlayer(m_player); // これでHPが連携されます
+	m_gameUI->SetPlayer(m_player); 
 
 	// --- UI生成 ---
 	m_coinUI = NewGO<CoinUI>(0, "coinUI");
 	m_gameTimeUI = NewGO<GameTimeUI>(0, "gameTimeUI");
-	NewGO<Pause>(0, "pause"); // ポーズ機能は常駐
+	NewGO<Pause>(0, "pause"); 
 
+	// スキップ案内UIの生成
+	NewGO<EventUI>(0, "eventUI");
 
 	// 当たり判定マネージャのラッパーオブジェクト生成
 	m_collisionHitManagerObject = NewGO<CollisionHitManagerObject>(0, "collisionHitManagerObject");
@@ -142,20 +156,19 @@ bool Game::Start()
 	AthleticManager::CreateInstance();
 	AthleticManager::GetInstance()->Setup();
 
-	/** 背景の初期化（二重生成防止チェック付き） */
+	/** 背景の初期化 */
 	if (m_backGround == nullptr) {
 		m_backGround = NewGO<BackGround>(0, "background");
 	}
 
 	// ゴールを配置する
 	GameClear* gameClear = NewGO<GameClear>(0, "gameClear");
-	gameClear->SetPosition(Vector3(0.0f, 0.0f, -2850.0f)); // ※ゴールを置きたい座標を指定してください！
+	gameClear->SetPosition(Vector3(0.0f, 0.0f, -2850.0f)); 
 	//gameClear->SetPosition(Vector3(100.0f, -200.0f, 0.0f)); // テスト用
 
 
 	//イベントカメラの生成(デバッグカメラで座標を取得する際はコメントアウトしておく)
 	m_eventCamera = NewGO<EventCamera>(0, "eventCamera");
-
 
 	//============================================================================
 	//デバッグカメラの生成(テスト時以外はコメントアウトしておく)
@@ -200,11 +213,10 @@ void Game::Update()
 	{
 		Countdown* countdown = FindGO<Countdown>("countdown");
 
-		// 判定1: カウントダウンが存在し、終了フラグが立っている
+		// カウントダウンが存在し、終了フラグが立っている
 		bool isFinished = (countdown != nullptr && countdown->IsFinished());
 
-		// 判定2: カウントダウンが見つからない（＝終了して削除された）
-		// ※Startで作ったはずなのにFindGOで取れない場合も「終わった」とみなす安全策です
+		// カウントダウンが見つからない（＝終了して削除された）
 		bool isGone = (countdown == nullptr);
 
 		if (isFinished || isGone)
@@ -250,7 +262,7 @@ void Game::Update()
 		{
 
 			Vector3 diff = m_player->GetPosition() - m_fridgePos;
-			float distance = diff.Length();// 中心からの距離
+			float distance = diff.Length();
 
 
 			float volume = 0.0f;
@@ -303,6 +315,23 @@ void Game::Update()
 		}
 	}
 
+	if (EnemyManager::GetInstance()->IsBossClearEventRequested())
+	{
+		// 合図を受け取ったので、フラグを下ろす
+		EnemyManager::GetInstance()->ClearBossClearEventRequest();
+
+
+		// イベントカメラがあるか確認
+		if (m_eventCamera) {
+			// クリア用のルートデータをロード
+			m_eventCamera->LoadClearPath();
+
+
+			//再生
+			m_eventCamera->Play();
+		}
+	}
+
 	// ---------------------------------------------------------
 	// カメラの更新制御
 	// ---------------------------------------------------------
@@ -313,18 +342,14 @@ void Game::Update()
 
 	if (isEventPlaying)
 	{
-		// イベント中：GameCameraを無効化（止める）
+		// イベント中：GameCameraを無効化
 		if (m_gameCamera) {
 			m_gameCamera->SetEnable(false);
 		}
-
-		// m_eventCamera->Update() は書きません！
-		// NewGOで作ったオブジェクトはエンジンが自動でUpdateを呼んでくれるため、
-		// ここで書くと2回実行されてしまいます。
 	}
 	else
 	{
-		// イベント外：GameCameraを有効化（動かす）
+		// イベント外：GameCameraを有効化
 		if (m_gameCamera) {
 			m_gameCamera->SetEnable(true);
 		}
@@ -336,8 +361,8 @@ void Game::Update()
 
 	/**
 	 * StageManagerの更新
- * @note IGameObject継承かどうかに関わらず、ここで明示的に呼び出しているようです。
- */
+	 * @note IGameObject継承かどうかに関わらず、ここで明示的に呼び出しているようです。
+	 */
 	StageManager::GetInstance()->Update();
 
 	/** * EnemyManagerの更新

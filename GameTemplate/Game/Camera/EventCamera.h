@@ -52,6 +52,14 @@ public:
     void LoadBossPath();
 
     /**
+    * @brief ボス撃破時ルートをセットする関数
+    */
+    void LoadClearPath();
+
+    // どこからでもアクセスできる「イベント中フラグ」
+    static bool IsEventPlaying;
+
+    /**
      * @brief 再生中かどうか
      */
     bool IsPlaying()const { return m_isPlaying; }
@@ -64,17 +72,17 @@ private:
      */
     float EaseInOut(float t);
 
+    // イベント終了時の処理をまとめる専用関数
+    void FinishEvent();
 
 private:
     std::vector<CameraKeyFrame>m_pathList;
 
 
-    bool m_isPlaying = false;    // 再生中フラグ
-    bool m_isCutMode = false;    // カット切り替えモードかどうか
-    int m_currentIndex = 0;      // 現在どの地点(A->BのA)にいるか
-    float m_segmentTimer = 0.0f; // 現在の区間の経過時間
-
-
-    // 1区間を何秒で移動するか
-    float m_segmentDuration = 3.0f;
+    bool m_isPlaying        = false; // 再生中フラグ
+    bool m_isCutMode        = false; ;// カット切り替えモードかどうか
+    bool m_isClearMode      = false; // 撃破演出かどうか
+    int m_currentIndex      =     0; // 現在どの地点(A->BのA)にいるか
+    float m_segmentTimer    =  0.0f; // 現在の区間の経過時間
+    float m_segmentDuration =  0.0f; // 1区間を何秒で移動するか
 };

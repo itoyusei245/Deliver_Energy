@@ -7,149 +7,149 @@
 #include "Game.h" 
 #include "Setting.h"
 #include "Title.h"
-#include "CoinUI.h"
-#include "GameTimeUI.h"
+#include "UI/CoinUI.h"
+#include "UI/GameTimeUI.h"
 #include "Countdown.h"
+#include "Enemy/EnemyManager.h"
+#include "Enemy/Boss.h"
+#include "Enemy/BossStatusUI.h"
+#include "GetItem.h"
+#include "Athletic/AthleticManager.h"
+#include "Athletic/AthleticStage.h"
+#include "Athletic/AthleticTrigger.h"
+#include "StageManager.h"
+
+namespace {
+    // --- 検索・生成用マジックストリングの定数化 ---
+    constexpr const char* NAME_SETTING   = "setting";
+    constexpr const char* NAME_COIN_UI   = "coinUI";
+    constexpr const char* NAME_TIME_UI   = "gameTimeUI";
+    constexpr const char* NAME_COUNTDOWN = "countdown";
+    constexpr const char* NAME_ATHLETIC  = "athleticStage";
+    constexpr const char* NAME_TRIGGER   = "athleticTriggerLoader";
+    constexpr const char* NAME_BOSS      = "boss";
+    constexpr const char* NAME_BOSS_UI   = "bossUI";
+    constexpr const char* NAME_GAME      = "game";
+    constexpr const char* NAME_TITLE     = "title";
+}
 
 Pause::Pause()
 {
-    // フィルター画像の初期化（半透明の黒）
-    m_filterSprite.Init("Assets/sprite/pause.DDS", 1920.0f, 1080.0f);
-    m_filterSprite.SetPosition(Vector3::Zero);
-    m_filterSprite.SetMulColor({ 0.0f, 0.0f, 0.0f, 0.8f });
-
-    // PAUSEロゴと選択肢画像の初期化
-    m_pauseSprite.Init(TEX_PAESE, 1920.0f, 1080.0f);
-    m_pauseSprite.SetPosition(Vector3::Zero);
-
-    for (int i = 0; i < 4; i++)
-    {
-        m_selectSprute[i].Init(TEX_SELECT[i], 1920.0f, 1080.0f);
-        m_selectSprute[i].SetPosition(Vector3::Zero);
-    }
-
+    m_ui = new PauseUI();
     m_isActive = false;
     m_selectBar = 0;
+
+    m_ui->SetActive(m_isActive);
+    m_ui->SetSelectBar(m_selectBar);
 }
 
 Pause::~Pause()
 {
+    delete m_ui;
 }
 
-/**
- * @brief 更新処理
- * @details
- * - スタートボタンでポーズのON/OFFを切り替えます。
- * - ポーズ中は十字キーでメニュー選択、Aボタンで決定します。
- * - リトライやタイトルの場合、既存のゲームオブジェクトを検索して削除し、状態をリセットします。
- */
 void Pause::Update()
 {
-    /**ゲームプレイ中（カウントダウン後）でなければ処理しない*/
     if (!Game::IsGamePlay) return;
 
-    /**スタートボタンが押されたらフラグを反転（ON <-> OFF）*/
     if (g_pad[0]->IsTrigger(enButtonStart))
     {
         m_isActive = !m_isActive;
-        Game::IsPaused = m_isActive; // 静的フラグを更新して他のオブジェクトを停止させる
-        // ポーズを解除したとき、もし設定画面が開いていたら強制的に閉じる
+        Game::IsPaused = m_isActive;
+
+        m_ui->SetActive(m_isActive);
+
         if (!m_isActive) {
-            Setting* setting = FindGO<Setting>("setting");
+            Setting* setting = FindGO<Setting>(NAME_SETTING);
             if (setting != nullptr) {
                 DeleteGO(setting);
             }
         }
     }
 
-    /**表示中ならメニュー操作を受け付ける*/
     if (m_isActive)
     {
-        // 設定画面が開いている間は、ポーズ画面の操作を受け付けない
-        if (FindGO<Setting>("setting") != nullptr) {
+        // 設定画面が開いている間は操作を受け付けない
+        if (FindGO<Setting>(NAME_SETTING) != nullptr) {
             return;
         }
 
-        m_filterSprite.Update();
-        m_pauseSprite.Update();
-
-        // メニュー選択（ループ移動）
-        if (g_pad[0]->IsTrigger(enButtonUp))
-        {
+        if (g_pad[0]->IsTrigger(enButtonUp)) {
             m_selectBar--;
             if (m_selectBar < 0) m_selectBar = 3;
+            m_ui->SetSelectBar(m_selectBar);
         }
-        if (g_pad[0]->IsTrigger(enButtonDown))
-        {
+        if (g_pad[0]->IsTrigger(enButtonDown)) {
             m_selectBar++;
             if (m_selectBar > 3) m_selectBar = 0;
+            m_ui->SetSelectBar(m_selectBar);
         }
 
-        /**現在選択されている画像だけ更新*/
-        m_selectSprute[m_selectBar].Update();
-
-        /**決定ボタン処理*/
+        // 決定ボタン処理
         if (g_pad[0]->IsTrigger(enButtonA))
         {
             if (m_selectBar == 0)
             {
-                // 0: Continue（再開）
                 m_isActive = false;
                 Game::IsPaused = false;
+                m_ui->SetActive(false);
             }
-            else if (m_selectBar == 1)
+            else if (m_selectBar == 1) 
             {
-                // 1: Retry（リトライ）
-                // ポーズ解除
                 Game::IsPaused = false;
 
-                // UI類を手動削除（二重生成防止）
-                DeleteGO(FindGO<CoinUI>("coinUI"));
-                DeleteGO(FindGO<GameTimeUI>("gameTimeUI"));
-                DeleteGO(FindGO<Countdown>("countdown"));
+                EnemyManager::DeleteInstance();
+                AthleticManager::DeleteInstance();
+                StageManager::DeleteInstance();
+                GetItem::ResetCoinCount();
 
-                // ゲーム本体を削除（Player等はGameのデストラクタで消える想定）
-                DeleteGO(FindGO<Game>("game"));
+                DeleteGO(FindGO<CoinUI>(NAME_COIN_UI));
+                DeleteGO(FindGO<GameTimeUI>(NAME_TIME_UI));
+                DeleteGO(FindGO<Countdown>(NAME_COUNTDOWN));
+                DeleteGO(FindGO<AthleticStage>(NAME_ATHLETIC));
+                DeleteGO(FindGO<AthleticTrigger>(NAME_TRIGGER));
+                DeleteGO(FindGO<Boss>(NAME_BOSS));
+                DeleteGO(FindGO<BossStatusUI>(NAME_BOSS_UI));
+                DeleteGO(FindGO<Game>(NAME_GAME));
 
-                // 新しいゲームを作成
-                NewGO<Game>(0, "game");
-
-                // 自身を削除
+                NewGO<Game>(0, NAME_GAME);
                 DeleteGO(this);
             }
-            else if (m_selectBar == 2)
+            else if (m_selectBar == 2) 
             {
-                NewGO<Setting>(0, "setting");
-
+                NewGO<Setting>(0, NAME_SETTING);
             }
             else if (m_selectBar == 3)
             {
-                // 3: Title（タイトルへ戻る）
                 Game::IsPaused = false;
 
-                // 全オブジェクト削除
-                DeleteGO(FindGO<Game>("game"));
-                DeleteGO(FindGO<CoinUI>("coinUI"));
-                DeleteGO(FindGO<GameTimeUI>("gameTimeUI"));
-                DeleteGO(FindGO<Countdown>("countdown"));
+                EnemyManager::DeleteInstance();
+                AthleticManager::DeleteInstance();
+                StageManager::DeleteInstance();
+                GetItem::ResetCoinCount();
 
-                // タイトル画面生成
-                NewGO<Title>(0, "title");
+                DeleteGO(FindGO<Game>(NAME_GAME));
+                DeleteGO(FindGO<CoinUI>(NAME_COIN_UI));
+                DeleteGO(FindGO<GameTimeUI>(NAME_TIME_UI));
+                DeleteGO(FindGO<Countdown>(NAME_COUNTDOWN));
+                DeleteGO(FindGO<AthleticStage>(NAME_ATHLETIC));
+                DeleteGO(FindGO<AthleticTrigger>(NAME_TRIGGER));
+                DeleteGO(FindGO<Boss>(NAME_BOSS));
+                DeleteGO(FindGO<BossStatusUI>(NAME_BOSS_UI));
 
-                // 自身削除
+                NewGO<Title>(0, NAME_TITLE);
                 DeleteGO(this);
             }
         }
     }
+
+    m_ui->Update();
 }
 
 void Pause::Render(RenderContext& rc)
 {
-    /**ゲームプレイ中 かつ ポーズ中のみ描画*/
     if (Game::IsGamePlay && m_isActive)
     {
-        m_filterSprite.Draw(rc);
-        m_pauseSprite.Draw(rc);
-        m_selectSprute[m_selectBar].Draw(rc);
-    };
+        m_ui->Render(rc);
+    }
 }
