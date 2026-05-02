@@ -1,115 +1,112 @@
+/**
+ * @file Title.cpp
+ * @brief タイトル画面の実装
+ */
 #include "stdafx.h"
 #include "Title.h"
 #include "Game.h"
 #include "Setting.h"
-#include"system/system.h"
-#include"Sound/SoundManager.h"
+#include "system/system.h"
+#include "Sound/SoundManager.h"
+#include "GameLoading.h"
 
+ // 静的変数の実体定義
 bool Title::IsTitle = false;
 bool Title::IsSetting = false;
 
+namespace {
+    // --- マジックナンバー・ストリングの定数化 ---
+    constexpr const char* NAME_LOADING = "gameLoading";
+    constexpr const char* NAME_SETTING = "setting";
 
-/**
- * @brief Titleクラスのコンストラクタ
- * @details タイトル画面用のスプライト画像を初期化します。
- */
+    // メニューのインデックス
+    constexpr int MENU_START = 0;
+    constexpr int MENU_SETTING = 1;
+    constexpr int MENU_QUIT = 2;
+}
+
 Title::Title()
 {
-    /**タイトル画面の画像を読み込み*/
-    m_titleSprite.Init("Assets/sprite/Title.DDS", 1920.0f, 1080.0f);
-    m_picUpSprite[0].Init("Assets/sprite/selectBer_GameState.DDS", 1920.0f, 1080.0f);
-    m_picUpSprite[1].Init("Assets/sprite/selectBer_Settings.DDS", 1920.0f, 1080.0f);
-    m_picUpSprite[2].Init("Assets/sprite/selectBer_Quit.DDS", 1920.0f, 1080.0f);
+    // UIの生成
+    m_ui = new TitleUI();
+    m_currentBar = MENU_START;
+
+    // UIに初期状態を伝達
+    m_ui->SetCurrentBar(m_currentBar);
 
     SoundManager::Get().PlayBGM(enSoundKind_Title);
 }
 
-/**
- * @brief Titleクラスのデストラクタ
- */
 Title::~Title()
-{ 
+{
+    delete m_ui;
 }
-
 
 bool Title::Start()
 {
     IsTitle = false;
     IsSetting = false;
-
     return true;
 }
 
-
-/**
- * @brief 毎フレームの更新処理
- * @details Aボタンが押されたらゲーム画面へ遷移し、自身を削除します。
- */
 void Title::Update()
 {
+    // 設定画面を開いている間は入力を受け付けない
     if (IsSetting) {
         return;
     }
 
     UpdatePicUp();
+
     if (g_pad[0]->IsTrigger(enButtonA))
     {
         SoundManager::Get().PlaySE(enSoundKind_Decision);
-        /**ゲームを始める*/
-        if (m_currentBar == 0) {
-            //! ゲームのオブジェクトを作成
-            NewGO<Game>(0, "game");
-            //! 自身を削除する
+
+        if (m_currentBar == MENU_START) {
+            // ロード画面へ
+            NewGO<GameLoading>(0, NAME_LOADING);
             DeleteGO(this);
         }
-        /**設定を開く*/
-        if (m_currentBar == 1) {
-            //設定画面であることを記録
+        else if (m_currentBar == MENU_SETTING) {
+            // 設定を開く
             IsSetting = true;
-
-            //! 設定画面を作成
-            NewGO<Setting>(0, "setting");
+            NewGO<Setting>(0, NAME_SETTING);
         }
-        /**ゲームを終了する*/
-        if (m_currentBar == 2) {
+        else if (m_currentBar == MENU_QUIT) {
+            // ゲームを終了する
             g_gameLoop.m_isLoop = false;
         }
-
     }
+
+    // UIの更新
+    m_ui->Update();
 }
 
 void Title::UpdatePicUp()
 {
-    
     if (g_pad[0]->IsTrigger(enButtonUp))
     {
         SoundManager::Get().PlaySE(enSoundKind_Choose);
-        if(m_currentBar==0){
-            m_currentBar = 0;
+        m_currentBar--;
+        if (m_currentBar < MENU_START) {
+            m_currentBar = MENU_START;
         }
-        else {
-            m_currentBar = m_currentBar - 1.0f;
-        }
+        m_ui->SetCurrentBar(m_currentBar);
     }
+
     if (g_pad[0]->IsTrigger(enButtonDown))
     {
         SoundManager::Get().PlaySE(enSoundKind_Choose);
-        if (m_currentBar == 2/**カレントが最大値の時*/) {
-            m_currentBar = 2;
+        m_currentBar++;
+        if (m_currentBar > MENU_QUIT) {
+            m_currentBar = MENU_QUIT;
         }
-        else {
-            m_currentBar = m_currentBar + 1.0f;
-        }
+        m_ui->SetCurrentBar(m_currentBar);
     }
 }
 
-/**
- * @brief タイトル画面の描画処理
- * @param rc 描画コンテキスト
- * @details タイトル画像の描画を行います。
- */
 void Title::Render(RenderContext& rc)
 {
-    m_titleSprite.Draw(rc);
-    m_picUpSprite[m_currentBar].Draw(rc);
+    // 描画はすべてUIに任せる
+    m_ui->Render(rc);
 }

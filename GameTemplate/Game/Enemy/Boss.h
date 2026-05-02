@@ -15,7 +15,7 @@
 class Boss : public EnemyBase
 {
 	// NOTE: Boss用のステートパターンでアクセスしたいので例外的にfriendクラスにする
-	// これにより、ステートクラス側からBossのprivateメンバ（座標やフラグなど）を直接操作可能にします。
+	// これにより、ステートクラス側からBossのprivateメンバ（座標やフラグなど）を直接操作可能にする。
 	friend class BossIdleState;
 	friend class BossMoveState;
 	friend class BossCreateFamiliarState;

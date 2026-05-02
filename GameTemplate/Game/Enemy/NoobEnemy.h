@@ -90,4 +90,6 @@ private:
 
 	/** 移動力（AIから与えられる） */
 	float m_movePower = 0.0f;
+	bool m_isDying = false;
+	int m_deathTimer = 0;
 };

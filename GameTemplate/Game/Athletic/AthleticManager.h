@@ -8,20 +8,11 @@
  /**
   * @class AthleticManager
   * @brief アスレチックステージの進行管理クラス
-  * @note シングルトンパターンで実装されており、ステージへのトリガー生成やステージ本体のスポーンを管理します。
   */
 class AthleticManager
 {
 private:
-    /**
-     * @brief コンストラクタ
-     * @note シングルトンのためprivate
-     */
     AthleticManager();
-
-    /**
-     * @brief デストラクタ
-     */
     ~AthleticManager();
 
 
@@ -37,7 +28,7 @@ public:
 
     /**
      * @brief インスタンスを生成する
-     * @note ゲーム開始時などに一度だけ呼び出してください。
+     * @note ゲーム開始時などに一度だけ呼び出す。
      */
     static void CreateInstance()
     {
@@ -47,7 +38,7 @@ public:
 
     /**
      * @brief インスタンスを破棄する
-     * @note ゲーム終了時などに呼び出し、メモリを解放してください。
+     * @note ゲーム終了時などに呼び出し、メモリを解放する。
      */
     static void DeleteInstance()
     {
@@ -60,37 +51,23 @@ public:
 
     /**
      * @brief 初期セットアップを行う
-     * @details トリガー検知用オブジェクト(AthleticTrigger)の生成などを行います。
+     * @details トリガー検知用オブジェクト(AthleticTrigger)の生成などを行う。
      */
     void Setup();
 
-    /**
-     * @brief ステージ開始用のトリガー（当たり判定）を作成する
-     * @param[in] pos 配置座標
-     * @param[in] rot 回転情報
-     * @param[in] scale サイズ（スケール）
-     */
     void CreateStageTrigger(const Vector3& pos, const Quaternion& rot, const Vector3& scale);
 
-    /**
-     * @brief ステージ開始用のトリガーを削除する
-     */
     void DeleteStageTrigger();
 
-    /**
-     * @brief 現在のステージトリガーを取得する
-     * @return CollisionObject* トリガーオブジェクトへのポインタ
-     */
     CollisionObject* GetStageTrigger()const { return m_stageTrigger; }
 
     /**
      * @brief アスレチックステージ本体を生成する
-     * @details プレイヤーがトリガーに接触した際などに呼び出し、実際のステージギミックを展開します。
+     * @details プレイヤーがトリガーに接触した際などに呼び出し、実際のステージギミックを展開する。
      */
     void SpawnAthleticStage();
 
 private:
-    /** シングルトンインスタンス */
     static AthleticManager* m_instance;
 
     /** 現在のアスレチックステージ本体 */

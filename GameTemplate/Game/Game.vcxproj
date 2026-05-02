@@ -36,40 +36,40 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Preview|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Preview|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -229,12 +229,11 @@
     <ClCompile Include="Athletic\AthleticState.cpp" />
     <ClCompile Include="Athletic\AthleticTrigger.cpp" />
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="Camera\DebugCamera.cpp" />
     <ClCompile Include="Camera\EventCamera.cpp" />
     <ClCompile Include="Camera\GameCamera.cpp" />
-    <ClCompile Include="CoinUI.cpp" />
     <ClCompile Include="Collision\CollisionHitManager.cpp" />
     <ClCompile Include="Countdown.cpp" />
-    <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="Enemy\Boss.cpp" />
     <ClCompile Include="Enemy\BossStatusUI.cpp" />
     <ClCompile Include="Enemy\EnemyBase.cpp" />
@@ -246,10 +245,9 @@
     <ClCompile Include="Enemy\NoobEnemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameClear.cpp" />
+    <ClCompile Include="GameLoading.cpp" />
     <ClCompile Include="GameResult.cpp" />
     <ClCompile Include="GameStateBase.cpp" />
-    <ClCompile Include="GameTimeUI.cpp" />
-    <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="GetItem.cpp" />
     <ClCompile Include="InGameState.cpp" />
     <ClCompile Include="main.cpp" />
@@ -265,6 +263,18 @@
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="UI\CoinUI.cpp" />
+    <ClCompile Include="UI\CountdownUI.cpp" />
+    <ClCompile Include="UI\EventUI.cpp" />
+    <ClCompile Include="UI\GameResultUI.cpp" />
+    <ClCompile Include="UI\GameTimeUI.cpp" />
+    <ClCompile Include="UI\GameUI.cpp" />
+    <ClCompile Include="UI\LoadUI.cpp" />
+    <ClCompile Include="UI\PauseUI.cpp" />
+    <ClCompile Include="UI\SettingUI.cpp" />
+    <ClCompile Include="UI\TitleUI.cpp" />
+    <ClCompile Include="UI\UIAnimation.cpp" />
+    <ClCompile Include="UI\UIBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Athletic\AthleticBase.h" />
@@ -273,12 +283,11 @@
     <ClInclude Include="Athletic\AthleticState.h" />
     <ClInclude Include="Athletic\AthleticTrigger.h" />
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="Camera\DebugCamera.h" />
     <ClInclude Include="Camera\EventCamera.h" />
     <ClInclude Include="Camera\GameCamera.h" />
-    <ClInclude Include="CoinUI.h" />
     <ClInclude Include="Collision\CollisionHitManager.h" />
     <ClInclude Include="Countdown.h" />
-    <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="Enemy\Boss.h" />
     <ClInclude Include="Enemy\BossStatusUI.h" />
     <ClInclude Include="Enemy\EnemyBase.h" />
@@ -290,10 +299,9 @@
     <ClInclude Include="Enemy\NoobEnemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameClear.h" />
+    <ClInclude Include="GameLoading.h" />
     <ClInclude Include="GameResult.h" />
     <ClInclude Include="GameStateBase.h" />
-    <ClInclude Include="GameTimeUI.h" />
-    <ClInclude Include="GameUI.h" />
     <ClInclude Include="GetItem.h" />
     <ClInclude Include="InGameState.h" />
     <ClInclude Include="Pause.h" />
@@ -306,6 +314,18 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="UI\CoinUI.h" />
+    <ClInclude Include="UI\CountdownUI.h" />
+    <ClInclude Include="UI\EventUI.h" />
+    <ClInclude Include="UI\GameResultUI.h" />
+    <ClInclude Include="UI\GameTimeUI.h" />
+    <ClInclude Include="UI\GameUI.h" />
+    <ClInclude Include="UI\LoadUI.h" />
+    <ClInclude Include="UI\PauseUI.h" />
+    <ClInclude Include="UI\SettingUI.h" />
+    <ClInclude Include="UI\TitleUI.h" />
+    <ClInclude Include="UI\UIAnimation.h" />
+    <ClInclude Include="UI\UIBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game.rc" />

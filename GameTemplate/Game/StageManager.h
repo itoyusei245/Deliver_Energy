@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 
+class AthleticStage;
  /**
   * @struct AthleticSpawnInfo
   * @brief アスレチック（ギミック）生成用の定義情報
@@ -59,7 +60,6 @@ public:
      * @param spawnInfos 生成するオブジェクト情報のリスト
      */
     void CreateAthleticBox(Vector3& pos, Quaternion& rot, Vector3& size, const std::vector<AthleticSpawnInfo>& spawnInfos);
-    /*@}*/
 
     // --- シングルトン管理 ---
     static void CreateInstance()
@@ -89,4 +89,7 @@ private:
 
     /** 登録されたアスレチックトリガーのリスト */
     std::vector<AthleticTriggerInfo> m_athleticTriggers;
+
+    /** 自分が生成したアスレチックのリスト */
+    std::vector<AthleticStage*> m_spawnedStages;
 };

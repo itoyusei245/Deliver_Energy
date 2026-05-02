@@ -48,7 +48,7 @@ public:
     /** * @brief 注視点（プレイヤー）からカメラ位置への相対ベクトル
      * @details このベクトルを回転させることで、カメラのアングルを変更します。
      */
-    Vector3 m_toCameraPos = Vector3::One;
+    Vector3 m_toCameraPos;
 
 private:
     /** * @brief スプリングカメラオブジェクト
@@ -58,4 +58,10 @@ private:
     
     // 有効フラグ（最初はtrue）
     bool m_isEnable = true;
+
+	float m_targetOffsetY;
+	float m_targetOffsetZ;
+    float m_rotSpeedX;
+	float m_rotSpeedY;
+	float m_pitchLimitClamp;
 };

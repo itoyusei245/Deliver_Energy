@@ -7,117 +7,94 @@
 #include "Enemy/EnemyManager.h"
 #include "Enemy/Boss.h"
 #include "EnemyStatus.h"
+#include "Camera/EventCamera.h"
+
+namespace
+{
+	constexpr const char* PATH_ICON		 = "Assets/sprite/Boss_HP_Icon.DDS";
+	constexpr const char* PATH_BAR_BACK	 = "Assets/sprite/Boss_HP_Flame.DDS";
+	constexpr const char* PATH_BAR_GAUGE = "Assets/sprite/Boss_HP.DDS";
+	const Vector2		  SIZE_ICON		 = Vector2(100.0f, 100.0f);
+	const Vector2		  SIZE_BAR		 = Vector2(900.0f, 70.0f);
+	const Vector3		  POS_ICON		 = Vector3(-500.0f, 450.0f, 0.0f);
+	const Vector3		  POS_BAR		 = Vector3(-400.0f, 450.0f, 0.0f);
+	constexpr float		  LERP_SPEED	 = 0.1f;
+	constexpr float		  SNAP_THRESHOLD = 0.05f;
+}
 
 BossStatusUI::BossStatusUI()
 {
+	// キャンバスの生成
+	m_canvas = new UICanvas();
+
+	// 各UIの生成
+	m_icon = m_canvas->CreateUI<UIIcon>();
+	m_hpBarBack = m_canvas->CreateUI<UIIcon>();
+	m_hpBarGauge = m_canvas->CreateUI<UIGauge>();
 }
 
 BossStatusUI::~BossStatusUI()
 {
+	delete m_canvas;
 }
 
-/**
- * @brief 開始処理
- * @details
- * - スプライト画像の読み込み
- * - ピボット（基準点）を(0,0)つまり左上に設定することで、スケール変更時に左側を固定して伸縮させます。
- * - 初期位置の設定
- */
 bool BossStatusUI::Start()
 {
-	m_iconSprite.Init("Assets/sprite/Boss_HP_Icon.DDS", 100.0f, 100.0f);
-	m_hpBarBack.Init("Assets/sprite/Boss_HP_Flame.DDS", 900.0f, 70.0f);
-	m_hpBarGauge.Init("Assets/sprite/Boss_HP.DDS", 900.0f, 70.0f);
+	// アイコンの初期化
+	m_icon->Initialize(PATH_ICON, SIZE_ICON.x, SIZE_ICON.y, POS_ICON, Vector3::One, Quaternion::Identity);
 
-	// ピボットを左上(0.0, 0.0)に設定
-	// これにより、スケールをX軸方向に縮小した際、左端を基準に右側が減っていく挙動になります。
-	m_hpBarBack.SetPivot(Vector2(0.0f, 0.0f));
-	m_hpBarGauge.SetPivot(Vector2(0.0f, 0.0f));
+	// 背景枠の初期化
+	m_hpBarBack->Initialize(PATH_BAR_BACK, SIZE_BAR.x, SIZE_BAR.y, POS_BAR, Vector3::One, Quaternion::Identity);
+	// UIImageクラスが持っているGetSpriteRender()を使って、今まで通りピボットを調整
+	m_hpBarBack->GetSpriteRender()->SetPivot(Vector2(0.0f, 0.0f));
 
-	m_iconSprite.SetPosition(ICON_POS);
-	m_hpBarBack.SetPosition(BAR_POS);
-	m_hpBarGauge.SetPosition(BAR_POS);
+	// ゲージ本体の初期化
+	m_hpBarGauge->Initialize(PATH_BAR_GAUGE, SIZE_BAR.x, SIZE_BAR.y, POS_BAR, Vector3::One, Quaternion::Identity);
+	m_hpBarGauge->GetSpriteRender()->SetPivot(Vector2(0.0f, 0.0f));
 
-	// 表示用HPの初期値を適当な値（あるいはMAX）にしておく
 	m_displayHP = 100.0f;
 
 	return true;
 }
 
-/**
- * @brief 更新処理
- * @details
- * 1. EnemyManagerからボスのインスタンスを取得
- * 2. ボスがいる場合：
- * - 現在のHPと最大HPを取得
- * - 表示用HP(m_displayHP)を現在HP(currentHP)に向けて線形補間(Lerp)し、滑らかに減少させる
- * - HP割合(0.0～1.0)を算出し、ゲージスプライトのXスケールに反映
- * 3. ボスがいない場合：
- * - 非表示にする
- */
 void BossStatusUI::Update()
 {
-	//マネージャーが削除されていたら、処理を中断する
-	if (EnemyManager::GetInstance() == nullptr)
-	{
-		return;
-	}
-	
-	// シングルトンのマネージャからボスを取得
+	if (EnemyManager::GetInstance() == nullptr) return;
+
 	Boss* boss = EnemyManager::GetInstance()->GetBoss();
 
 	if (boss != nullptr) {
-
-		// ボスがいる -> 表示フラグON
 		m_isVisible = true;
 
-		// ステータスを取得
 		BossStatus* status = boss->GetStatus();
 		float currentHP = (float)status->GetCurrentHP();
 		float maxHP = (float)status->GetMaxHP();
 
-		// --- HP減少アニメーション処理 ---
-		float lerpSpeed = 0.1f;
-		// 現在の実HPに向かって徐々に数値を近づける（イージング処理）
-		m_displayHP += (currentHP - m_displayHP) * lerpSpeed;
-
-		// 誤差が少なくなったら値を確定させる（ピタッと止めるため）
-		if (abs(currentHP - m_displayHP) < 0.05f) {
+		m_displayHP += (currentHP - m_displayHP) * LERP_SPEED;
+		if (abs(currentHP - m_displayHP) < SNAP_THRESHOLD) {
 			m_displayHP = currentHP;
 		}
 
-		// --- ゲージのスケール計算 ---
 		float hpRatio = 1.0f;
 		if (maxHP > 0.0f) {
 			hpRatio = m_displayHP / maxHP;
 		}
 
-		// 0.0 ～ 1.0 の範囲にクランプ
-		hpRatio = max(0.0f, min(hpRatio, 1.0f));
+		m_hpBarGauge->SetProgress(hpRatio);
 
-		// X軸のスケールにHP割合を適用してバーの長さを変える
-		m_hpBarGauge.SetScale(Vector3(hpRatio, 1.0f, 1.0f));
-
-		// スプライトの更新
-		m_iconSprite.Update();
-		m_hpBarBack.Update();
-		m_hpBarGauge.Update();
+		// キャンバス全体を更新
+		m_canvas->Update();
 	}
 	else {
-		// ボスがいない -> 表示フラグOFF
 		m_isVisible = false;
 	}
 }
 
-/**
- * @brief 描画処理
- */
 void BossStatusUI::Render(RenderContext& rc)
 {
-	// フラグがtrueの場合のみ描画
+	if (EventCamera::IsEventPlaying) return;
+
 	if (m_isVisible) {
-		m_iconSprite.Draw(rc);
-		m_hpBarBack.Draw(rc);
-		m_hpBarGauge.Draw(rc);
+		m_canvas->Render(rc);
 	}
 }

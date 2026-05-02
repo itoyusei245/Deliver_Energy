@@ -33,7 +33,7 @@ namespace
         Vector3 nextPosition = position;
 
         // フラグに応じて加算・減算
-        nextPosition.y += isMovingUp ? moveSpeed : moveSpeed * -1.0f;
+        nextPosition.y += isMovingUp ? moveSpeed : -moveSpeed;
 
         // 範囲制限と反転処理
         if (isMovingUp) {
@@ -55,7 +55,7 @@ namespace
 // -------------------------------------------------------------
 // Boss Idle State
 // -------------------------------------------------------------
-void BossIdleState::Eneter()
+void BossIdleState::Enter()
 {
     // アニメーション再生（必要であれば実装）
 }
@@ -85,7 +85,7 @@ bool BossIdleState::RequestState(int& request)
 // -------------------------------------------------------------
 // Boss Move State
 // -------------------------------------------------------------
-void BossMoveState::Eneter()
+void BossMoveState::Enter()
 {
     // アニメーション再生
 }
@@ -105,11 +105,11 @@ void BossMoveState::Update()
         BOSS_MAX_Y,
         BOSS_MIN_Y,
         moveSpeed,
-        m_isMovingUp // このメンバ変数はUpdate内でローカルに使われているようだが、本来はm_owner->IsMovingUp()と同期すべき箇所の可能性あり
+        isMovingUp 
     );
 
     // 計算後のフラグと座標をBoss本体に反映
-    m_owner->SetMovingUp(m_isMovingUp);
+    m_owner->SetMovingUp(isMovingUp);
     m_owner->SetPosition(nextPosition);
 }
 
@@ -134,7 +134,7 @@ bool BossMoveState::RequestState(int& request)
 // -------------------------------------------------------------
 // Boss Create Familiar State
 // -------------------------------------------------------------
-void BossCreateFamiliarState::Eneter()
+void BossCreateFamiliarState::Enter()
 {
     // ボスに対して「眷属を作ってくれ」というフラグを立てる
     // 実際の生成処理は EnemyManager がこのフラグを見て行う
@@ -168,7 +168,7 @@ bool BossCreateFamiliarState::RequestState(int& request)
 // Familiar States
 /*************************************************************/
 
-void FamiliarIdleState::Eneter()
+void FamiliarIdleState::Enter()
 {
     // アニメーション再生
 }
@@ -195,7 +195,7 @@ bool FamiliarIdleState::RequestState(int& request)
 }
 
 
-void FamiliarMoveState::Eneter()
+void FamiliarMoveState::Enter()
 {
     // アニメーション再生
 }
@@ -209,6 +209,7 @@ void FamiliarMoveState::Update()
 {
     const float deltaTime = g_gameTime->GetFrameDeltaTime();
 
+    if (EnemyManager::GetInstance() == nullptr) return;
     // EnemyManager経由でBossを取得
     Boss* boss = EnemyManager::GetInstance()->GetBoss();
 
@@ -217,8 +218,9 @@ void FamiliarMoveState::Update()
         // ボスの移動方向をコピー（これでボスと同じタイミングで上下する）
         m_isMovingUp = boss->IsMovingUp();
 
+        float bossMoveRange = BOSS_MAX_Y - BOSS_MIN_Y;
         // ボスとの移動距離比率などで速度を調整
-        float syncSpeedRatio = 140.0f / 200.0f;
+        float syncSpeedRatio = FAMILIAR_OFFSET_Y / bossMoveRange;
         float moveSpeed = m_owner->GetStatus()->GetMoveSpeed() * deltaTime * syncSpeedRatio;
 
         // 次の座標を計算
@@ -253,7 +255,7 @@ bool FamiliarMoveState::RequestState(int& request)
 // NoobEnemy States
 /*************************************************************/
 
-void NoobEnemyIdleState::Eneter()
+void NoobEnemyIdleState::Enter()
 {
     // アニメーション再生
 }
@@ -280,7 +282,7 @@ bool NoobEnemyIdleState::RequestState(int& request)
 }
 
 
-void NoobEnemyMoveState::Eneter()
+void NoobEnemyMoveState::Enter()
 {
     // アニメーション再生
 }

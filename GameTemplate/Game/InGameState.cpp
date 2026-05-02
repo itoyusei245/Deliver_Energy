@@ -10,11 +10,23 @@
 #include "Enemy/EnemyManager.h"
 #include "StageManager.h"
 #include "Countdown.h"
-#include "GameTimeUI.h"
-#include "CoinUI.h"
+#include "UI/GameTimeUI.h"
+#include "UI/CoinUI.h"
 #include "Pause.h"
 
- // 静的変数の実体定義
+namespace {
+    constexpr int PRIO_DEFAULT = 0;
+
+    constexpr const char* NAME_PLAYER = "player";
+    constexpr const char* NAME_CAMERA = "gameCamera";
+    constexpr const char* NAME_BACKGROUND = "background";
+    constexpr const char* NAME_COUNTDOWN = "countdown";
+    constexpr const char* NAME_TIME_UI = "gameTimeUI";
+    constexpr const char* NAME_COIN_UI = "coinUI";
+    constexpr const char* NAME_PAUSE = "pauseFilter";
+}
+
+// 静的変数の実体定義
 bool InGameState::IsGamePlay = false;
 bool InGameState::IsPaused = false;
 int InGameState::CoinCount = 0;
@@ -25,17 +37,10 @@ InGameState::InGameState()
 
 InGameState::~InGameState()
 {
-    // デストラクタでオブジェクト削除を呼ぶ（安全策）
+    // デストラクタでオブジェクト削除を呼ぶ
     DeleteGameObjects();
 }
 
-/**
- * @brief シーン開始時の初期化処理
- * @details
- * 1. StageManager, EnemyManagerのシングルトン生成とセットアップ
- * 2. ゲーム進行フラグのリセット
- * 3. プレイヤー、カメラ、背景、UI、ポーズ機能の生成
- */
 void InGameState::OnEnter()
 {
     // === 1. シングルトン初期化 ===
@@ -50,20 +55,17 @@ void InGameState::OnEnter()
     CoinCount = 0;
 
     // === 3. オブジェクト生成とポインタ保持 ===
-    m_player = NewGO<Player>(0, "player");
-    m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
-    m_backGround = NewGO<BackGround>(0, "background");
+    // 定数を使って安全に生成！
+    m_player = NewGO<Player>(PRIO_DEFAULT, NAME_PLAYER);
+    m_gameCamera = NewGO<GameCamera>(PRIO_DEFAULT, NAME_CAMERA);
+    m_backGround = NewGO<BackGround>(PRIO_DEFAULT, NAME_BACKGROUND);
 
-    m_countdown = NewGO<Countdown>(0, "countdown");
-    m_gameTimeUI = NewGO<GameTimeUI>(0, "gameTimeUI");
-    m_coinUI = NewGO<CoinUI>(0, "coinUI");
-    m_pause = NewGO<Pause>(0, "pauseFilter");
+    m_countdown = NewGO<Countdown>(PRIO_DEFAULT, NAME_COUNTDOWN);
+    m_gameTimeUI = NewGO<GameTimeUI>(PRIO_DEFAULT, NAME_TIME_UI);
+    m_coinUI = NewGO<CoinUI>(PRIO_DEFAULT, NAME_COIN_UI);
+    m_pause = NewGO<Pause>(PRIO_DEFAULT, NAME_PAUSE);
 }
 
-/**
- * @brief 毎フレームの更新処理
- * @details カウントダウン終了を監視してゲームプレイフラグを立てます。また、各マネージャを更新します。
- */
 void InGameState::OnUpdate()
 {
     // カウントダウン終了判定
@@ -86,10 +88,6 @@ bool InGameState::ShouldChangeState()
     return false;
 }
 
-/**
- * @brief シーン内の全オブジェクトを削除する
- * @details 保持しているポインタを使ってDeleteGOを行い、ポインタをnullptrで無効化します。
- */
 void InGameState::DeleteGameObjects()
 {
     DeleteGO(m_player);

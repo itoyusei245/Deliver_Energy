@@ -12,9 +12,7 @@
 class CollisionHitManager
 {
 private:
-    /** コンストラクタ（シングルトン） */
     CollisionHitManager() {}
-    /** デストラクタ */
     ~CollisionHitManager() {}
 
 public:
@@ -98,9 +96,5 @@ public:
         CollisionHitManager::GetInstance()->Update();
     }
 
-    /**
-     * @brief 描画処理
-     * @note このクラス自体は描画するものがないため、処理は空です。
-     */
     void Render(RenderContext& rc) override {}
 };

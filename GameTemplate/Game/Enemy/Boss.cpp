@@ -5,6 +5,13 @@
 #include "stdafx.h"
 #include "Boss.h"
 
+namespace 
+{
+	constexpr const char* MODEL_PATH	   = "Assets/animData/main_bossEnemy.tkm"; 
+	constexpr float		  COLLISION_RADIUS = 10.0f;
+	const Vector3		  BOSS_SCALE(65.0f,65.0f,65.0f);
+}
+
 Boss::Boss()
 {
 	// ステータスのメモリ確保
@@ -35,7 +42,7 @@ Boss::~Boss()
  */
 bool Boss::Start()
 {
-	SetScale(Vector3(65.0f, 65.0f, 65.0f));
+	SetScale(BOSS_SCALE);
 
 	// ステートの生成
 	m_stateList[enBossStateType_Idle] = new BossIdleState(this);
@@ -43,7 +50,7 @@ bool Boss::Start()
 	m_stateList[enBossStateType_CreateFamiliar] = new BossCreateFamiliarState(this);
 
 	// モデル初期化
-	m_modelRender.Init("Assets/animData/main_bossEnemy.tkm");
+	m_modelRender.Init(MODEL_PATH);
 	m_modelRender.SetTRS(Vector3::Zero, m_rotation, m_scale);
 	m_modelRender.Update();
 
@@ -51,7 +58,7 @@ bool Boss::Start()
 	m_physicsStaticObject.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix());
 
 	// 当たり判定用球体の作成
-	m_collisionObject.CreateSphere(m_position, m_rotation, 10.0f);
+	m_collisionObject.CreateSphere(m_position, m_rotation, COLLISION_RADIUS);
 	m_collisionObject.Update();
 
 	return true;
@@ -65,6 +72,18 @@ bool Boss::Start()
  */
 void Boss::Update()
 {
+	// ---------------------------------------------------
+	// 死んでいる場合も、モデルの座標更新だけは続ける！
+	// ---------------------------------------------------
+	if (m_status != nullptr && m_status->IsDead()) {
+
+		// AIやステートの更新はしないが、モデルの描画座標だけは最新の m_position に合わせる
+		m_modelRender.SetTRS(m_position, m_rotation, m_scale);
+		m_modelRender.Update();
+
+		return;
+	}
+
 	// --- ステートマシンの更新 ---
 	int requestState = EnBossStateType_Max;
 
@@ -75,7 +94,7 @@ void Boss::Update()
 		// 新しいステートIDに切り替え
 		m_currentState = static_cast<EnBossStateType>(requestState);
 		// 新しいステートを開始
-		m_stateList[m_currentState]->Eneter(); // ※ここはおそらくEnterのタイポですが、元のコードに合わせています
+		m_stateList[m_currentState]->Enter(); 
 	}
 	// 現在のステートの更新を実行
 	m_stateList[m_currentState]->Update();

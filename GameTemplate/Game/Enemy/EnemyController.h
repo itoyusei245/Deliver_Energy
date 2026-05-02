@@ -16,10 +16,10 @@ class NoobEnemy;
 class EnemyController : public IGameObject
 {
 	// 関数ポインタの型定義
-	using EnterFunc = void(*)(EnemyController*);
+	using EnterFunc  = void(*)(EnemyController*);
 	using UpdateFunc = void(*)(EnemyController*);
-	using ExitFunc = void(*)(EnemyController*);
-	using CheckFunc = bool(*)(EnemyController*);
+	using ExitFunc   = void(*)(EnemyController*);
+	using CheckFunc  = bool(*)(EnemyController*);
 
 private:
 	/**
@@ -28,10 +28,10 @@ private:
 	 */
 	struct StateFunc
 	{
-		EnterFunc m_enter;  //!< ステート開始時処理
+		EnterFunc  m_enter;  //!< ステート開始時処理
 		UpdateFunc m_update;//!< 更新処理
-		ExitFunc m_exit;    //!< ステート終了時処理
-		CheckFunc m_check;  //!< 遷移判定処理（trueを返すと次のステートへ遷移）
+		ExitFunc   m_exit;    //!< ステート終了時処理
+		CheckFunc  m_check;  //!< 遷移判定処理（trueを返すと次のステートへ遷移）
 	};
 
 
@@ -44,7 +44,7 @@ private:
 	{
 		enAIType_Idle,            //!< 待機
 		enAIType_Move,            //!< 移動実行
-		enAIType_SarchTargetMove, //!< 次の移動先を決定（Search）
+		enAIType_SearchTargetMove, //!< 次の移動先を決定（Search）
 		enAIType_Max,
 		enAIType_Invalid = enAIType_Max,
 	};
@@ -119,10 +119,10 @@ private:
 	EnAIType m_requestState = enAIType_Invalid;    //!< 次に遷移したい状態
 
 	// 操作対象となるエネミー
-	NoobEnemy* m_target = nullptr;                 //!< 操作対象
-	EnEnemyType m_enemyType = enEnemyType_A;       //!< 敵のタイプ
-	Vector3 m_targetPosition = Vector3::Zero;      //!< 現在目指している移動目標地点
-	int m_moveIndex = 0;                           //!< 巡回ルート上の現在のインデックス
+	NoobEnemy*  m_target         = nullptr;       //!< 操作対象
+	EnEnemyType m_enemyType      = enEnemyType_A; //!< 敵のタイプ
+	Vector3     m_targetPosition = Vector3::Zero; //!< 現在目指している移動目標地点
+	int		    m_moveIndex		 = 0;             //!< 巡回ルート上の現在のインデックス
 
 	/**
 	 * 状態処理周り
@@ -183,9 +183,9 @@ private:
 	 * @name Search Move Target State (移動先決定)
 	 * @{
 	 */
-	static void SarchMoveTargetEnter(EnemyController* enemy);
-	static void SarchMoveTargetUpdate(EnemyController* enemy);
-	static void SarchMoveTargetExit(EnemyController* enemy);
-	static bool SarchMoveTargetCheck(EnemyController* enemy);
+	static void SearchMoveTargetEnter(EnemyController* enemy);
+	static void SearchMoveTargetUpdate(EnemyController* enemy);
+	static void SearchMoveTargetExit(EnemyController* enemy);
+	static bool SearchMoveTargetCheck(EnemyController* enemy);
 	/** @} */
 };

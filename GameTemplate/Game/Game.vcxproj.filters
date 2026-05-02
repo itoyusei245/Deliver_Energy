@@ -19,6 +19,9 @@
     <Filter Include="Camera">
       <UniqueIdentifier>{5fc59283-33d5-4e8b-9252-f2e4bf5fc8b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{e2c0c729-9b75-40cb-8ac0-cd10d9e7a97e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -35,8 +38,6 @@
     <ClCompile Include="GetItem.cpp" />
     <ClCompile Include="Setting.cpp" />
     <ClCompile Include="Countdown.cpp" />
-    <ClCompile Include="GameTimeUI.cpp" />
-    <ClCompile Include="CoinUI.cpp" />
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="GameStateBase.cpp" />
     <ClCompile Include="InGameState.cpp" />
@@ -61,9 +62,6 @@
     <ClCompile Include="Collision\CollisionHitManager.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy\BossStatusUI.cpp">
-      <Filter>Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy\EnemyController.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
@@ -85,7 +83,6 @@
     <ClCompile Include="Athletic\AthleticState.cpp">
       <Filter>Athletic</Filter>
     </ClCompile>
-    <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="Sound\SoundManager.cpp">
       <Filter>Sound</Filter>
     </ClCompile>
@@ -96,8 +93,48 @@
     <ClCompile Include="Camera\EventCamera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="DebugCamera.cpp">
+    <ClCompile Include="GameLoading.cpp" />
+    <ClCompile Include="Camera\DebugCamera.cpp">
       <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\CoinUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\EventUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\GameTimeUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\GameUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\LoadUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIBase.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIAnimation.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\BossStatusUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\GameResultUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\CountdownUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\PauseUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\SettingUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\TitleUI.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,8 +152,6 @@
     <ClInclude Include="GetItem.h" />
     <ClInclude Include="Setting.h" />
     <ClInclude Include="Countdown.h" />
-    <ClInclude Include="GameTimeUI.h" />
-    <ClInclude Include="CoinUI.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="GameStateBase.h" />
     <ClInclude Include="InGameState.h" />
@@ -141,9 +176,6 @@
     <ClInclude Include="Collision\CollisionHitManager.h">
       <Filter>Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy\BossStatusUI.h">
-      <Filter>Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy\EnemyController.h">
       <Filter>Enemy</Filter>
     </ClInclude>
@@ -165,7 +197,6 @@
     <ClInclude Include="Athletic\AthleticState.h">
       <Filter>Athletic</Filter>
     </ClInclude>
-    <ClInclude Include="GameUI.h" />
     <ClInclude Include="Sound\SoundManager.h">
       <Filter>Sound</Filter>
     </ClInclude>
@@ -179,8 +210,48 @@
     <ClInclude Include="Camera\EventCamera.h">
       <Filter>Camera</Filter>
     </ClInclude>
-    <ClInclude Include="DebugCamera.h">
+    <ClInclude Include="GameLoading.h" />
+    <ClInclude Include="Camera\DebugCamera.h">
       <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\CoinUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\EventUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\GameTimeUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\GameUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\LoadUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIBase.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIAnimation.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\BossStatusUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\GameResultUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\CountdownUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\PauseUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\SettingUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\TitleUI.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

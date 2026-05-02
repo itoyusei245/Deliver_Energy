@@ -43,9 +43,9 @@ public:
 	 * @param[in] damgeValue ダメージ量
 	 * @details HPを減算し、0未満にならないよう補正します。
 	 */
-	void Damage(int damgeValue)
+	void Damage(int damageValue)
 	{
-		m_currentHP -= damgeValue;
+		m_currentHP -= damageValue;
 		if (m_currentHP < 0) {
 			m_currentHP = 0;
 		}
@@ -79,14 +79,7 @@ public:
 	 * @details 3回の眷属召喚フェーズに対応するため、HPを3に設定します。
 	 * （眷属セットを1回全滅させるごとに1ダメージ入る仕様のため）
 	 */
-	void Setup() override
-	{
-		// 初期パラメーターの設定
-		// 3体の眷属に対応するため、HPを3にする（1体倒すごとに1ダメージ）
-		m_maxHP = 3;
-		m_currentHP = m_maxHP;
-		m_moveSpeed = 100.0f;
-	}
+	void Setup() override;
 
 	/**
 	 * @brief 眷属生成回数を加算する
@@ -120,16 +113,7 @@ public:
 	 * @brief パラメータ初期化
 	 * @details HPは1。これを倒すことでボス本体にダメージが入ります。
 	 */
-	void Setup() override
-	{
-		// 初期パラメーターの設定
-		m_maxHP = 1;
-		m_currentHP = m_maxHP;
-		m_moveSpeed = 100.0f;
-	}
-
-protected:
-
+	void Setup() override;
 };
 
 
@@ -146,14 +130,5 @@ public:
 	/**
 	 * @brief パラメータ初期化
 	 */
-	void Setup() override
-	{
-		// 初期パラメーターの設定
-		m_maxHP = 1;
-		m_currentHP = m_maxHP;
-		m_moveSpeed = 100.0f;
-	}
-
-protected:
-
+	void Setup() override;
 };

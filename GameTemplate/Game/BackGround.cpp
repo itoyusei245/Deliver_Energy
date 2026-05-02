@@ -5,7 +5,25 @@
 #include "stdafx.h"
 #include "BackGround.h"
 #include"Game.h"
+#include "Enemy/EnemyManager.h"
+#include "Enemy/Boss.h"
 
+namespace 
+{
+    constexpr const char* PATH_MAP        = "Assets/modelData/Stage/map_new.tkm";
+    constexpr const char* PATH_ANIM       = "Assets/modelData/Stage/reizouko_anim.tkm";
+    constexpr const char* PATH_PROGRAMMER = "Assets/modelData/Stage/Programmer.tkm";
+    constexpr const char* PATH_STATE      = "Assets/modelData/Stage/state.tkm";
+    constexpr const char* PATH_BOSS       = "Assets/modelData/Stage/Bosss.tkm";
+
+	constexpr float   DOOR_OPEN_SPEED   = -25.0f; // 1秒間に25度開く
+	constexpr float   DOOR_TARGET_ANGLE = -51.0f; // ドアが完全に開いたときの角度
+    
+    const Vector3 POS(0.0f, 0.0f, 0.0f);
+    const Vector3 HINGE_OFFSET   (250.0f, 0.0f, 220.0f);
+	const Vector3 POS_HIDE_STATE (0.0f, -2000.0f, 0.0f );
+	const Vector3 POS_HIDE_BOSS  (0.0f, -10000.0f, 0.0f );
+}
  /**
   * @brief BackGroundクラスのコンストラクタ
   * @details
@@ -17,31 +35,39 @@
 BackGround::BackGround()
 {
     /** モデルの位置を設定*/
-    m_map.SetPosition(0.0f, 0.0f, 0.0f);
-    m_map.Init("Assets/modelData/Stage/map_new.tkm");
+    m_map.SetPosition(POS);
+    m_map.Init(PATH_MAP);
 
-    // アニメーション用モデル（冷蔵庫）の初期化
-    m_anim.SetPosition(0.0f, 0.0f, 0.0f);
-    m_anim.Init("Assets/modelData/Stage/reizouko_anim.tkm");
+    m_anim.SetPosition(POS);
+    m_anim.Init(PATH_ANIM);
 
-    /***/
-    m_pro.SetPosition(0.0f, 0.0f, 0.0f);
-    m_pro.Init("Assets/modelData/Stage/Programmer.tkm");
+    m_pro.SetPosition(POS);
+    m_pro.Init(PATH_PROGRAMMER);
 
-    // ヒンジ（回転軸）のローカル座標オフセットを設定
-    m_hingeOffset = Vector3(250.0f, 0.0f, 220.0f);
-
-    m_openAngle = 0.0f;
-
-    // 当たり判定用モデルのロード
-    m_hitBox.SetPosition(0.0f, 0.0f, 0.0f);
-    m_hitBox.Init("Assets/modelData/Stage/map_new.tkm");
+    m_hitBox.SetPosition(POS);
+    m_hitBox.Init(PATH_MAP);
     m_hitBox.Update();
+    
+    m_blockState.SetPosition(POS);
+    m_blockState.Init(PATH_STATE);
+    m_blockState.Update();
+
+    m_brockBoss.SetPosition(POS);
+    m_brockBoss.Init(PATH_BOSS);
+    m_brockBoss.Update();
+
+    m_hingeOffset = HINGE_OFFSET;
+    m_openAngle = 0.0f;
+    m_initialPos = POS;
 
     /** 物理静的オブジェクトをモデルから生成*/
     physicsStaticObject.CreateFromModel(m_hitBox.GetModel(), m_hitBox.GetModel().GetWorldMatrix());
+    m_physicsState.CreateFromModel(m_blockState.GetModel(), m_blockState.GetModel().GetWorldMatrix());
+    m_physicsBoss.CreateFromModel(m_brockBoss.GetModel(), m_brockBoss.GetModel().GetWorldMatrix());
 
-    /** 物理静的オブジェクトをモデルから生成（コメントアウト中）*/
+    m_physicsBoss.SetPosition(POS_HIDE_STATE);
+
+    /** 物理静的オブジェクトをモデルから生成*/
     //physicsStaticObject.CreateFromModel(m_mapAthletic.GetModel(), m_mapAthletic.GetModel().GetWorldMatrix());
 
     /** デバッグ用ワイヤーフレーム表示を有効化*/
@@ -66,21 +92,19 @@ void BackGround::Update()
 {
     if (Game::IsGamePlay)
     {
-        // 指定の角度（-51度）になるまで開き続ける
-        if (m_openAngle > -51.0f)
+        m_physicsState.SetPosition(Vector3(0.0f, -2000.0f, 0.0f));
+        // 指定の角度になるまで開き続ける
+        if (m_openAngle > DOOR_TARGET_ANGLE)
         {
-            // 開くスピード (1秒間に25度動く)
-            float openSpeed = -25.0f;
-
             // 経過時間分だけ角度を足す
-            m_openAngle += openSpeed * g_gameTime->GetFrameDeltaTime();
+            m_openAngle += DOOR_OPEN_SPEED * g_gameTime->GetFrameDeltaTime();
 
-            // 行き過ぎないように-51度で止める（クランプ処理）
-            if (m_openAngle < -51.0f) {
-                m_openAngle = -51.0f;
+            // 行き過ぎないように-51度で止める
+            if (m_openAngle < DOOR_TARGET_ANGLE) {
+                m_openAngle = DOOR_TARGET_ANGLE;
             }
 
-            // 回転クォータニオンを作成 (Y軸を中心に回転)
+            // 回転クォータニオンを作成
             Quaternion rot;
             rot.SetRotationDeg(Vector3::AxisY, m_openAngle);
             m_anim.SetRotation(rot);
@@ -98,6 +122,20 @@ void BackGround::Update()
             // 3. 初期位置に補正値を足してセットすることで、見かけ上ヒンジを中心に回っているように見せる
             m_anim.SetPosition(m_initialPos + positionCorrection);
         }
+    }
+
+    Boss* boss = nullptr;
+    if (EnemyManager::GetInstance() != nullptr) {
+        boss = EnemyManager::GetInstance()->GetBoss();
+    }
+
+    // ボスが存在して、かつ生きているなら
+    if (boss != nullptr && !boss->GetStatus()->IsDead()) {
+        // 壁を元の位置（地上）に出現させる！
+        m_physicsBoss.SetPosition(Vector3::Zero);
+    }
+    else {
+        m_physicsBoss.SetPosition(POS_HIDE_BOSS);
     }
 
     // 各モデルの更新

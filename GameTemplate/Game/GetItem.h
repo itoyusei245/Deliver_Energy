@@ -28,13 +28,13 @@ public:
 	 * @brief 更新処理
 	 * @details 重力落下、接地判定、プレイヤーとの当たり判定、回転アニメーション、点滅・消滅処理を行います。
 	 */
-	void Update();
+	void Update()override;
 
 	/**
 	 * @brief 描画処理
 	 * @details 点滅処理により、m_isVisibleがtrueのときのみ描画します。
 	 */
-	void Render(RenderContext& rc);
+	void Render(RenderContext& rc)override;
 
 
 public:
@@ -73,11 +73,8 @@ private:
 	/** 回転アニメーション用角度 */
 	float m_rotation = 0.0f;
 
-	/** コリジョンの半径 */
-	float m_radius = 20.0f;
-
 	/** 重力加速度 */
-	float m_gravity = -9.8f;
+	float m_gravity = 9.8f;
 
 	/** 接地フラグ */
 	bool m_isOnGround = false;
@@ -98,6 +95,6 @@ private:
 	/** 現在の表示状態（点滅中に切り替わる） */
 	bool m_isVisible = true;
 
-	/** 透明度（※現在はisVisibleでのON/OFF制御のため未使用の可能性あり） */
-	float m_alpha = 1.0f;
+	//多重削除を防ぐためのフラグ
+	bool m_isDead = false;
 };

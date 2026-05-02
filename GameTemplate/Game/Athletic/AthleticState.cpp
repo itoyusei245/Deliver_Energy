@@ -23,7 +23,7 @@ namespace
 		Vector3 nextPosition = position;
 
 		// 上昇中ならプラス、下降中ならマイナス方向に移動
-		nextPosition.y += isMovingUp ? moveSpeed : moveSpeed * -1.0f;
+		nextPosition.y += isMovingUp ? moveSpeed : -moveSpeed;
 
 		// 上限・下限チェックと反転処理
 		if (isMovingUp) {
@@ -120,7 +120,7 @@ void AthleticMoveState::Exit()
 
 /**
  * @brief 遷移リクエスト
- * @details 移動ステートは継続するため、遷移リクエストは行いません（false）。
+ * @details 移動ステートは継続するため、遷移リクエストは行わない。
  */
 bool AthleticMoveState::RequestState(int& request)
 {

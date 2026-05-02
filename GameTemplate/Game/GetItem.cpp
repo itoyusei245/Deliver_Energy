@@ -6,9 +6,33 @@
 #include "GetItem.h"
 #include "Player.h" 
 #include "BackGround.h"
-#include"Game.h"
+#include "Game.h"
 
- // 静的メンバ変数の実体定義
+namespace {
+    constexpr const char* PATH_COIN_MODEL = "Assets/modelData/Item/coin.tkm";
+    constexpr const char* NAME_COLLISION = "coinCollision";
+    constexpr const char* NAME_PLAYER = "player";
+
+    constexpr float COLLISION_RADIUS = 20.0f;
+    constexpr float RAY_START_Y_OFFSET = 50.0f;
+    constexpr float RAY_END_Y_OFFSET = -1000.0f;
+    constexpr float RAY_X_OFFSET = 25.0f;
+    constexpr float MODEL_HEIGHT_OFFSET = 40.0f;
+    constexpr float FALL_THRESHOLD = 10.0f; 
+
+    constexpr float ROTATION_SPEED = 1.0f; 
+
+    constexpr float TIME_START_BLINK = 20.0f; 
+    constexpr float TIME_DESPAWN = 25.0f; 
+    constexpr float BLINK_DURATON = TIME_DESPAWN - TIME_START_BLINK; 
+
+    constexpr float BLINK_INTERVAL_MAX = 1.0f;
+    constexpr float BLINK_INTERVAL_MIN = 0.05f; 
+
+    constexpr float SE_COOLDOWN_TIME = 0.05f; 
+}
+
+// 静的メンバ変数の実体定義
 int GetItem::m_totalCoinCount = 0;
 
 GetItem::GetItem()
@@ -17,7 +41,6 @@ GetItem::GetItem()
 
 GetItem::~GetItem()
 {
-    // コリジョンは手動生成しているため、ここで削除
     if (m_collision)
     {
         DeleteGO(m_collision);
@@ -25,150 +48,146 @@ GetItem::~GetItem()
     }
 }
 
-
-/**
- * @brief 初期化処理
- * @details
- * モデルのロード、初期位置設定、当たり判定（Sphere）の生成を行います。
- * また、自動消滅管理用のタイマーもリセットします。
- */
 void GetItem::Init(const Vector3& pos)
 {
     m_position = pos;
-    m_velocity = { 0.0f, 0.0f, 0.0f };
+    m_velocity = Vector3::Zero;
 
-    // コインモデルの初期化
-    m_coin.Init("Assets/modelData/Item/coin.tkm");
+    m_coin.Init(PATH_COIN_MODEL);
     m_coin.SetPosition(m_position);
 
-    // 当たり判定の生成（半径20.0fの球）
-    m_collision = NewGO<CollisionObject>(0, "coinCollision");
-    m_collision->CreateSphere(m_position, Quaternion::Identity, m_radius);
-
-    // コイン自体が消えてもコリジョンが残らないよう、削除管理はGetItem側で行う
+    m_collision = NewGO<CollisionObject>(0, NAME_COLLISION);
+    m_collision->CreateSphere(m_position, Quaternion::Identity, COLLISION_RADIUS);
     m_collision->SetIsEnableAutoDelete(false);
 
-    // タイマー等の初期化
     m_spawnTime = 0.0f;
     m_blinkTimer = 0.0f;
     m_blinkStarted = false;
     m_isVisible = true;
+    m_isDead = false;
 }
 
-/**
- * @brief 更新処理
- * @details
- * 1. 物理挙動：重力で落下し、下方向へのRayTestで地面を検知して着地させます。
- * 2. 接触判定：プレイヤーと接触したら、総数(m_totalCoinCount)を増やして自身を削除します。
- * 3. アニメーション：Y軸回転させます。
- * 4. 寿命管理：
- * - 20秒経過：点滅開始
- * - 20～25秒：徐々に点滅間隔を早める（1.0秒 -> 0.05秒間隔）
- * - 25秒経過：時間切れで消滅（削除）
- */
 void GetItem::Update()
 {
     if (Game::IsPaused) return;
-
+    if (m_isDead) return;
 
     float deltaTime = g_gameTime->GetFrameDeltaTime();
     m_spawnTime += deltaTime;
 
-    // --- 1. 物理挙動（落下） ---
-    if (!m_isOnGround)
-    {
-        m_velocity.y += m_gravity;
-        m_position += m_velocity * g_gameTime->GetFrameDeltaTime();
+    // --- SEのクールダウン管理 ---
+    static float seCooldown = 0.0f;
+    if (seCooldown > 0.0f) {
+        seCooldown -= deltaTime;
     }
 
-    // --- 接地判定（RayTest） ---
-    // 少し上から真下に向かってレイを飛ばす
-    Vector3 rayStart = m_position + Vector3(0.0f, 50.0f, 0.0f);
-    Vector3 rayEnd = m_position + Vector3(0.0f, -1000.0f, 0.0f);
+    auto* physics = PhysicsWorld::GetInstance();
+    Vector3 rayStart = m_position + Vector3(RAY_X_OFFSET, RAY_START_Y_OFFSET, 0.0f);
+    Vector3 rayEnd = m_position + Vector3(RAY_X_OFFSET, RAY_END_Y_OFFSET, 0.0f);
     Vector3 hitPos;
 
-    auto* physics = PhysicsWorld::GetInstance();
-
-    if (physics->RayTest(rayStart, rayEnd, hitPos))
+    // --- 1. 物理挙動（落下と接地） ---
+    if (!m_isOnGround)
     {
-        float groundY = hitPos.y;
-        float coinBottomY = m_position.y - m_radius;
+        m_velocity.y -= m_gravity;
+        m_position += m_velocity * deltaTime;
 
-        // コインの底が地面より下に行ったら着地とみなす
-        if (coinBottomY <= groundY)
+        if (physics->RayTest(rayStart, rayEnd, hitPos))
         {
-            m_isOnGround = true;
-            m_velocity.y = 0.0f;
-            // 地面にめり込まない位置に補正
-            m_position.y = groundY + m_radius;
+            float groundY = hitPos.y;
+            float coinBottomY = m_position.y - MODEL_HEIGHT_OFFSET;
 
-            // コリジョン位置も同期
-            if (m_collision)
-                m_collision->SetPosition(m_position);
+            if (coinBottomY <= groundY)
+            {
+                m_isOnGround = true;
+                m_velocity.y = 0.0f;
+                m_position.y = groundY + MODEL_HEIGHT_OFFSET;
+
+                if (m_collision) {
+                    m_collision->SetPosition(m_position);
+                }
+            }
+        }
+    }
+    else
+    {
+        // 着地後、足場が消えていないか監視
+        if (physics->RayTest(rayStart, rayEnd, hitPos))
+        {
+            float groundY = hitPos.y;
+            float coinBottomY = m_position.y - MODEL_HEIGHT_OFFSET;
+
+            if (groundY < coinBottomY - FALL_THRESHOLD)
+            {
+                m_isOnGround = false;
+            }
+        }
+        else
+        {
+            m_isOnGround = false;
         }
     }
 
-
     // --- 2. プレイヤーとの接触判定 ---
-    Player* player = FindGO<Player>("player");
+    Player* player = FindGO<Player>(NAME_PLAYER);
     if (player && m_collision && m_collision->IsHit(player->characterController))
     {
-        // コイン獲得
+        m_isDead = true;
         m_totalCoinCount++;
 
-        // 自身を削除
+        if (seCooldown <= 0.0f) {
+            SoundManager::Get().PlaySE(enSoundKind_Coin);
+            seCooldown = SE_COOLDOWN_TIME;
+        }
+
+        if (m_collision) {
+            DeleteGO(m_collision);
+            m_collision = nullptr;
+        }
         DeleteGO(this);
         return;
     }
 
     // --- 3. 回転アニメーション ---
-    m_rotation += 1.0f;
+    m_rotation += ROTATION_SPEED;
     Quaternion rot;
     rot.SetRotationDegY(m_rotation);
     m_coin.SetRotation(rot);
 
-
     // --- 4. 点滅・消滅ロジック ---
-
-    // 20秒経過で点滅フラグON
-    if (!m_blinkStarted && m_spawnTime >= 20.0f)
+    if (!m_blinkStarted && m_spawnTime >= TIME_START_BLINK)
     {
         m_blinkStarted = true;
         m_blinkTimer = 0.0f;
     }
 
-    // 点滅期間（20秒～25秒）
-    if (m_blinkStarted && m_spawnTime < 25.0f)
+    if (m_blinkStarted && m_spawnTime < TIME_DESPAWN)
     {
-        float blinkPhase = m_spawnTime - 20.0f; // 点滅開始からの経過時間
+        float blinkPhase = m_spawnTime - TIME_START_BLINK;
 
-        // 点滅間隔を徐々に短くする計算
-        // t: 0.0(開始時) ～ 1.0(終了直前)
-        const float startInterval = 1.0f;  // 点滅初期の間隔
-        const float endInterval = 0.05f;   // 点滅終盤の間隔
-        float t = blinkPhase / 5.0f;
+        float t = blinkPhase / BLINK_DURATON;
         if (t > 1.0f) t = 1.0f;
 
-        // 現在のフェーズに応じた点滅間隔を算出
-        float blinkInterval = startInterval + (endInterval - startInterval) * t;
+        float blinkInterval = BLINK_INTERVAL_MAX + (BLINK_INTERVAL_MIN - BLINK_INTERVAL_MAX) * t;
 
         m_blinkTimer += deltaTime;
-
-        // 指定間隔が経過したら表示状態を反転
         if (m_blinkTimer >= blinkInterval)
         {
             m_isVisible = !m_isVisible;
             m_blinkTimer -= blinkInterval;
         }
     }
-    // 25秒経過で強制消滅
-    else if (m_spawnTime >= 25.0f)
+    else if (m_spawnTime >= TIME_DESPAWN)
     {
+        m_isDead = true;
+        if (m_collision) {
+            DeleteGO(m_collision);
+            m_collision = nullptr;
+        }
         DeleteGO(this);
         return;
     }
 
-    // 表示フラグが立っている時だけモデル位置を更新して描画準備
     if (m_isVisible)
     {
         m_coin.SetPosition(m_position);
@@ -176,10 +195,8 @@ void GetItem::Update()
     }
 }
 
-
 void GetItem::Render(RenderContext& rc)
 {
-    // 点滅OFFのタイミングでは描画しない
     if (m_isVisible)
     {
         m_coin.Draw(rc);

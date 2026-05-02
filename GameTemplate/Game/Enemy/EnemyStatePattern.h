@@ -22,7 +22,7 @@ public:
 	/** * @brief ステート開始時処理（初期化）
 	 * @note 状態遷移してきた直後に1度だけ呼ばれます。
 	 */
-	virtual void Eneter() = 0;
+	virtual void Enter() = 0;
 
 	/** * @brief ステート更新処理
 	 * @note 毎フレーム呼び出されます。
@@ -70,7 +70,7 @@ public:
 	IBossState(Boss* owner) : m_owner(owner) {}
 	virtual ~IBossState() {}
 
-	virtual void Eneter() override {}
+	virtual void Enter() override {}
 	virtual void Update() override {}
 	virtual void Exit() override {}
 	virtual bool RequestState(int& request) override { return false; }
@@ -91,7 +91,7 @@ public:
 	BossIdleState(Boss* owner) : IBossState(owner) {}
 	~BossIdleState() {}
 
-	void Eneter() override;
+	void Enter() override;
 	void Update() override;
 	void Exit() override;
 	bool RequestState(int& request) override;
@@ -109,7 +109,7 @@ public:
 	BossMoveState(Boss* owner) : IBossState(owner) {}
 	~BossMoveState() {}
 
-	void Eneter() override;
+	void Enter() override;
 	void Update() override;
 	void Exit() override;
 	bool RequestState(int& request) override;
@@ -130,7 +130,7 @@ public:
 	BossCreateFamiliarState(Boss* owner) : IBossState(owner) {}
 	~BossCreateFamiliarState() {}
 
-	void Eneter() override;
+	void Enter() override;
 	void Update() override;
 	void Exit() override;
 	bool RequestState(int& request) override;
@@ -163,7 +163,7 @@ public:
 	IFamiliarState(Familiar* owner) : m_owner(owner) {}
 	virtual ~IFamiliarState() {}
 
-	virtual void Eneter() override {}
+	virtual void Enter() override {}
 	virtual void Update() override {}
 	virtual void Exit() override {}
 	virtual bool RequestState(int& request) override { return false; }
@@ -183,7 +183,7 @@ public:
 	FamiliarIdleState(Familiar* owner) : IFamiliarState(owner) {}
 	~FamiliarIdleState() {}
 
-	void Eneter() override;
+	void Enter() override;
 	void Update() override;
 	void Exit() override;
 	bool RequestState(int& request) override;
@@ -201,7 +201,7 @@ public:
 	FamiliarMoveState(Familiar* owner) : IFamiliarState(owner) {}
 	~FamiliarMoveState() {}
 
-	void Eneter() override;
+	void Enter() override;
 	void Update() override;
 	void Exit() override;
 	bool RequestState(int& request) override;
@@ -237,7 +237,7 @@ public:
 	INoobEnemyState(NoobEnemy* owner) : m_owner(owner) {}
 	virtual ~INoobEnemyState() {}
 
-	virtual void Eneter() override {}
+	virtual void Enter() override {}
 	virtual void Update() override {}
 	virtual void Exit() override {}
 	virtual bool RequestState(int& request) override { return false; }
@@ -257,7 +257,7 @@ public:
 	NoobEnemyIdleState(NoobEnemy* owner) : INoobEnemyState(owner) {}
 	~NoobEnemyIdleState() {}
 
-	void Eneter() override;
+	void Enter() override;
 	void Update() override;
 	void Exit() override;
 	bool RequestState(int& request) override;
@@ -274,7 +274,7 @@ public:
 	NoobEnemyMoveState(NoobEnemy* owner) : INoobEnemyState(owner) {}
 	~NoobEnemyMoveState() {}
 
-	void Eneter() override;
+	void Enter() override;
 	void Update() override;
 	void Exit() override;
 	bool RequestState(int& request) override;

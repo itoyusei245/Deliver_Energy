@@ -19,10 +19,6 @@ public:
 	 * @brief コンストラクタ
 	 */
 	GameStateBase() = default;
-
-	/**
-	 * @brief デストラクタ
-	 */
 	virtual ~GameStateBase() = default;
 
 	/**
@@ -52,43 +48,13 @@ public:
 	 */
 	virtual GameStateBase* ChangeState() final;
 
-	/**
-	 * @brief 更新処理（フレームワーク）
-	 * @details アクティブな場合のみ、具体的な更新処理(OnUpdate)を実行します。
-	 * @note このメソッドはオーバーライドできません(final)。
-	 */
 	virtual void Update() final;
-
-	/**
-	 * @brief 具体的な更新処理
-	 * @note 派生クラスで実装します。
-	 */
 	virtual void OnUpdate() = 0;
 
-	/**
-	 * @brief ステート開始時の処理（フレームワーク）
-	 * @details オブジェクトをアクティブ化し、OnEnterを呼び出します。
-	 * @note このメソッドはオーバーライドできません(final)。
-	 */
 	virtual void Enter() final;
-
-	/**
-	 * @brief 具体的な開始時処理
-	 * @note 派生クラスで実装します（リソースのロードや初期化など）。
-	 */
 	virtual void OnEnter() = 0;
 
-	/**
-	 * @brief ステート終了時の処理（フレームワーク）
-	 * @details オブジェクトを非アクティブ化し、OnExitを呼び出します。
-	 * @note このメソッドはオーバーライドできません(final)。
-	 */
 	virtual void Exit() final;
-
-	/**
-	 * @brief 具体的な終了時処理
-	 * @note 派生クラスで実装します（リソース解放など）。
-	 */
 	virtual void OnExit() = 0;
 
 	/**
@@ -114,7 +80,7 @@ public:
 	std::unique_ptr<GameStateBase> m_nextState = nullptr;
 
 	/** 次のステートの名前（FindGOによる検索用） */
-	const char* m_nextStateName;
+	const char* m_nextStateName = nullptr;
 
 private:
 	/** アクティブフラグ（Updateを実行するかどうかの制御） */

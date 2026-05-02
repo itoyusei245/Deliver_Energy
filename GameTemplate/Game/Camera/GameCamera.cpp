@@ -7,12 +7,31 @@
 #include "Player.h"
 #include"Game.h"
 
+namespace
+{
+    const Vector3 DEFAULT_CAMERA_POS(-450.0f, 0.0f, 0.0f);
+	constexpr float CAMERA_TARGET_OFFSET_Y = 60.0f;
+	constexpr float CAMERA_TARGET_OFFSET_Z = 20.0f;
+	
+    constexpr float CLIP_NEAR = 1.0f;
+	constexpr float CLIP_FAR  = 15000.0f;
+
+	constexpr float DEFAULT_ROT_SPEED_X = 1.0f;
+	constexpr float DEFAULT_ROT_SPEED_Y = 1.0f;
+	constexpr float PITCH_LIMIT_CLAMP   = 0.9f; 
+}
+
  /**
   * @brief GameCameraクラスのコンストラクタ
   */
 GameCamera::GameCamera()
 {
-
+	m_toCameraPos     = DEFAULT_CAMERA_POS;
+	m_targetOffsetY   = CAMERA_TARGET_OFFSET_Y;
+	m_targetOffsetZ   = CAMERA_TARGET_OFFSET_Z;
+	m_rotSpeedX       = DEFAULT_ROT_SPEED_X;
+	m_rotSpeedY       = DEFAULT_ROT_SPEED_Y;
+	m_pitchLimitClamp = PITCH_LIMIT_CLAMP;
 }
 
 /**
@@ -54,12 +73,12 @@ bool GameCamera::Start()
         true,   // カメラコリジョン（壁めり込み防止）を有効化
         1.0f	// カメラの注視点オフセット（高さ）
     );
-    m_springCamera.SetNear(1.0f);
-    m_springCamera.SetFar(10000.0f);
+    m_springCamera.SetNear(CLIP_NEAR);
+    m_springCamera.SetFar(CLIP_FAR);
 
     /**初期注視点の計算*/
     Vector3 target = player->position;
-    target.y += 60.0f; // 足元ではなく少し上を見る
+    target.y += m_targetOffsetY; // 足元ではなく少し上を見る
 
     /** 初期カメラ位置の計算*/
     Vector3 startPos = target + m_toCameraPos;
@@ -105,10 +124,10 @@ void GameCamera::Update()
     /** 注視点を計算*/
     Vector3 target = player->position;
     /** プレイヤーの足元から少し上(60.0f)を注視点とする*/
-    target.y += 60.0f;
+    target.y += m_targetOffsetY;
 
     // カメラのForwardを使って少し先を見るなどの処理（現在はコメントアウト的な扱いか、補正用）
-    target += g_camera3D->GetForward() * 20.0f;
+    target += g_camera3D->GetForward() * m_targetOffsetZ;
 
     Vector3 toCameraPosOld = m_toCameraPos;
 
@@ -118,14 +137,14 @@ void GameCamera::Update()
 
     // --- Y軸周りの回転（左右回転） ---
     Quaternion qRot;
-    qRot.SetRotationDeg(Vector3::AxisY, 1.0f * x);
+    qRot.SetRotationDeg(Vector3::AxisY, m_rotSpeedX * x);
     qRot.Apply(m_toCameraPos);
 
     // --- X軸（ローカル横軸）周りの回転（上下回転） ---
     Vector3 axisX;
     axisX.Cross(Vector3::AxisY, m_toCameraPos); // Y軸とカメラベクトルの外積で横軸を求める
     axisX.Normalize();
-    qRot.SetRotationDeg(axisX, 1.0 * y);
+    qRot.SetRotationDeg(axisX, m_rotSpeedY * y);
     qRot.Apply(m_toCameraPos);
 
     // --- カメラの回転角度制限（クランプ） ---
@@ -133,12 +152,12 @@ void GameCamera::Update()
     Vector3 toPosDir = m_toCameraPos;
     toPosDir.Normalize();
 
-    // Y成分が0.9を超えると真上/真下に近すぎるため、回転を取り消す（Oldに戻す）
-    if (toPosDir.y < -0.9f) {
+    // Y成分がm_pitchLimitClampを超えると真上/真下に近すぎるため、回転を取り消す（Oldに戻す）
+    if (toPosDir.y < -m_pitchLimitClamp) {
         // カメラが上向きすぎ（見上げすぎ）
         m_toCameraPos = toCameraPosOld;
     }
-    else if (toPosDir.y > 0.9f) {
+    else if (toPosDir.y > m_pitchLimitClamp) {
         // カメラが下向きすぎ（見下ろしすぎ）
         m_toCameraPos = toCameraPosOld;
     }

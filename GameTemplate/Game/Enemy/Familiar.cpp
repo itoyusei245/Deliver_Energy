@@ -5,6 +5,16 @@
 #include "stdafx.h"
 #include "Familiar.h"
 
+namespace 
+{
+	constexpr const char* MODEL_PATH_TYPE_A = "Assets/animData/bossEnemy_TypeA.tkm";
+	constexpr const char* MODEL_PATH_TYPE_B = "Assets/animData/m_boss_Enemy_TypeB.tkm";
+
+	constexpr float COLLISION_RADIUS = 110.0f;
+
+	const Vector3	FAMILIAR_SCALE(1.7f, 1.7f, 1.7f);
+}
+
 Familiar::Familiar()
 {
 	// ステータスの生成とセットアップ
@@ -34,7 +44,7 @@ Familiar::~Familiar()
  */
 bool Familiar::Start()
 {
-	SetScale(Vector3(1.7f, 1.7f, 1.7f));
+	SetScale(FAMILIAR_SCALE);
 
 	// ステート生成
 	m_stateList[enFamiliarStateType_Idle] = new FamiliarIdleState(this);
@@ -44,10 +54,10 @@ bool Familiar::Start()
 	switch (m_familiaType)
 	{
 	case enFamiliarType_A:
-		m_modelRender.Init("Assets/animData/bossEnemy_TypeA.tkm");
+		m_modelRender.Init(MODEL_PATH_TYPE_A);
 		break;
 	case enFamiliarType_B:
-		m_modelRender.Init("Assets/animData/m_boss_Enemy_TypeB.tkm");
+		m_modelRender.Init(MODEL_PATH_TYPE_B);
 		break;
 	default:
 		break;
@@ -60,15 +70,8 @@ bool Familiar::Start()
 	// モデル形状から物理メッシュを作成
 	m_physicsStaticObject.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix());
 
-
-	// (コメントアウトされているコアモデル処理)
-	//m_coreModel.Init("Assets/animData/familiarCore.tkm");
-	//m_coreModel.SetTRS(Vector3::Zero, m_rotation, m_scale);
-	//m_coreModel.Update();
-	//m_physicsStaticObject.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix());
-
 	// 当たり判定用球体の作成（半径110.0f）
-	m_collisionObject.CreateSphere(m_position, m_rotation, 110.0f);
+	m_collisionObject.CreateSphere(m_position, m_rotation, COLLISION_RADIUS);
 
 	return true;
 }
@@ -82,13 +85,13 @@ bool Familiar::Start()
 void Familiar::Update()
 {
 	// --- ステートマシンの更新 ---
-	int requestState = EnBossStateType_Max;
+	int requestState = EnFamiliarStateType_Max;
 
 	// 遷移リクエストがあれば切り替え
 	if (m_stateList[m_currentState]->RequestState(requestState)) {
 		m_stateList[m_currentState]->Exit();
 		m_currentState = static_cast<EnFamiliarStateType>(requestState);
-		m_stateList[m_currentState]->Eneter(); // Typo: Enter
+		m_stateList[m_currentState]->Enter();
 	}
 	// 現在のステートの更新
 	m_stateList[m_currentState]->Update();
